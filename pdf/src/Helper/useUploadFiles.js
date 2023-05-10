@@ -33,7 +33,6 @@ const useUploadFiles = () => {
               setIsUploading(false);
               setDownloadedUrl(url);
               resolve(url);
-
               // Call API endpoint with the download URL
               fetch(`http://localhost:5000/api/${route}`, {
                 method: "POST",
