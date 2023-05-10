@@ -1,0 +1,497 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+*:after, *::before {
+  margin: 0;
+  padding: 0;
+}
+
+.homePage-container {
+  width: 100%;
+  padding-top: 64px;
+  display: -ms-grid;
+  display: grid;
+  row-gap: 2em;
+  place-items: center;
+}
+
+.homePage-container header {
+  padding: 2em 2em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 0.5em;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+}
+
+.homePage-container header h1 {
+  font-size: 3.5rem;
+}
+
+.homePage-container header p {
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+.homePage-container .homePage-container__wrapper {
+  padding: 1em 2em;
+  max-width: 1024px;
+}
+
+.homePage-container .homePage-container__wrapper ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.homePage-container .homePage-container__wrapper ul .operations-box--list {
+  list-style-type: none;
+}
+
+@media (min-width: 0px) and (max-width: 639px) {
+  .operations-box--list {
+    width: 100%;
+    padding: 8px;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .operations-box--list {
+    width: 50%;
+    padding: 12px;
+  }
+}
+
+@media (min-width: 1024px) {
+  header p {
+    max-width: 720px;
+  }
+  .operations-box--list {
+    width: 33.3%;
+    padding: 12px;
+  }
+}
+
+.operationsPage-container {
+  width: 100%;
+  height: 100%;
+  padding-top: 64px;
+  min-height: calc(100vh - 64px);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.operationsPage-container__wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 0 auto;
+          flex: 1 0 auto;
+  width: 100%;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 2em;
+}
+
+.operationsPage-container__header {
+  width: 100%;
+  padding-top: 2em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 0.1em;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.operationsPage-container__header--content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0.75em;
+}
+
+.operationsPage-container__header--content__img {
+  width: 32px;
+  height: 32px;
+}
+
+.operationsPage-container__header--content h1 {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.operationsPage-container__header h2 {
+  font-weight: 300;
+  color: #212121;
+  font-size: 1.4rem;
+}
+
+@media (min-width: 0px) and (max-width: 1199px) {
+  .operationsPage-container__wrapper {
+    max-width: none;
+    padding: 2em 1em;
+  }
+}
+
+@media (min-width: 1200px) {
+  .operationsPage-container__wrapper {
+    max-width: 1120px;
+    padding: 2em 1.5em;
+  }
+}
+
+.navbar-container {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 64px;
+  padding: 0 1em;
+  background-color: white;
+  -webkit-box-shadow: 0 0 2px rgba(26, 26, 26, 0.2);
+          box-shadow: 0 0 2px rgba(26, 26, 26, 0.2);
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.navbar-container .logo {
+  width: 32px;
+  height: 32px;
+}
+
+.navbar-container__middle {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 0%;
+          flex: 1 1 0%;
+  min-width: 0;
+  padding: 0 0.875em;
+}
+
+.navbar-container__right {
+  margin-left: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.navbar-container__right .convert-btn {
+  position: relative;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  gap: 0.5em;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 0 1.25em;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1rem;
+  height: 40px;
+  background: #0055ff;
+  color: white;
+}
+
+.navbar-container__right .convert-btn:hover {
+  background: #0048d9;
+}
+
+.operations-box {
+  border: 1px solid #e4e4e4;
+  background: #fafafa;
+  border-radius: 4px;
+  position: relative;
+}
+
+.operations-box:hover {
+  background: #f4f4f4;
+}
+
+.operations-box a {
+  width: 100%;
+  position: relative;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.05rem;
+  outline: none;
+  color: #1a1a1a;
+}
+
+.operations-box a h4 {
+  padding: 1em 3.25em 1em 3.875em;
+  height: 120px;
+}
+
+.operations-box__img {
+  position: absolute;
+  top: 17px;
+  left: 17px;
+  width: 32px;
+  height: 32px;
+}
+
+.operations-box__arrow {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 17px;
+  right: 17px;
+  color: #1a1a1a;
+  pointer-events: none;
+}
+
+.operations-box p {
+  color: #1a1a1a;
+  position: absolute;
+  pointer-events: none;
+  text-align: left;
+  left: 65px;
+  right: 57px;
+  margin: 0px;
+  top: 42px;
+  font-size: 0.875rem;
+}
+
+@-webkit-keyframes animate-progress-bar {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 60px 0px;
+  }
+}
+
+@keyframes animate-progress-bar {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 60px 0px;
+  }
+}
+
+.fileUpload-container {
+  width: 100%;
+  position: relative;
+  height: 300px;
+  border-radius: 4px;
+}
+
+.fileUpload-container .fileUpload-container--wrapper {
+  padding: 0.65em;
+  border-radius: 4px;
+  height: 100%;
+}
+
+form {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: relative;
+  cursor: pointer;
+}
+
+form .fileUpload-container__content {
+  width: 100%;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 1em;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  border-radius: 4px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 2px dashed rgba(0, 0, 0, 0.15);
+}
+
+form .fileUpload-container__content__img {
+  padding-bottom: 18px;
+  height: 60px;
+  width: 96px;
+}
+
+form .fileUpload-container__content__img svg {
+  fill: white;
+}
+
+form .fileUpload-container__content p {
+  color: white;
+}
+
+form .fileUpload-container__content__row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  border-radius: 4px;
+  color: #212121;
+  background-color: white;
+}
+
+form .fileUpload-container__content__row .fileUpload-container__content__input input[type="file"] {
+  position: absolute;
+  z-index: -1;
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+form .fileUpload-container__content__row .fileUpload-container__content__input .file-input {
+  cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 1em;
+}
+
+form .fileUpload-container__content__row .fileUpload-container__content__input .file-input .icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.5em;
+}
+
+form .fileUpload-container__content__row .fileUpload-container__content__input .file-input span {
+  font-weight: 600;
+  font-size: 0.975rem;
+  text-transform: uppercase;
+}
+
+form .fileUpload-container__content__row .fileUpload-container__content__btn {
+  border-left: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+form .fileUpload-container__content__row .fileUpload-container__content__btn button {
+  padding: 1em 1.25em;
+  width: 100%;
+  height: 100%;
+  outline: 0;
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.fileUpload-container__progress {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  height: 100%;
+  border-radius: 4px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background-color: white;
+  border: 1px solid #e4e4e4;
+}
+
+.fileUpload-container__progress .progress-bar {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  height: 4px;
+  -webkit-transition: width 0.4s ease-out 0s;
+  transition: width 0.4s ease-out 0s;
+}
+
+.fileUpload-container__progress svg {
+  height: 60px;
+  width: 96px;
+}
+
+.fileUpload-container__progress p {
+  text-align: center;
+  padding-top: 0.75rem;
+  font-weight: 300;
+  font-size: 1.35rem;
+}
+/*# sourceMappingURL=App.css.map */

@@ -1,0 +1,60 @@
+.operations-box {
+  border: 1px solid #e4e4e4;
+  background: rgb(250, 250, 250);
+  border-radius: 4px;
+  position: relative;
+  &:hover {
+    background: rgb(244, 244, 244);
+  }
+  a {
+    width: 100%;
+    position: relative;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.05rem;
+    outline: none;
+    color: rgb(26, 26, 26);
+    h4 {
+      padding: 1em 3.25em 1em 3.875em;
+      height: 120px;
+    }
+  }
+  &__img {
+    position: absolute;
+    top: 17px;
+    left: 17px;
+    width: 32px;
+    height: 32px;
+  }
+  &__arrow {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: 17px;
+    right: 17px;
+    color: rgb(26, 26, 26);
+    pointer-events: none;
+  }
+  p {
+    color: rgb(26, 26, 26);
+    position: absolute;
+    pointer-events: none;
+    text-align: left;
+    left: 65px;
+    right: 57px;
+    margin: 0px;
+    top: 42px;
+    font-size: 0.875rem;
+  }
+}
+
+@keyframes animate-progress-bar {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 60px 0px;
+  }
+}

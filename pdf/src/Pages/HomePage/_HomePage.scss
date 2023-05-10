@@ -1,0 +1,60 @@
+.homePage-container {
+  width: 100%;
+  padding-top: 64px;
+  display: grid;
+  row-gap: 2em;
+  place-items: center;
+  header {
+    padding: 2em 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    h1 {
+      font-size: 3.5rem;
+    }
+    p {
+      font-weight: 500;
+      font-size: 1.25rem;
+    }
+  }
+  .homePage-container__wrapper {
+    padding: 1em 2em;
+    max-width: 1024px;
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      .operations-box--list {
+        list-style-type: none;
+      }
+    }
+  }
+}
+
+@media (min-width: 0px) and (max-width: 639px) {
+  .operations-box--list {
+    width: 100%;
+    padding: 8px;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .operations-box--list {
+    width: 50%;
+    padding: 12px;
+  }
+}
+
+@media (min-width: 1024px) {
+  header {
+    p {
+      max-width: 720px;
+    }
+  }
+  .operations-box--list {
+    width: 33.3%;
+    padding: 12px;
+  }
+}

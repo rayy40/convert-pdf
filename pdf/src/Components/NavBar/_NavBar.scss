@@ -1,0 +1,49 @@
+.navbar-container {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 64px;
+  padding: 0 1em;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 0 2px rgba(26, 26, 26, 0.2);
+  border-bottom: 1px solid rgb(224, 224, 224);
+  .logo {
+    width: 32px;
+    height: 32px;
+  }
+  &__middle {
+    flex: 1 1 0%;
+    min-width: 0;
+    padding: 0 0.875em;
+  }
+  &__right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    .convert-btn {
+      position: relative;
+      display: inline-flex;
+      gap: 0.5em;
+      flex-direction: row;
+      align-items: center;
+      user-select: none;
+      text-decoration: none;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      padding: 0 1.25em;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1rem;
+      height: 40px;
+      background: rgb(0, 85, 255);
+      color: rgb(255, 255, 255);
+      &:hover {
+        background: rgb(0, 72, 217);
+      }
+    }
+  }
+}
