@@ -12,7 +12,7 @@ const FileUploadBox = ({ route, image, bgColor, file }) => {
     const files = fileInputRef.current.files;
 
     if (files.length === 0) return;
-    uploadFiles(route, files[0]);
+    uploadFiles(route, Array.from(files));
   };
 
   console.log(downloadLink);
