@@ -7,6 +7,7 @@ const useUploadFiles = () => {
   const [progress, setProgress] = useState(0);
   const [downloadedUrl, setDownloadedUrl] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const [downloadLink, setDownloadLink] = useState("");
 
   const uploadFiles = async (route, file) => {
     if (!file) return;
@@ -41,10 +42,10 @@ const useUploadFiles = () => {
                   "Content-Type": "application/json",
                 },
               })
-                .then((response) => response.json())
-                .then((data) => {
-                  console.log(data);
-                  // Do something with the response
+                .then((response) => response.blob())
+                .then((blob) => {
+                  const url = window.URL.createObjectURL(blob);
+                  setDownloadLink(url);
                 })
                 .catch((error) => {
                   console.error(error);
@@ -55,7 +56,7 @@ const useUploadFiles = () => {
       );
     });
   };
-  return { isUploading, progress, downloadedUrl, uploadFiles };
+  return { isUploading, progress, downloadedUrl, uploadFiles, downloadLink };
 };
 
 export default useUploadFiles;

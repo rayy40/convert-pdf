@@ -5,7 +5,7 @@ import useUploadFiles from "../../Helper/useUploadFiles";
 
 const FileUploadBox = ({ route, image, bgColor, file }) => {
   let fileInputRef = useRef(null);
-  const { isUploading, progress, uploadFiles } = useUploadFiles();
+  const { isUploading, progress, uploadFiles, downloadLink } = useUploadFiles();
 
   const handleFileUpload = (e) => {
     e.preventDefault();
@@ -14,6 +14,8 @@ const FileUploadBox = ({ route, image, bgColor, file }) => {
     if (files.length === 0) return;
     uploadFiles(route, files[0]);
   };
+
+  console.log(downloadLink);
 
   return (
     <div className="fileUpload-container">
