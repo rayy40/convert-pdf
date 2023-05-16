@@ -39,10 +39,11 @@ const FileUploadBox = ({ route, image, bgColor, file }) => {
                 <label className="file-input">
                   <input
                     ref={fileInputRef}
-                    multiple
+                    // mutiple
                     className="picker-input"
                     type="file"
-                    accept="image/png, image/gif, image/jpeg, image/jpg"
+                    accept="application/pdf"
+                    // accept="image/png, image/gif, image/jpeg, image/jpg"
                   />
                   <FontAwesomeIcon className="icon" icon={faFilePdf} />
                   <span>Choose Files</span>

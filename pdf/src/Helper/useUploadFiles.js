@@ -12,8 +12,6 @@ const useUploadFiles = () => {
   const uploadFiles = async (route, files) => {
     if (!files || files.length === 0) return;
 
-    console.log(files);
-
     setIsUploading(true);
     const uploadPromises = files.map((file) => {
       const storageRef = ref(storage, `/files/${file.name}--${uuidv4()}`);
