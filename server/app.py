@@ -123,7 +123,6 @@ def pdf_to_jpg():
             pix.save(image_path)
 
     # Check the number of images
-    print(num_pages)
     if num_pages > 1:
         # Create a zip file containing the images
         zip_data = BytesIO()
@@ -132,18 +131,8 @@ def pdf_to_jpg():
                 image_path = os.path.join("images", f"file_{i}.jpg")
                 zipf.write(image_path, f"file_{i}.jpg")
 
-        # Save the zip file locally
-        zip_filename = "converted_images.zip"
-        with open(zip_filename, "wb") as zip_file:
-            zip_file.write(zip_data.getvalue())
-
-        # Generate the download URL for the local zip file
-        local_zip_url = os.path.abspath(zip_filename)
-
-        # Clean up temporary files
-        for i in range(num_pages):
-            image_path = os.path.join("images", f"file_{i}.jpg")
-            os.remove(image_path)
+        # Reset the position of the zip_data object to the beginning
+        zip_data.seek(0)
 
         # Upload the zip file to Firebase Storage
         firebase = pyrebase.initialize_app(firebase_config)
@@ -152,6 +141,11 @@ def pdf_to_jpg():
 
         # Generate the download URL for the zip file
         zip_url = storage.child("converted_images.zip").get_url(None)
+
+        # Clean up temporary files
+        for i in range(num_pages):
+            image_path = os.path.join("images", f"file_{i}.jpg")
+            os.remove(image_path)
 
         return zip_url
     elif num_pages == 1:
