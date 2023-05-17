@@ -1,1 +1,5 @@
-pdf_files
+input.pdf
+converted_images.zip
+
+.env
+images
