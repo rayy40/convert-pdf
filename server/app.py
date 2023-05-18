@@ -168,5 +168,42 @@ def pdf_to_jpg():
         return "No images found."
 
 
+@app.route("/api/delete-pages", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def delete_pages():
+    data = request.get_json()
+    urls = data.get("urls")
+    pages = data.get("pages")
+
+    response = requests.get(urls)
+    with open("delete.pdf", "wb") as file:
+        file.write(response.content)
+
+    pdf = fitz.open("delete.pdf")
+
+    for page_number in sorted(pages, reverse=True):
+        pdf.delete_page(page_number - 1)
+
+    output_file_path = "output.pdf"
+    pdf.save(output_file_path)
+    pdf.close()
+
+    # Upload the single image file to Firebase Storage
+    firebase = pyrebase.initialize_app(firebase_config)
+    storage = firebase.storage()
+    storage.child("modified.pdf").put(output_file_path)
+
+    # Generate the download URL for the modified PDF
+    pdf_url = storage.child("modified.pdf").get_url(None)
+
+    # Clean up temporary files
+    os.remove("delete.pdf")
+    os.remove(output_file_path)
+
+    print("Completed")
+
+    return pdf_url
+
+
 if __name__ == "__main__":
     app.run(debug=True)

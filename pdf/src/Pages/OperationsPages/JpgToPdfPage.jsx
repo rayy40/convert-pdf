@@ -7,7 +7,7 @@ const JpgToPdfPage = () => {
       <div className="operationsPage-container__wrapper">
         <div className="operationsPage-container__header">
           <div className="operationsPage-container__header--content">
-            <div className="operationsPage-contaoner__header--content__img">
+            <div className="operationsPage-container__header--content__img">
               <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z"

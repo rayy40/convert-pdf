@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
+import { FileContext } from "../../Helper/FileContext";
 
 const NavBar = () => {
+  const { metadata } = useContext(FileContext);
+  console.log(metadata);
+
+  const convertSize = (size) => {
+    if (size >= 1000000) {
+      // Convert to megabytes
+      return `${(size / 1000000).toFixed(2)} mB`;
+    } else {
+      // Convert to kilobytes
+      return `${Math.round(size / 1000)} kB`;
+    }
+  };
+
   return (
     <div className="navbar-container__wrapper">
       <div className="navbar-container">
@@ -48,10 +62,13 @@ const NavBar = () => {
             </svg>
           </div>
         </a>
-        <div className="navbar-container__middle">JPG to PDF</div>
+        <div className="navbar-container__middle">
+          <p>{metadata?.name.split("--")[0]}</p>
+          <span>{convertSize(metadata?.size)}</span>
+        </div>
         <div className="navbar-container__right">
           <button className="convert-btn">
-            Convert
+            Download
             <FontAwesomeIcon className="icon" icon={faArrowRightLong} />
           </button>
         </div>

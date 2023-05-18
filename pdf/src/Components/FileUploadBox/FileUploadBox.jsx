@@ -1,11 +1,19 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import useUploadFiles from "../../Helper/useUploadFiles";
+import { useNavigate } from "react-router-dom";
 
 const FileUploadBox = ({ route, image, bgColor, file }) => {
   let fileInputRef = useRef(null);
+  const navigate = useNavigate();
   const { isUploading, progress, uploadFiles, downloadLink } = useUploadFiles();
+
+  useEffect(() => {
+    if (progress === 100 && route === "delete-pages") {
+      navigate("/delete-pages/edit");
+    }
+  }, [progress, navigate, route]);
 
   const handleFileUpload = (e) => {
     e.preventDefault();

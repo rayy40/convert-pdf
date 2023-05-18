@@ -19,6 +19,14 @@
     flex: 1 1 0%;
     min-width: 0;
     padding: 0 0.875em;
+    p {
+      font-size: 1rem;
+      color: #333;
+    }
+    span {
+      font-size: 0.875rem;
+      color: #aaa;
+    }
   }
   &__right {
     margin-left: auto;

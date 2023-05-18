@@ -1,0 +1,165 @@
+.edit-pdf-container {
+  padding: 2em;
+  margin-top: 2em;
+  .pdf-wrapper {
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    p {
+      margin-top: 1em;
+    }
+    &:hover {
+      .icons-container {
+        visibility: visible;
+      }
+    }
+  }
+  &__banner {
+    width: calc(100% + 3.9em);
+    margin-left: -2em;
+    padding: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: whitesmoke;
+    box-shadow: 0 0 2px rgba(26, 26, 26, 0.2);
+    border-bottom: 1px solid #e4e4e4;
+    margin-bottom: 2em;
+    font-size: 1.05rem;
+    .icon {
+      opacity: 0.5;
+      color: #888;
+      transition: color 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+    .icon--active {
+      cursor: pointer;
+      opacity: 1;
+      color: #6691e8;
+      &:hover {
+        color: #7fa3ec;
+      }
+    }
+  }
+}
+
+.react-pdf__Document {
+  display: flex;
+  gap: 4em;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  .react-pdf__Page {
+    width: 400px;
+    height: 550px;
+    canvas {
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      width: unset !important;
+      height: unset !important;
+      max-width: 100% !important;
+      max-height: 100% !important;
+    }
+    &__annotations {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+}
+
+.icons-container {
+  visibility: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100% - 2.5em);
+  position: absolute;
+  bottom: 5em;
+  left: 1.25em;
+  .icon {
+    color: #888;
+    font-size: 1.25rem;
+    transition: color 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+  .magnify {
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 0.5em;
+    outline: none transparent;
+    border: none transparent;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    background: #e4e4e4;
+    &:hover {
+      .icon {
+        color: #333;
+      }
+    }
+  }
+}
+
+.checkbox-container {
+  position: absolute;
+  top: 1.5em;
+  right: 2em;
+  z-index: 2;
+  .form-checkbox {
+    font-size: 2rem;
+    line-height: 1.1;
+    input[type="checkbox"] {
+      appearance: none;
+      background-color: #fff;
+      margin: 0;
+      font: inherit;
+      color: #888;
+      width: 27.5px;
+      height: 27.5px;
+      border: 3px solid #888;
+      border-radius: 0.15em;
+      transform: translateY(-0.075em);
+      display: grid;
+      place-content: center;
+      cursor: pointer;
+      &::before {
+        content: "";
+        width: 0.65em;
+        height: 0.65em;
+        transform: scale(0);
+        transition: 120ms transform ease-in-out;
+        box-shadow: inset 1em 1em #7fa3ec;
+      }
+      &:checked {
+        border-color: #6691e8;
+      }
+      &:checked::before {
+        transform: scale(1);
+      }
+    }
+  }
+}
+
+.checkbox-container--deactive {
+  display: none;
+}
+
+.converting-container__wrapper {
+  margin-top: 4em;
+  height: calc(100vh - 4em);
+}
+
+@media only screen and (max-width: 1024px) {
+  .react-pdf__Document {
+    justify-content: center;
+    .react-pdf__Page {
+      width: 300px;
+      height: 400px;
+    }
+  }
+  .checkbox-container {
+    top: 1.25em;
+    right: 1.25em;
+    .form-checkbox {
+      input[type="checkbox"] {
+        width: 22.5px;
+        height: 22.5px;
+      }
+    }
+  }
+}
