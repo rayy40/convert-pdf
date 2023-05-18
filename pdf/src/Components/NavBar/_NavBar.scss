@@ -20,6 +20,10 @@
     min-width: 0;
     padding: 0 0.875em;
     p {
+      max-width: 200px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
       font-size: 1rem;
       color: #333;
     }
@@ -42,11 +46,10 @@
       text-decoration: none;
       border: 1px solid transparent;
       border-radius: 4px;
-      padding: 0 1.25em;
+      padding: 0.65em 1.25em;
       cursor: pointer;
-      font-weight: 700;
-      font-size: 1rem;
-      height: 40px;
+      font-weight: 500;
+      font-size: 0.925rem;
       background: rgb(0, 85, 255);
       color: rgb(255, 255, 255);
       &:hover {

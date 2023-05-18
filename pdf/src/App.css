@@ -336,6 +336,10 @@ body {
 }
 
 .navbar-container__middle p {
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   font-size: 1rem;
   color: #333;
 }
@@ -375,11 +379,10 @@ body {
   text-decoration: none;
   border: 1px solid transparent;
   border-radius: 4px;
-  padding: 0 1.25em;
+  padding: 0.65em 1.25em;
   cursor: pointer;
-  font-weight: 700;
-  font-size: 1rem;
-  height: 40px;
+  font-weight: 500;
+  font-size: 0.925rem;
   background: #0055ff;
   color: white;
 }
@@ -632,6 +635,7 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
 .edit-pdf-container {
   padding: 2em;
   margin-top: 2em;
+  position: relative;
 }
 
 .edit-pdf-container .pdf-wrapper {
@@ -641,7 +645,7 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
 }
 
 .edit-pdf-container .pdf-wrapper p {
-  margin-top: 1em;
+  margin-top: 0.5em;
 }
 
 .edit-pdf-container .pdf-wrapper:hover .icons-container {
@@ -649,27 +653,35 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
 }
 
 .edit-pdf-container__banner {
-  width: calc(100% + 3.9em);
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 3;
+  top: 4em;
+  width: calc(100% + 4em);
   margin-left: -2em;
-  padding: 1em;
+  padding: 1em 1.25em;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
   background-color: whitesmoke;
   -webkit-box-shadow: 0 0 2px rgba(26, 26, 26, 0.2);
           box-shadow: 0 0 2px rgba(26, 26, 26, 0.2);
   border-bottom: 1px solid #e4e4e4;
   margin-bottom: 2em;
-  font-size: 1.05rem;
 }
 
 .edit-pdf-container__banner .icon {
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  font-size: 1.125rem;
   opacity: 0.5;
   color: #888;
   -webkit-transition: color 0.2s cubic-bezier(0.19, 1, 0.22, 1);
@@ -684,6 +696,23 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
 
 .edit-pdf-container__banner .icon--active:hover {
   color: #7fa3ec;
+}
+
+.edit-pdf-container__banner .banner-checkbox {
+  font-size: 1.05rem;
+  line-height: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0.65em;
+}
+
+.edit-pdf-container__banner .banner-checkbox input[type="checkbox"] {
+  width: 22.5px;
+  height: 22.5px;
 }
 
 .react-pdf__Document {
@@ -720,45 +749,6 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
   max-height: 100%;
 }
 
-.icons-container {
-  visibility: hidden;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  width: calc(100% - 2.5em);
-  position: absolute;
-  bottom: 5em;
-  left: 1.25em;
-}
-
-.icons-container .icon {
-  color: #888;
-  font-size: 1.25rem;
-  -webkit-transition: color 0.2s cubic-bezier(0.19, 1, 0.22, 1);
-  transition: color 0.2s cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-.icons-container .magnify {
-  cursor: pointer;
-  border-radius: 50%;
-  padding: 0.5em;
-  outline: none transparent;
-  border: none transparent;
-  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-          box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  background: #e4e4e4;
-}
-
-.icons-container .magnify:hover .icon {
-  color: #333;
-}
-
 .checkbox-container {
   position: absolute;
   top: 1.5em;
@@ -766,12 +756,12 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
   z-index: 2;
 }
 
-.checkbox-container .form-checkbox {
+.form-checkbox {
   font-size: 2rem;
   line-height: 1.1;
 }
 
-.checkbox-container .form-checkbox input[type="checkbox"] {
+.form-checkbox input[type="checkbox"] {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -791,7 +781,7 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
   cursor: pointer;
 }
 
-.checkbox-container .form-checkbox input[type="checkbox"]::before {
+.form-checkbox input[type="checkbox"]::before {
   content: "";
   width: 0.65em;
   height: 0.65em;
@@ -805,11 +795,11 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
           box-shadow: inset 1em 1em #7fa3ec;
 }
 
-.checkbox-container .form-checkbox input[type="checkbox"]:checked {
+.form-checkbox input[type="checkbox"]:checked {
   border-color: #6691e8;
 }
 
-.checkbox-container .form-checkbox input[type="checkbox"]:checked::before {
+.form-checkbox input[type="checkbox"]:checked::before {
   -webkit-transform: scale(1);
           transform: scale(1);
 }

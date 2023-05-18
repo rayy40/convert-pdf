@@ -4,10 +4,7 @@ import { FileContext } from "../../Helper/FileContext";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMagnifyingGlass,
-  faTrashAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import Loading from "../../Layouts/Loading";
 import Converting from "../../Layouts/Converting";
 
@@ -58,7 +55,6 @@ const EditPdf = () => {
     );
   }
 
-  console.log(numPages);
   return (
     <div className="edit-pdf-container">
       <div className="edit-pdf-container__banner">
@@ -71,6 +67,32 @@ const EditPdf = () => {
           }`}
           icon={faTrashAlt}
         />
+        <div className="deselect-container">
+          <label className="form-checkbox banner-checkbox" htmlFor="Deselect">
+            <input
+              onChange={() =>
+                setIsCheckboxSelected((prev) => {
+                  const updatedState = {};
+                  Object.keys(prev).forEach((key) => {
+                    updatedState[key] = false;
+                  });
+                  return updatedState;
+                })
+              }
+              checked={
+                isCheckboxSelected &&
+                Object.values(isCheckboxSelected).some(
+                  (value) => value === true
+                )
+              }
+              type="checkbox"
+            />
+            {isCheckboxSelected &&
+            Object.values(isCheckboxSelected).some((value) => value === true)
+              ? "Deselect All"
+              : "Select All"}
+          </label>
+        </div>
       </div>
       {uploadUrl.length > 0 ? (
         <Document
@@ -87,37 +109,33 @@ const EditPdf = () => {
             </div>
           )}
         >
-          {Array.from(new Array(numPages)).map((_, index) => (
-            <div key={index} className="pdf-wrapper">
-              <Page pageNumber={index + 1} />
-              <div className="icons-container">
-                <button className="magnify">
-                  <FontAwesomeIcon className="icon" icon={faMagnifyingGlass} />
-                </button>
+          {isCheckboxSelected &&
+            Array.from(new Array(numPages)).map((_, index) => (
+              <div key={index} className="pdf-wrapper">
+                <Page pageNumber={index + 1} />
+                <p>{index + 1}</p>
+                <div
+                  className={`checkbox-container ${
+                    numPages === 1 && "checkbox-container--deactive"
+                  }`}
+                >
+                  <form action="/">
+                    <label className="form-checkbox">
+                      <input
+                        onChange={() =>
+                          setIsCheckboxSelected((prev) => ({
+                            ...prev,
+                            [index + 1]: !prev[index + 1],
+                          }))
+                        }
+                        checked={isCheckboxSelected[index + 1]}
+                        type="checkbox"
+                      />
+                    </label>
+                  </form>
+                </div>
               </div>
-              <p>{index + 1}</p>
-              <div
-                className={`checkbox-container ${
-                  numPages === 1 && "checkbox-container--deactive"
-                }`}
-              >
-                <form action="/">
-                  <label className="form-checkbox">
-                    <input
-                      onChange={() =>
-                        setIsCheckboxSelected((prev) => ({
-                          ...prev,
-                          [index + 1]: !prev[index + 1],
-                        }))
-                      }
-                      type="checkbox"
-                      name="checkbox"
-                    />
-                  </label>
-                </form>
-              </div>
-            </div>
-          ))}
+            ))}
         </Document>
       ) : (
         <Loading />

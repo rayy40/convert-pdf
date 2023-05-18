@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FileContext } from "../../Helper/FileContext";
+import { useLocation } from "react-router-dom";
 
 const NavBar = () => {
-  const { metadata } = useContext(FileContext);
-  console.log(metadata);
+  const location = useLocation();
+  const { metadata, uploadUrl } = useContext(FileContext);
 
   const convertSize = (size) => {
     if (size >= 1000000) {
@@ -63,14 +64,26 @@ const NavBar = () => {
           </div>
         </a>
         <div className="navbar-container__middle">
-          <p>{metadata?.name.split("--")[0]}</p>
-          <span>{convertSize(metadata?.size)}</span>
+          {location.pathname === "/delete-pages/edit" && (
+            <>
+              <p>{metadata?.name.split("--")[0]}</p>
+              <span>{convertSize(metadata?.size)}</span>
+            </>
+          )}
         </div>
         <div className="navbar-container__right">
-          <button className="convert-btn">
-            Download
-            <FontAwesomeIcon className="icon" icon={faArrowRightLong} />
-          </button>
+          <a
+            className="link"
+            target="_blank"
+            rel="noreferrer"
+            href={uploadUrl}
+            download
+          >
+            <button className="convert-btn">
+              Download
+              <FontAwesomeIcon className="icon" icon={faDownload} />
+            </button>
+          </a>
         </div>
       </div>
     </div>
