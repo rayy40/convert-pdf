@@ -222,40 +222,7 @@ def compress_pdf():
 
     pdf = fitz.open("compress.pdf")
 
-    compression_quality = 6
-
-    # Iterate through pages
-    for page_index in range(len(pdf)):
-        # Get the current page
-        page = pdf[page_index]
-
-        # Extract images from the page
-        images = page.get_pixmap()
-        print(images)
-
-        for image_index in range(len(images)):
-            print(image_index)
-            # Get the current image
-            image = images[image_index]
-
-            # Convert Pixmap to Pillow Image
-            img = Image.frombytes("RGB", [image.width, image.height], image.samples)
-
-            # Resize or compress the image as desired using Pillow methods
-            # Example: Reduce image quality to 80%
-            img = img.save("temp.jpg", "JPEG", quality=80)
-
-            # Replace the original image with the compressed one
-            page.set_pixmap(image, image_index)
-
-    # Subset embedded fonts
-    pdf.subset_fonts()
-
-    # Save the compressed PDF
-    pdf.save("compressed.pdf", deflate=compression_quality, garbage=False, clean=True)
-
-    # Close the PDF
-    pdf.close()
+    # Compression logic
 
     return "Uploaded"
 
