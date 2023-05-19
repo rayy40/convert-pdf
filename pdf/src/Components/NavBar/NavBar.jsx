@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FileContext } from "../../Helper/FileContext";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 const NavBar = () => {
   const location = useLocation();
@@ -21,7 +21,7 @@ const NavBar = () => {
   return (
     <div className="navbar-container__wrapper">
       <div className="navbar-container">
-        <a href="/">
+        <Link className="link" to={"/"}>
           <div className="logo">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
               <polygon
@@ -62,7 +62,7 @@ const NavBar = () => {
               ></polygon>
             </svg>
           </div>
-        </a>
+        </Link>
         <div className="navbar-container__middle">
           {location.pathname === "/delete-pages/edit" && (
             <>
@@ -72,18 +72,20 @@ const NavBar = () => {
           )}
         </div>
         <div className="navbar-container__right">
-          <a
-            className="link"
-            target="_blank"
-            rel="noreferrer"
-            href={uploadUrl}
-            download
-          >
-            <button className="convert-btn">
-              Download
-              <FontAwesomeIcon className="icon" icon={faDownload} />
-            </button>
-          </a>
+          {location.pathname === "/delete-pages/edit" && (
+            <a
+              className="link"
+              target="_blank"
+              rel="noreferrer"
+              href={uploadUrl}
+              download
+            >
+              <button className="convert-btn">
+                Download
+                <FontAwesomeIcon className="icon" icon={faDownload} />
+              </button>
+            </a>
+          )}
         </div>
       </div>
     </div>
