@@ -1,12 +1,15 @@
 from flask import send_file, request, Flask
 from flask_cors import CORS, cross_origin
 from dotenv import load_dotenv
+from pptx import Presentation
 from io import BytesIO
 from PIL import Image
 import urllib.request
 import requests
+import tempfile
 import zipfile
 import pyrebase
+import math
 import fitz
 import os
 
@@ -200,9 +203,86 @@ def delete_pages():
     os.remove("delete.pdf")
     os.remove(output_file_path)
 
-    print("Completed")
-
     return pdf_url
+
+
+@app.route("/api/pdf-to-ppt", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def pdf_to_ppt():
+    # Get the JSON data containing URLs
+    data = request.get_json()
+    urls = data.get("urls")
+
+    response = requests.get(urls[0])
+
+    # Load the PDF content into a Presentation object
+    prs = Presentation()
+
+    # Create a slide for each page in the PDF
+    pdf_stream = BytesIO(response.content)
+    pdf_stream.seek(0)
+    slide_width = prs.slide_width
+    slide_height = prs.slide_height
+    slide_layout = prs.slide_layouts[1]  # Use the layout for a content slide
+
+    with tempfile.NamedTemporaryFile(delete=False) as pdf_file:
+        pdf_file.write(pdf_stream.getvalue())
+
+        pdf_doc = fitz.open(pdf_file.name)
+        for page_index in range(len(pdf_doc)):
+            slide = prs.slides.add_slide(slide_layout)
+            content_slide = slide.shapes
+
+            # Convert PDF page to image
+            page = pdf_doc.load_page(page_index)
+            pix = page.get_pixmap()
+
+            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as img_file:
+                img.save(img_file.name, format="PNG")
+
+                # Calculate the dimensions while maintaining the aspect ratio
+                max_width = slide_width
+                max_height = slide_height
+                img_width, img_height = img.size
+                aspect_ratio = img_width / img_height
+
+                if aspect_ratio > max_width / max_height:
+                    width = max_width
+                    height = math.ceil(width / aspect_ratio)
+                    left = 0
+                    top = (max_height - height) / 2
+                else:
+                    height = max_height
+                    width = math.ceil(height * aspect_ratio)
+                    top = 0
+                    left = (max_width - width) / 2
+
+                # Add the image to the slide
+                content_slide.add_picture(img_file.name, left, top, width, height)
+
+    # Save the Presentation as a PPTX file
+    converted_pptx = tempfile.NamedTemporaryFile(delete=False, suffix=".pptx")
+    prs.save(converted_pptx.name)
+    converted_pptx.close()
+
+    # Upload the converted PPTX file to Firebase Storage
+    firebase = pyrebase.initialize_app(firebase_config)
+    storage = firebase.storage()
+    storage.child("converted.pptx").put(converted_pptx.name)
+
+    # Generate the download URL for the converted PPTX
+    pptx_url = storage.child("converted.pptx").get_url(None)
+
+    # Clean up temporary files
+    pdf_file.close()
+    pdf_doc.close()
+    pdf_stream.close()
+    os.remove(converted_pptx.name)
+    os.remove(pdf_file.name)
+
+    return pptx_url
 
 
 @app.route("/api/compress-pdf", methods=["POST"])
@@ -210,10 +290,6 @@ def delete_pages():
 def compress_pdf():
     data = request.get_json()
     urls = data.get("urls")
-
-    print(urls)
-
-    print(data)
 
     response = requests.get(urls[0])
 

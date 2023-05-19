@@ -9,6 +9,7 @@ import EditPdf from "./Components/EditPdf/EditPdf";
 import { FileProvider } from "./Helper/FileContext";
 import NavBar from "./Components/NavBar/NavBar";
 import { pdfjs } from "react-pdf";
+import PdfToPptPage from "./Pages/OperationsPages/PdfToPptPage";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -22,6 +23,7 @@ function App() {
             <Route path="/" exact element={<HomePage />} />
             <Route path="/pdf-to-jpg" element={<PdfToJpgPage />} />
             <Route path="/jpg-to-pdf" element={<JpgToPdfPage />} />
+            <Route path="/pdf-to-ppt" element={<PdfToPptPage />} />
             <Route path="/delete-pages" element={<DeletePdfPage />} />
             <Route path="/compress-pdf" element={<CompressPdfPage />} />
             <Route path="/delete-pages/edit" element={<EditPdf />} />

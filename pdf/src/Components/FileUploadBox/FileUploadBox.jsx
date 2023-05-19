@@ -51,7 +51,7 @@ const FileUploadBox = ({ route, image, bgColor, file }) => {
                     className="picker-input"
                     type="file"
                     accept="application/pdf"
-                    // accept="image/png, image/gif, image/jpeg, image/jpg"
+                    // accept="image/png, image/gif, image/bmp, image/tiff, image/jpg"
                   />
                   <FontAwesomeIcon className="icon" icon={faFilePdf} />
                   <span>Choose Files</span>
