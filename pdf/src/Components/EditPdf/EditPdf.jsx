@@ -4,7 +4,7 @@ import { FileContext } from "../../Helper/FileContext";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faScissors, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import Loading from "../../Layouts/Loading";
 import Converting from "../../Layouts/Converting";
 import { useLocation } from "react-router-dom";
@@ -20,6 +20,7 @@ const EditPdf = () => {
     setIsModifying,
   } = useContext(FileContext);
   const [numPages, setNumPages] = useState(null);
+  const [isSplitting, setIsSplitting] = useState([]);
   const location = useLocation();
 
   const generateInitialCheckboxState = (numPages) => {
@@ -36,6 +37,14 @@ const EditPdf = () => {
       </div>
     );
   }
+
+  const handleScissorButtonClick = (index) => {
+    //
+    setIsSplitting((prev) => ({
+      ...prev,
+      [index + 1]: !prev[index + 1],
+    }));
+  };
 
   return (
     <div className="edit-pdf-container">
@@ -73,36 +82,70 @@ const EditPdf = () => {
           }`}
           icon={faTrashAlt}
         />
-        <div className="deselect-container">
-          <label className="form-checkbox banner-checkbox" htmlFor="Deselect">
-            <input
-              onChange={() =>
-                setIsCheckboxSelected((prev) => {
-                  const updatedState = {};
-                  const anyValueSelected = Object.values(prev).some(
-                    (value) => value === true
-                  );
+        {!location.pathname.includes("/split-pdf") && (
+          <div className="deselect-container">
+            <label className="form-checkbox banner-checkbox" htmlFor="Deselect">
+              <input
+                onChange={() =>
+                  setIsCheckboxSelected((prev) => {
+                    const updatedState = {};
+                    const anyValueSelected = Object.values(prev).some(
+                      (value) => value === true
+                    );
 
-                  Object.keys(prev).forEach((key) => {
-                    updatedState[key] = anyValueSelected ? false : true;
-                  });
-                  return updatedState;
-                })
-              }
-              checked={
-                isCheckboxSelected &&
-                Object.values(isCheckboxSelected).some(
-                  (value) => value === true
-                )
-              }
-              type="checkbox"
-            />
-            {isCheckboxSelected &&
-            Object.values(isCheckboxSelected).some((value) => value === true)
-              ? "Deselect All"
-              : "Select All"}
-          </label>
-        </div>
+                    Object.keys(prev).forEach((key) => {
+                      updatedState[key] = anyValueSelected ? false : true;
+                    });
+                    return updatedState;
+                  })
+                }
+                checked={
+                  isCheckboxSelected &&
+                  Object.values(isCheckboxSelected).some(
+                    (value) => value === true
+                  )
+                }
+                type="checkbox"
+              />
+              {isCheckboxSelected &&
+              Object.values(isCheckboxSelected).some((value) => value === true)
+                ? "Deselect All"
+                : "Select All"}
+            </label>
+          </div>
+        )}
+        {location.pathname.includes("/split-pdf") && (
+          <div className="split-after-every-page-container">
+            <label
+              className="form-checkbox banner-checkbox"
+              htmlFor="split-after-every-page"
+            >
+              <input
+                onChange={() =>
+                  setIsSplitting((prev) => {
+                    const allValuesSelected = Object.values(prev).every(
+                      (value) => value === true
+                    );
+                    const updatedState = {};
+
+                    Object.keys(prev).forEach((key) => {
+                      updatedState[key] = allValuesSelected ? false : true;
+                    });
+                    return updatedState;
+                  })
+                }
+                checked={
+                  isSplitting &&
+                  Object.values(isSplitting)
+                    .slice(0, -1)
+                    .every((value) => value === true)
+                }
+                type="checkbox"
+              />
+              Split after every page
+            </label>
+          </div>
+        )}
       </div>
       {uploadUrl.length > 0 ? (
         <Document
@@ -112,6 +155,7 @@ const EditPdf = () => {
           onLoadSuccess={({ numPages }) => {
             setNumPages(numPages);
             setIsCheckboxSelected(generateInitialCheckboxState(numPages));
+            setIsSplitting(generateInitialCheckboxState(numPages));
           }}
           onLoadError={(err) => (
             <div className="error-container">
@@ -121,30 +165,53 @@ const EditPdf = () => {
         >
           {isCheckboxSelected &&
             Array.from(new Array(numPages)).map((_, index) => (
-              <div key={index} className="pdf-wrapper">
-                <Page pageNumber={index + 1} />
-                <p>{index + 1}</p>
-                <div
-                  className={`checkbox-container ${
-                    numPages === 1 && "checkbox-container--deactive"
-                  }`}
-                >
-                  <form action="/">
-                    <label className="form-checkbox">
-                      <input
-                        onChange={() =>
-                          setIsCheckboxSelected((prev) => ({
-                            ...prev,
-                            [index + 1]: !prev[index + 1],
-                          }))
-                        }
-                        checked={isCheckboxSelected[index + 1]}
-                        type="checkbox"
-                      />
-                    </label>
-                  </form>
+              <React.Fragment key={index}>
+                <div className="pdf-wrapper">
+                  <Page pageNumber={index + 1} />
+                  <p>{index + 1}</p>
+                  {!location.pathname.includes("split-pdf") && (
+                    <div
+                      className={`checkbox-container ${
+                        numPages === 1 && "checkbox-container--deactive"
+                      }`}
+                    >
+                      <form action="/">
+                        <label className="form-checkbox">
+                          <input
+                            onChange={() =>
+                              setIsCheckboxSelected((prev) => ({
+                                ...prev,
+                                [index + 1]: !prev[index + 1],
+                              }))
+                            }
+                            checked={isCheckboxSelected[index + 1]}
+                            type="checkbox"
+                          />
+                        </label>
+                      </form>
+                    </div>
+                  )}
                 </div>
-              </div>
+                {location.pathname.includes("/split-pdf") && (
+                  <div
+                    className={`${
+                      numPages === index + 1
+                        ? "scissor-container--deactive"
+                        : isSplitting?.[index + 1]
+                        ? "scissor-container scissor-container--active"
+                        : "scissor-container"
+                    }`}
+                  >
+                    <button onClick={() => handleScissorButtonClick(index)}>
+                      <FontAwesomeIcon
+                        className="icon"
+                        icon={faScissors}
+                        rotation={270}
+                      />
+                    </button>
+                  </div>
+                )}
+              </React.Fragment>
             ))}
         </Document>
       ) : (

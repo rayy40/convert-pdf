@@ -15,7 +15,11 @@ const NavBar = () => {
     setIsModifying,
   } = useContext(FileContext);
 
-  const pathsToCheck = ["delete-pages/edit", "split-pdf/edit"];
+  const pathsToCheck = [
+    "delete-pages/edit",
+    "split-pdf/edit",
+    "extract-pdf/edit",
+  ];
 
   const convertSize = (size) => {
     if (size >= 1000000) {
@@ -95,27 +99,29 @@ const NavBar = () => {
               </button>
             </a>
           )}
-          <button
-            className={`convert-btn ${
-              isCheckboxSelected &&
-              Object.values(isCheckboxSelected).every(
-                (value) => value === false
-              ) &&
-              "convert-btn--deactive"
-            }`}
-            onClick={() =>
-              handleApiCall(
-                isCheckboxSelected,
-                uploadUrl,
-                setIsModifying,
-                setUploadUrl,
-                location.pathname.split("/")[1]
-              )
-            }
-          >
-            Extract
-            <FontAwesomeIcon className="icon" icon={faArrowRight} />
-          </button>
+          {!location.pathname.includes("/delete-pages/edit") && (
+            <button
+              className={`convert-btn ${
+                isCheckboxSelected &&
+                Object.values(isCheckboxSelected).every(
+                  (value) => value === false
+                ) &&
+                "convert-btn--deactive"
+              }`}
+              onClick={() =>
+                handleApiCall(
+                  isCheckboxSelected,
+                  uploadUrl,
+                  setIsModifying,
+                  setUploadUrl,
+                  location.pathname.split("/")[1]
+                )
+              }
+            >
+              Extract
+              <FontAwesomeIcon className="icon" icon={faArrowRight} />
+            </button>
+          )}
         </div>
       </div>
     </div>

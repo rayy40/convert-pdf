@@ -11,6 +11,8 @@ import NavBar from "./Components/NavBar/NavBar";
 import { pdfjs } from "react-pdf";
 import PdfToPptPage from "./Pages/OperationsPages/PdfToPptPage";
 import SplitPdfPage from "./Pages/OperationsPages/SplitPdfPage";
+import ExtractPdfPage from "./Pages/OperationsPages/ExtractPdfPage";
+import MergePdfPage from "./Pages/OperationsPages/MergePdfPage";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -27,9 +29,12 @@ function App() {
             <Route path="/pdf-to-ppt" element={<PdfToPptPage />} />
             <Route path="/delete-pages" element={<DeletePdfPage />} />
             <Route path="/split-pdf" element={<SplitPdfPage />} />
+            <Route path="/extract-pdf" element={<ExtractPdfPage />} />
+            <Route path="/merge-pdf" element={<MergePdfPage />} />
             <Route path="/compress-pdf" element={<CompressPdfPage />} />
             <Route path="/delete-pages/edit" element={<EditPdf />} />
             <Route path="/split-pdf/edit" element={<EditPdf />} />
+            <Route path="/extract-pdf/edit" element={<EditPdf />} />
           </Routes>
         </div>
       </FileProvider>

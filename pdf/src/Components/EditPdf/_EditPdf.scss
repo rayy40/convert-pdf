@@ -3,16 +3,11 @@
   margin-top: 2em;
   position: relative;
   .pdf-wrapper {
-    cursor: pointer;
     position: relative;
     text-align: center;
+    cursor: pointer;
     p {
       margin-top: 0.5em;
-    }
-    &:hover {
-      .icons-container {
-        visibility: visible;
-      }
     }
   }
   &__banner {
@@ -62,6 +57,51 @@
       }
     }
   }
+  .scissor-container {
+    border-left: 1px dotted #888;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    transition: border-left 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+    cursor: pointer;
+    button {
+      margin-left: -1.5em;
+      padding: 1em;
+      outline: none transparent;
+      border: none transparent;
+      border-radius: 50%;
+      background: white;
+      cursor: pointer;
+      .icon {
+        color: #888;
+        transition: color 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+      }
+    }
+    &:hover {
+      border-left: 1px solid #333;
+      .icon {
+        color: #333;
+      }
+    }
+  }
+  .scissor-container--active {
+    border-left: 1px solid #333;
+    button {
+      border-radius: 50%;
+      background: #333;
+      .icon {
+        color: #e4e4e4;
+      }
+    }
+    &:hover {
+      .icon {
+        color: #e4e4e4;
+      }
+    }
+  }
+  .scissor-container--deactive {
+    display: none;
+  }
 }
 
 .react-pdf__Document {
@@ -71,8 +111,8 @@
   justify-content: space-evenly;
   flex-wrap: wrap;
   .react-pdf__Page {
-    width: 400px;
-    height: 550px;
+    width: 350px;
+    height: 500px;
     canvas {
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
       width: unset !important;
@@ -147,7 +187,7 @@
   }
   .checkbox-container {
     top: 1.25em;
-    right: 1.25em;
+    right: 1.5em;
     .form-checkbox {
       input[type="checkbox"] {
         width: 22.5px;

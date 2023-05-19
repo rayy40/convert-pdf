@@ -12,7 +12,9 @@ const FileUploadBox = ({ route, image, bgColor, file }) => {
   useEffect(() => {
     if (
       progress === 100 &&
-      (route === "delete-pages" || route === "split-pdf")
+      (route === "delete-pages" ||
+        route === "split-pdf" ||
+        route === "extract-pdf")
     ) {
       navigate(`/${route}/edit`);
     }
@@ -48,7 +50,7 @@ const FileUploadBox = ({ route, image, bgColor, file }) => {
                 <label className="file-input">
                   <input
                     ref={fileInputRef}
-                    // mutiple
+                    multiple
                     className="picker-input"
                     type="file"
                     accept="application/pdf"
