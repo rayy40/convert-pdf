@@ -207,6 +207,48 @@ def delete_pages():
     return pdf_url
 
 
+@app.route("/api/split-pdf", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def split_pdf():
+    data = request.get_json()
+    urls = data.get("urls")
+    pages = data.get("pages")
+
+    response = requests.get(urls)
+
+    with open("split.pdf", "wb") as file:
+        file.write(response.content)
+
+    # Extract selected pages
+    extracted_pages = []
+    doc = fitz.open("split.pdf")
+    pdf = fitz.open()
+
+    for page_num in sorted(pages, reverse=True):
+        page = doc[int(page_num) - 1]  # Page numbers start from 0
+        pdf.insert_pdf(doc, from_page=int(page_num) - 1, to_page=int(page_num) - 1)
+
+    # Save the extracted pages to a new PDF file
+    output_filename = "extracted_pages.pdf"
+    pdf.save(output_filename)
+    pdf.close()
+    doc.close()
+
+    # Upload the new PDF file to Firebase storage
+    firebase = pyrebase.initialize_app(firebase_config)
+    storage = firebase.storage()
+    storage.child(output_filename).put(output_filename)
+
+    # Get the download URL
+    download_url = storage.child(output_filename).get_url(None)
+
+    # Remove the local files
+    os.remove("split.pdf")
+    os.remove(output_filename)
+
+    return download_url
+
+
 @app.route("/api/pdf-to-ppt", methods=["POST"])
 @cross_origin(supports_credentials=True)
 def pdf_to_ppt():

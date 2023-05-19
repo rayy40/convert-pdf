@@ -8,12 +8,18 @@ import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import Loading from "../../Layouts/Loading";
 import Converting from "../../Layouts/Converting";
 import { useLocation } from "react-router-dom";
+import { handleApiCall } from "../../Helper/ReusableFunctions";
 
 const EditPdf = () => {
-  const { uploadUrl, setUploadUrl, isCheckboxSelected, setIsCheckboxSelected } =
-    useContext(FileContext);
+  const {
+    uploadUrl,
+    setUploadUrl,
+    isCheckboxSelected,
+    setIsCheckboxSelected,
+    isModifying,
+    setIsModifying,
+  } = useContext(FileContext);
   const [numPages, setNumPages] = useState(null);
-  const [isModifying, setIsModifying] = useState(false);
   const location = useLocation();
 
   const generateInitialCheckboxState = (numPages) => {
@@ -21,32 +27,6 @@ const EditPdf = () => {
       acc[index + 1] = false;
       return acc;
     }, {});
-  };
-
-  const deletePagesFromPdf = () => {
-    const selectedPages = Object.entries(isCheckboxSelected)
-      .filter(([key, value]) => value === true)
-      .map(([key]) => Number(key));
-
-    setIsModifying(true);
-
-    fetch(`http://localhost:5000/api/delete-pages`, {
-      method: "POST",
-      body: JSON.stringify({ urls: uploadUrl, pages: selectedPages }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.text()) // Assuming the response is JSON
-      .then((data) => {
-        setUploadUrl(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-      .finally(() => {
-        setIsModifying(false);
-      });
   };
 
   if (isModifying) {
@@ -60,8 +40,30 @@ const EditPdf = () => {
   return (
     <div className="edit-pdf-container">
       <div className="edit-pdf-container__banner">
+        <div className="no-of-files-selected">
+          {isCheckboxSelected &&
+            Object.values(isCheckboxSelected).some(
+              (value) => value === true
+            ) && (
+              <p>
+                {`${
+                  Object.values(isCheckboxSelected).filter(
+                    (value) => value === true
+                  ).length
+                } page`}
+              </p>
+            )}
+        </div>
         <FontAwesomeIcon
-          onClick={deletePagesFromPdf}
+          onClick={() =>
+            handleApiCall(
+              isCheckboxSelected,
+              uploadUrl,
+              setIsModifying,
+              setUploadUrl,
+              location.pathname.split("/")[1]
+            )
+          }
           className={`${
             !location.pathname.includes("delete-pages") && "icon--deactive"
           } icon ${

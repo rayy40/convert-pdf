@@ -1,12 +1,21 @@
 import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FileContext } from "../../Helper/FileContext";
 import { useLocation, Link } from "react-router-dom";
+import { handleApiCall } from "../../Helper/ReusableFunctions";
 
 const NavBar = () => {
   const location = useLocation();
-  const { metadata, uploadUrl } = useContext(FileContext);
+  const {
+    metadata,
+    uploadUrl,
+    isCheckboxSelected,
+    setUploadUrl,
+    setIsModifying,
+  } = useContext(FileContext);
+
+  const pathsToCheck = ["delete-pages/edit", "split-pdf/edit"];
 
   const convertSize = (size) => {
     if (size >= 1000000) {
@@ -64,7 +73,7 @@ const NavBar = () => {
           </div>
         </Link>
         <div className="navbar-container__middle">
-          {location.pathname === "/delete-pages/edit" && (
+          {pathsToCheck.some((path) => location.pathname.includes(path)) && (
             <>
               <p>{metadata?.name.split("--")[0]}</p>
               <span>{convertSize(metadata?.size)}</span>
@@ -72,7 +81,7 @@ const NavBar = () => {
           )}
         </div>
         <div className="navbar-container__right">
-          {location.pathname === "/delete-pages/edit" && (
+          {location.pathname.includes("/delete-pages/edit") && (
             <a
               className="link"
               target="_blank"
@@ -86,6 +95,27 @@ const NavBar = () => {
               </button>
             </a>
           )}
+          <button
+            className={`convert-btn ${
+              isCheckboxSelected &&
+              Object.values(isCheckboxSelected).every(
+                (value) => value === false
+              ) &&
+              "convert-btn--deactive"
+            }`}
+            onClick={() =>
+              handleApiCall(
+                isCheckboxSelected,
+                uploadUrl,
+                setIsModifying,
+                setUploadUrl,
+                location.pathname.split("/")[1]
+              )
+            }
+          >
+            Extract
+            <FontAwesomeIcon className="icon" icon={faArrowRight} />
+          </button>
         </div>
       </div>
     </div>

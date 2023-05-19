@@ -56,5 +56,12 @@
         background: rgb(0, 72, 217);
       }
     }
+    .convert-btn--deactive {
+      background: #c3c3c3;
+      cursor: not-allowed;
+      &:hover {
+        background: #c3c3c3;
+      }
+    }
   }
 }
