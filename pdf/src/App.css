@@ -698,6 +698,10 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
   color: #7fa3ec;
 }
 
+.edit-pdf-container__banner .icon--deactive {
+  display: none;
+}
+
 .edit-pdf-container__banner .banner-checkbox {
   font-size: 1.05rem;
   line-height: 1;

@@ -2,6 +2,7 @@ from flask import send_file, request, Flask
 from flask_cors import CORS, cross_origin
 from dotenv import load_dotenv
 from pptx import Presentation
+from pylokit import Office
 from io import BytesIO
 from PIL import Image
 import urllib.request
@@ -122,7 +123,7 @@ def pdf_to_jpg():
             pix = page.get_pixmap()
 
             # Save the pixmap as an image file
-            image_path = os.path.join("images", f"file_{i}.png")
+            image_path = os.path.join("images", f"file_{i}.jpg")
             pix.save(image_path)
 
     # Check the number of images
@@ -131,8 +132,8 @@ def pdf_to_jpg():
         zip_data = BytesIO()
         with zipfile.ZipFile(zip_data, "w") as zipf:
             for i in range(num_pages):
-                image_path = os.path.join("images", f"file_{i}.png")
-                zipf.write(image_path, f"file_{i}.png")
+                image_path = os.path.join("images", f"file_{i}.jpg")
+                zipf.write(image_path, f"file_{i}.jpg")
 
         # Reset the position of the zip_data object to the beginning
         zip_data.seek(0)
@@ -147,21 +148,21 @@ def pdf_to_jpg():
 
         # Clean up temporary files
         for i in range(num_pages):
-            image_path = os.path.join("images", f"file_{i}.png")
+            image_path = os.path.join("images", f"file_{i}.jpg")
             os.remove(image_path)
 
         return zip_url
     elif num_pages == 1:
         # Generate the download URL for the single image
-        image_path = os.path.abspath(os.path.join("images", "file_0.png"))
+        image_path = os.path.abspath(os.path.join("images", "file_0.jpg"))
 
         # Upload the single image file to Firebase Storage
         firebase = pyrebase.initialize_app(firebase_config)
         storage = firebase.storage()
-        storage.child("converted_image.png").put(image_path)
+        storage.child("converted_image.jpg").put(image_path)
 
         # Generate the download URL for the single image
-        image_url = storage.child("converted_image.png").get_url(None)
+        image_url = storage.child("converted_image.jpg").get_url(None)
 
         # Clean up temporary files
         os.remove(image_path)

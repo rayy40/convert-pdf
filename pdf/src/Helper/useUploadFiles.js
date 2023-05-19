@@ -58,7 +58,7 @@ const useUploadFiles = () => {
       setProgress(100);
     });
 
-    if (route !== "delete-pages") {
+    if (route !== "delete-pages" && route !== "split-pdf") {
       return Promise.all(uploadPromises)
         .then((urls) => {
           setIsUploading(false);

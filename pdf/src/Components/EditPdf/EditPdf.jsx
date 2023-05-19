@@ -7,12 +7,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import Loading from "../../Layouts/Loading";
 import Converting from "../../Layouts/Converting";
+import { useLocation } from "react-router-dom";
 
 const EditPdf = () => {
   const { uploadUrl, setUploadUrl, isCheckboxSelected, setIsCheckboxSelected } =
     useContext(FileContext);
   const [numPages, setNumPages] = useState(null);
   const [isModifying, setIsModifying] = useState(false);
+  const location = useLocation();
 
   const generateInitialCheckboxState = (numPages) => {
     return Array.from(new Array(numPages)).reduce((acc, _, index) => {
@@ -21,7 +23,7 @@ const EditPdf = () => {
     }, {});
   };
 
-  const handleApiCall = () => {
+  const deletePagesFromPdf = () => {
     const selectedPages = Object.entries(isCheckboxSelected)
       .filter(([key, value]) => value === true)
       .map(([key]) => Number(key));
@@ -59,8 +61,10 @@ const EditPdf = () => {
     <div className="edit-pdf-container">
       <div className="edit-pdf-container__banner">
         <FontAwesomeIcon
-          onClick={handleApiCall}
-          className={`icon ${
+          onClick={deletePagesFromPdf}
+          className={`${
+            !location.pathname.includes("delete-pages") && "icon--deactive"
+          } icon ${
             isCheckboxSelected &&
             Object.values(isCheckboxSelected).some((value) => value === true) &&
             "icon--active"
@@ -73,8 +77,12 @@ const EditPdf = () => {
               onChange={() =>
                 setIsCheckboxSelected((prev) => {
                   const updatedState = {};
+                  const anyValueSelected = Object.values(prev).some(
+                    (value) => value === true
+                  );
+
                   Object.keys(prev).forEach((key) => {
-                    updatedState[key] = false;
+                    updatedState[key] = anyValueSelected ? false : true;
                   });
                   return updatedState;
                 })

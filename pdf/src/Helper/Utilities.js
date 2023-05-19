@@ -215,40 +215,6 @@ export const operationsBoxInfo = [
     ),
   },
   {
-    header: "Word to PDF",
-    description: "Convert Word documents to PDF files",
-    link: "word-to-pdf",
-    image: (
-      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z"
-          fill="#3D99F5"
-        ></path>
-        <path
-          d="M23.0874 25L28 7H24.0597L21.0661 19.4034H21.0149L17.8934 7H14.1322L10.9595 19.2521H10.9083L8.01706 7H4L8.83582 25H12.9041L15.9488 12.7479H16L19.0959 25H23.0874Z"
-          fill="white"
-        ></path>
-      </svg>
-    ),
-  },
-  {
-    header: "PDF to Word",
-    description: "Convert PDFs to editable Word documents",
-    link: "pdf-to-word",
-    image: (
-      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z"
-          fill="#3D99F5"
-        ></path>
-        <path
-          d="M23.0874 25L28 7H24.0597L21.0661 19.4034H21.0149L17.8934 7H14.1322L10.9595 19.2521H10.9083L8.01706 7H4L8.83582 25H12.9041L15.9488 12.7479H16L19.0959 25H23.0874Z"
-          fill="white"
-        ></path>
-      </svg>
-    ),
-  },
-  {
     header: "Merge PDF",
     description: "Combine multiple PDFs into one unified document",
     link: "merge-pdf",

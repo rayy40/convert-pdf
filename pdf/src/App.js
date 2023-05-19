@@ -10,6 +10,7 @@ import { FileProvider } from "./Helper/FileContext";
 import NavBar from "./Components/NavBar/NavBar";
 import { pdfjs } from "react-pdf";
 import PdfToPptPage from "./Pages/OperationsPages/PdfToPptPage";
+import SplitPdfPage from "./Pages/OperationsPages/SplitPdfPage";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -25,8 +26,10 @@ function App() {
             <Route path="/jpg-to-pdf" element={<JpgToPdfPage />} />
             <Route path="/pdf-to-ppt" element={<PdfToPptPage />} />
             <Route path="/delete-pages" element={<DeletePdfPage />} />
+            <Route path="/split-pdf" element={<SplitPdfPage />} />
             <Route path="/compress-pdf" element={<CompressPdfPage />} />
             <Route path="/delete-pages/edit" element={<EditPdf />} />
+            <Route path="/split-pdf/edit" element={<EditPdf />} />
           </Routes>
         </div>
       </FileProvider>

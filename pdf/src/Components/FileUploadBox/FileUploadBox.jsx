@@ -7,11 +7,14 @@ import { useNavigate } from "react-router-dom";
 const FileUploadBox = ({ route, image, bgColor, file }) => {
   let fileInputRef = useRef(null);
   const navigate = useNavigate();
-  const { isUploading, progress, uploadFiles, downloadLink } = useUploadFiles();
+  const { isUploading, progress, uploadFiles } = useUploadFiles();
 
   useEffect(() => {
-    if (progress === 100 && route === "delete-pages") {
-      navigate("/delete-pages/edit");
+    if (
+      progress === 100 &&
+      (route === "delete-pages" || route === "split-pdf")
+    ) {
+      navigate(`/${route}/edit`);
     }
   }, [progress, navigate, route]);
 
@@ -22,8 +25,6 @@ const FileUploadBox = ({ route, image, bgColor, file }) => {
     if (files.length === 0) return;
     uploadFiles(route, Array.from(files));
   };
-
-  console.log(downloadLink);
 
   return (
     <div className="fileUpload-container">
