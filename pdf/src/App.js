@@ -13,6 +13,10 @@ import PdfToPptPage from "./Pages/OperationsPages/PdfToPptPage";
 import SplitPdfPage from "./Pages/OperationsPages/SplitPdfPage";
 import ExtractPdfPage from "./Pages/OperationsPages/ExtractPdfPage";
 import MergePdfPage from "./Pages/OperationsPages/MergePdfPage";
+import AddPageNumbersPdfPage from "./Pages/OperationsPages/AddPageNumbersPdfPage";
+import ProtectPdfPage from "./Pages/OperationsPages/ProtectPdfPage";
+import UnlockPdfPage from "./Pages/OperationsPages/UnlockPdfPage";
+import ResultPage from "./Pages/OperationsPages/ResultPage";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -31,10 +35,17 @@ function App() {
             <Route path="/split-pdf" element={<SplitPdfPage />} />
             <Route path="/extract-pdf" element={<ExtractPdfPage />} />
             <Route path="/merge-pdf" element={<MergePdfPage />} />
+            <Route
+              path="/add-page-numbers"
+              element={<AddPageNumbersPdfPage />}
+            />
+            <Route path="/protect-pdf" element={<ProtectPdfPage />} />
+            <Route path="/unlock-pdf" element={<UnlockPdfPage />} />
             <Route path="/compress-pdf" element={<CompressPdfPage />} />
             <Route path="/delete-pages/edit" element={<EditPdf />} />
             <Route path="/split-pdf/edit" element={<EditPdf />} />
             <Route path="/extract-pdf/edit" element={<EditPdf />} />
+            <Route path="/result" element={<ResultPage />} />
           </Routes>
         </div>
       </FileProvider>

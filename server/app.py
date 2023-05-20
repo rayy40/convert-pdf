@@ -346,6 +346,18 @@ def compress_pdf():
     return "Uploaded"
 
 
+@app.route("/api/protect-pdf", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def protect_pdf():
+    return "Protectd"
+
+
+@app.route("/api/unlock-pdf", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def unlock_pdf():
+    return "Unlocked"
+
+
 @app.route("/api/merge-pdf", methods=["POST"])
 @cross_origin(supports_credentials=True)
 def merge_pdf():

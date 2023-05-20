@@ -117,3 +117,13 @@ form {
     font-size: 1.35rem;
   }
 }
+
+.modifying--progress {
+  svg {
+    width: unset;
+    height: unset;
+  }
+  p {
+    font-size: 1.125rem;
+  }
+}

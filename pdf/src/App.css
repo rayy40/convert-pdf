@@ -641,6 +641,15 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
   font-size: 1.35rem;
 }
 
+.modifying--progress svg {
+  width: unset;
+  height: unset;
+}
+
+.modifying--progress p {
+  font-size: 1.125rem;
+}
+
 .edit-pdf-container {
   padding: 2em;
   margin-top: 2em;
@@ -899,6 +908,150 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
   .checkbox-container .form-checkbox input[type="checkbox"] {
     width: 22.5px;
     height: 22.5px;
+  }
+}
+
+.result-page-container__wrapper {
+  margin-top: 4em;
+}
+
+.result-page-container__wrapper .result-page-container {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 320px;
+      grid-template-columns: 1fr 320px;
+  height: calc(100vh - 4em);
+}
+
+.document-container {
+  padding: 2em;
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background-color: #fafafa;
+}
+
+.document-container .link {
+  margin: 2em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  max-width: 80%;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+
+.document-container .link img {
+  width: 100%;
+  max-width: 350px;
+  max-height: 746px;
+  -webkit-box-shadow: 0 0 5px rgba(26, 26, 26, 0.2);
+          box-shadow: 0 0 5px rgba(26, 26, 26, 0.2);
+}
+
+.details-container {
+  padding: 2em;
+  -webkit-box-shadow: rgba(26, 26, 26, 0.2) 0px 0px 2px;
+          box-shadow: rgba(26, 26, 26, 0.2) 0px 0px 2px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 1.25em;
+}
+
+.details-container h3 {
+  max-width: 85%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.details-container h3 span {
+  font-weight: 400;
+  color: #ccc;
+}
+
+.details-container .link {
+  padding: 0.5em 0 2em;
+  text-decoration: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border-bottom: 1px solid #e4e4e4;
+}
+
+.details-container .download-btn {
+  width: 100%;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 0.5em;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 1em 1.25em;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+  background: #0055ff;
+  color: white;
+}
+
+.details-container .download-btn:hover {
+  background: #0048d9;
+}
+
+.details-container .start-over-link {
+  margin: 0 auto;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  text-decoration: none;
+  text-align: center;
+  color: #333;
+  border-bottom: unset;
+}
+
+.details-container .start-over-link .icon {
+  margin-right: 0.65em;
+}
+
+@media only screen and (min-width: 640px) {
+  .document-container .link {
+    width: 100%;
+    height: 80%;
   }
 }
 /*# sourceMappingURL=App.css.map */

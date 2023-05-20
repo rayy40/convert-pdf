@@ -8,12 +8,15 @@ import {
 import { storage } from "../Config/firebase";
 import { FileContext } from "../Helper/FileContext";
 import { v4 as uuidv4 } from "uuid";
+import { useNavigate } from "react-router-dom";
 
 const useUploadFiles = () => {
   const [progress, setProgress] = useState(0);
   const { setUploadUrl, setMetadata } = useContext(FileContext);
   const [isUploading, setIsUploading] = useState(false);
+  const [isConverting, setIsConverting] = useState(false);
   const [downloadLink, setDownloadLink] = useState("");
+  const navigate = useNavigate();
 
   const uploadFiles = async (route, files) => {
     if (!files || files.length === 0) return;
@@ -46,7 +49,6 @@ const useUploadFiles = () => {
               .catch(reject);
             // Retrieve and log the metadata
             getMetadata(storageRef).then((metadata) => {
-              console.log(metadata);
               setMetadata(metadata);
             });
           }
@@ -58,32 +60,32 @@ const useUploadFiles = () => {
       setProgress(100);
     });
 
-    if (
-      route !== "delete-pages" &&
-      route !== "split-pdf" &&
-      route !== "extract-pdf"
-    ) {
-      return Promise.all(uploadPromises)
-        .then((urls) => {
-          setIsUploading(false);
-          // Call API endpoint with the download URLs
-          return fetch(`http://localhost:5000/api/${route}`, {
-            method: "POST",
-            body: JSON.stringify({ urls }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-        })
-        .then((response) => response.blob())
-        .then((blob) => setDownloadLink(blob))
-        .catch((error) => {
-          console.error(error);
+    return Promise.all(uploadPromises)
+      .then((urls) => {
+        setIsConverting(true);
+        setIsUploading(false);
+        // Call API endpoint with the download URLs
+        return fetch(`http://localhost:5000/api/${route}`, {
+          method: "POST",
+          body: JSON.stringify({ urls }),
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
-    }
+      })
+      .then((response) => response.text())
+      .then((data) => {
+        setIsConverting(false);
+        console.log(data);
+        setDownloadLink(data);
+        navigate("/result", { state: data });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
-  return { isUploading, progress, uploadFiles, downloadLink };
+  return { isConverting, isUploading, progress, uploadFiles, downloadLink };
 };
 
 export default useUploadFiles;

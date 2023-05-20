@@ -1,10 +1,13 @@
 import React from "react";
 
-const Converting = ({ bgColor }) => {
+const Converting = ({ bgColor, toggle }) => {
   return (
     <div className="converting-container">
       <div
-        style={{ backgroundColor: bgColor }}
+        style={{
+          backgroundColor: bgColor,
+          borderRadius: toggle ? "4px 4px 0 0" : "",
+        }}
         className="animate-progress-bar"
       ></div>
       <svg

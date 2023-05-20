@@ -115,57 +115,29 @@ export const operationsBoxInfo = [
     ),
   },
   {
-    header: "Excel to PDF",
-    description: "Convert Excel spreadsheets to PDF documents",
-    link: "excel-to-pdf",
-    image: (
-      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z"
-          fill="#00CC44"
-        ></path>
-        <path
-          d="M13.6106 15.5714L7 25H11.6726L15.8938 18.7731L20.0354 25H25L18.3894 15.5966L24.469 7H19.9027L16.0531 12.7479L12.3363 7H7.50442L13.6106 15.5714Z"
-          fill="white"
-        ></path>
-      </svg>
-    ),
-  },
-  {
-    header: "PDF to Excel",
-    description: "Convert PDFs to editable Excel spreadsheets",
-    link: "pdf-to-excel",
-    image: (
-      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z"
-          fill="#00CC44"
-        ></path>
-        <path
-          d="M13.6106 15.5714L7 25H11.6726L15.8938 18.7731L20.0354 25H25L18.3894 15.5966L24.469 7H19.9027L16.0531 12.7479L12.3363 7H7.50442L13.6106 15.5714Z"
-          fill="white"
-        ></path>
-      </svg>
-    ),
-  },
-  {
-    header: "PDF Reader",
-    description: "Display, print and share PDFs online",
-    link: "pdf-reader",
+    header: "Number Pages",
+    description: "Add & Insert Page Numbers to PDF files with ease",
+    link: "add-page-numbers",
     image: (
       <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z"
           fill="#0FC0C5"
         ></path>
-        <path d="M9.5 25.5V6.5H19.5L23.5 10.5V25.5H9.5Z" stroke="white"></path>
-        <path d="M19.5 6.5V10.5H23.5" stroke="white"></path>
-        <rect x="7" y="18" width="10" height="5" fill="white"></rect>
-        <path d="M12 16.5H21" stroke="white"></path>
-        <path d="M18 20.5H21" stroke="white"></path>
-        <path d="M18 18.5H21" stroke="white"></path>
-        <path d="M18 22.5H21" stroke="white"></path>
-        <path d="M12 14.5H21" stroke="white"></path>
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M10.948 17V16.063H12.0346V13.1732H11.0976V12.4567C11.6409 12.3543 11.9874 12.2126 12.3417 12H13.1921V16.063H14.1291V17H10.948Z"
+          fill="white"
+        ></path>
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M19.0541 21V20.3509L19.6174 19.8154C20.5623 18.9061 21.187 18.2163 21.187 17.6306C21.187 17.1515 20.9165 16.8887 20.4915 16.8887C20.136 16.8887 19.8655 17.1283 19.6182 17.391L19 16.7805C19.4869 16.2628 19.9428 16 20.6461 16C21.6121 16 22.2689 16.6182 22.2689 17.5611C22.2689 18.3879 21.4961 19.2689 20.7002 20.1036C20.9474 20.0726 21.2875 20.0417 21.5193 20.0417H22.5085V21H19.0541Z"
+          fill="white"
+        ></path>
+        <rect x="7.5" y="7.5" width="10" height="13" stroke="white"></rect>
+        <path d="M18 11.5H24.5V24.5H14.5V20" stroke="white"></path>
       </svg>
     ),
   },
@@ -265,6 +237,44 @@ export const operationsBoxInfo = [
           clipRule="evenodd"
           fill="white"
           d="M9.38925 24.7847C11.2743 25.4574 13.3599 24.5013 14.0474 22.6493L16 17.3898L17.9526 22.6493C18.6401 24.5013 20.7257 25.4574 22.6108 24.7847C24.4958 24.112 25.4666 22.0653 24.7791 20.2133C24.0915 18.3612 22.006 17.4052 20.1209 18.0779C19.2467 18.3898 18.5691 18.9972 18.1624 19.7437L16.6442 15.6544L19.8571 7L19.1194 7.37144C18.575 7.64549 18.1561 8.1114 17.9466 8.67569L16 13.9191L14.0534 8.67569C13.8439 8.1114 13.425 7.64549 12.8806 7.37144L12.1429 7L15.3558 15.6544L13.8376 19.7437C13.4309 18.9972 12.7533 18.3898 11.8791 18.0779C9.99404 17.4052 7.9085 18.3612 7.22094 20.2133C6.53338 22.0653 7.50417 24.112 9.38925 24.7847ZM9.80423 23.6669C11.061 24.1153 12.4513 23.478 12.9097 22.2433C13.3681 21.0086 12.7209 19.6441 11.4641 19.1957C10.2074 18.7472 8.81706 19.3846 8.35869 20.6193C7.90032 21.854 8.54751 23.2184 9.80423 23.6669ZM22.1958 23.6669C23.4525 23.2184 24.0997 21.854 23.6413 20.6193C23.1829 19.3846 21.7926 18.7472 20.5359 19.1957C19.2791 19.6441 18.6319 21.0086 19.0903 22.2433C19.5487 23.478 20.939 24.1153 22.1958 23.6669Z"
+        ></path>
+      </svg>
+    ),
+  },
+  {
+    header: "Unlock PDF",
+    description: "Remove passwords from PDF files.",
+    link: "unlock-pdf",
+    image: (
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z"
+          fill="#FF5975"
+        ></path>
+        <rect x="7.5" y="14.5" width="13" height="10" stroke="white"></rect>
+        <path
+          d="M24.5 12C24.5 9.51472 22.4853 7.5 20 7.5C17.5147 7.5 15.5 9.51472 15.5 12"
+          stroke="white"
+        ></path>
+        <path d="M15.5 12V14.5" stroke="white"></path>
+        <path d="M24.5 12V14" stroke="white"></path>
+      </svg>
+    ),
+  },
+  {
+    header: "Protect PDF",
+    description:
+      "Encrypt your PDF file using a password to ensure that it remains secure.",
+    link: "protect-pdf",
+    image: (
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z"
+          fill="#FF5975"
+        ></path>
+        <path
+          d="M15.7888 7.61318L16 7.534L16.2112 7.61318L17.2307 7.99551L20.3244 9.15566L23.4182 10.3158L24.4377 10.6981L24.4943 10.7194C24.3596 16.4023 22.2126 19.8326 20.1128 21.85C19.0361 22.8844 17.9634 23.5551 17.1626 23.9662C16.7624 24.1716 16.4311 24.3117 16.2027 24.3997C16.1259 24.4292 16.0608 24.4528 16.0087 24.4711C15.9558 24.4507 15.8896 24.4243 15.8113 24.3914C15.5818 24.295 15.2494 24.143 14.848 23.9242C14.0447 23.4864 12.9691 22.7833 11.8899 21.7261C9.78492 19.6641 7.64168 16.2331 7.50585 10.7193L7.56228 10.6981L8.58181 10.3158L11.6756 9.15566L14.7693 7.99551L15.7888 7.61318Z"
+          stroke="white"
         ></path>
       </svg>
     ),
