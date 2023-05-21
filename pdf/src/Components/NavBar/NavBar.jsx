@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FileContext } from "../../Helper/FileContext";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { handleApiCall } from "../../Helper/ReusableFunctions";
 
 const NavBar = () => {
@@ -14,6 +14,8 @@ const NavBar = () => {
     setUploadUrl,
     setIsModifying,
   } = useContext(FileContext);
+
+  const navigate = useNavigate();
 
   const pathsToCheck = [
     "delete-pages/edit",
@@ -29,6 +31,11 @@ const NavBar = () => {
       // Convert to kilobytes
       return `${Math.round(size / 1000)} kB`;
     }
+  };
+
+  const navigateToPage = (data) => {
+    console.log(data);
+    navigate("/result", { state: data });
   };
 
   return (
@@ -110,11 +117,13 @@ const NavBar = () => {
               }`}
               onClick={() =>
                 handleApiCall(
+                  metadata,
                   isCheckboxSelected,
                   uploadUrl,
                   setIsModifying,
                   setUploadUrl,
-                  location.pathname.split("/")[1]
+                  location.pathname.split("/")[1],
+                  navigateToPage
                 )
               }
             >

@@ -35,8 +35,10 @@ CORS(app, supports_credentials=True)
 @cross_origin(supports_credentials=True)
 def jpg_to_pdf():
     data = request.get_json()
-    print(data)
     urls = data.get("urls")
+    metadata = data.get("metadata")
+    filename = metadata["name"].split("--")[0]
+    filename_without_extension = os.path.splitext(filename)[0]
 
     # Create a new PDF document
     pdf = fitz.open()
@@ -78,22 +80,26 @@ def jpg_to_pdf():
     output_buffer = BytesIO()
     pdf.save(output_buffer)
 
-    # Save PDF to file
-    output_buffer.seek(0)  # Reset the buffer's position to the beginning
-    with open("output.pdf", "wb") as file:
-        file.write(output_buffer.read())
+    # Reset the buffer's position to the beginning
+    output_buffer.seek(0)
+
+    # Set the destination path for the file upload
+    folder_name = "jpg-to-pdf/modified"
+    destination_path = f"{folder_name}/{filename_without_extension}.pdf"
+
+    # Upload the single image file to Firebase Storage
+    firebase = pyrebase.initialize_app(firebase_config)
+    storage = firebase.storage()
+    storage.child(destination_path).put(output_buffer)
+
+    # Get the download URL
+    download_url = storage.child(destination_path).get_url(None)
 
     # Close the buffer
+    pdf.close()
     output_buffer.close()
 
-    return "Uploaded"
-
-    # return send_file(
-    #     output_buffer,
-    #     download_name='output.pdf',
-    #     as_attachment=True,
-    #     mimetype='application/pdf'
-    # )
+    return download_url
 
 
 @app.route("/api/pdf-to-jpg", methods=["POST"])
@@ -102,6 +108,9 @@ def pdf_to_jpg():
     # Get the JSON data containing URLs
     data = request.get_json()
     urls = data.get("urls")
+    metadata = data.get("metadata")
+    filename = metadata["name"].split("--")[0]
+    filename_without_extension = os.path.splitext(filename)[0]
 
     # Create a directory to store the images
     os.makedirs("images", exist_ok=True)
@@ -123,7 +132,7 @@ def pdf_to_jpg():
             pix = page.get_pixmap()
 
             # Save the pixmap as an image file
-            image_path = os.path.join("images", f"file_{i}.jpg")
+            image_path = os.path.join("images", f"{filename_without_extension}_{i}.jpg")
             pix.save(image_path)
 
     # Check the number of images
@@ -132,44 +141,54 @@ def pdf_to_jpg():
         zip_data = BytesIO()
         with zipfile.ZipFile(zip_data, "w") as zipf:
             for i in range(num_pages):
-                image_path = os.path.join("images", f"file_{i}.jpg")
-                zipf.write(image_path, f"file_{i}.jpg")
+                image_path = os.path.join(
+                    "images", f"{filename_without_extension}_{i}.jpg"
+                )
+                zipf.write(image_path, f"{filename_without_extension}_{i}.jpg")
 
         # Reset the position of the zip_data object to the beginning
         zip_data.seek(0)
 
+        # Set the destination path for the file upload
+        folder_name = "pdf-to-jpg/modified"
+        destination_path = f"{folder_name}/{filename_without_extension}.zip"
+
         # Upload the zip file to Firebase Storage
         firebase = pyrebase.initialize_app(firebase_config)
         storage = firebase.storage()
-        storage.child("converted_images.zip").put(zip_data)
+        storage.child(destination_path).put(zip_data)
 
-        # Generate the download URL for the zip file
-        zip_url = storage.child("converted_images.zip").get_url(None)
+        # Generate the download URL and metadata for the zip file
+        zip_url = storage.child(destination_path).get_url(None)
 
         # Clean up temporary files
         for i in range(num_pages):
-            image_path = os.path.join("images", f"file_{i}.jpg")
+            image_path = os.path.join("images", f"{filename_without_extension}_{i}.jpg")
             os.remove(image_path)
 
         return zip_url
     elif num_pages == 1:
         # Generate the download URL for the single image
-        image_path = os.path.abspath(os.path.join("images", "file_0.jpg"))
+        image_path = os.path.abspath(
+            os.path.join("images", f"{filename_without_extension}.jpg")
+        )
+
+        # Set the destination path for the file upload
+        folder_name = "pdf-to-jpg/modified"
+        destination_path = f"{folder_name}/{filename_without_extension}.jpg"
 
         # Upload the single image file to Firebase Storage
         firebase = pyrebase.initialize_app(firebase_config)
         storage = firebase.storage()
-        storage.child("converted_image.jpg").put(image_path)
+        storage.child(destination_path).put(image_path)
 
         # Generate the download URL for the single image
-        image_url = storage.child("converted_image.jpg").get_url(None)
+        image_url = storage.child(destination_path).get_url(None)
 
         # Clean up temporary files
         os.remove(image_path)
 
         return image_url
-    else:
-        return "No images found."
 
 
 @app.route("/api/delete-pages", methods=["POST"])
@@ -178,6 +197,9 @@ def delete_pages():
     data = request.get_json()
     urls = data.get("urls")
     pages = data.get("pages")
+    metadata = data.get("metadata")
+    filename = metadata["name"].split("--")[0]
+    filename_without_extension = os.path.splitext(filename)[0]
 
     response = requests.get(urls)
     with open("delete.pdf", "wb") as file:
@@ -192,13 +214,17 @@ def delete_pages():
     pdf.save(output_file_path)
     pdf.close()
 
+    # Set the destination path for the file upload
+    folder_name = "delete-pages/modified"
+    destination_path = f"{folder_name}/{filename_without_extension}-modified.pdf"
+
     # Upload the single image file to Firebase Storage
     firebase = pyrebase.initialize_app(firebase_config)
     storage = firebase.storage()
-    storage.child("modified.pdf").put(output_file_path)
+    storage.child(destination_path).put(output_file_path)
 
     # Generate the download URL for the modified PDF
-    pdf_url = storage.child("modified.pdf").get_url(None)
+    pdf_url = storage.child(destination_path).get_url(None)
 
     # Clean up temporary files
     os.remove("delete.pdf")
@@ -213,6 +239,9 @@ def extract_pdf():
     data = request.get_json()
     urls = data.get("urls")
     pages = data.get("pages")
+    metadata = data.get("metadata")
+    filename = metadata["name"].split("--")[0]
+    filename_without_extension = os.path.splitext(filename)[0]
 
     response = requests.get(urls)
 
@@ -234,13 +263,17 @@ def extract_pdf():
     pdf.close()
     doc.close()
 
+    # Set the destination path for the file upload
+    folder_name = "extract-pdf/modified"
+    destination_path = f"{folder_name}/{filename_without_extension}-extracted.pdf"
+
     # Upload the new PDF file to Firebase storage
     firebase = pyrebase.initialize_app(firebase_config)
     storage = firebase.storage()
-    storage.child(output_filename).put(output_filename)
+    storage.child(destination_path).put(output_filename)
 
     # Get the download URL
-    download_url = storage.child(output_filename).get_url(None)
+    download_url = storage.child(destination_path).get_url(None)
 
     # Remove the local files
     os.remove("split.pdf")
@@ -255,6 +288,9 @@ def pdf_to_ppt():
     # Get the JSON data containing URLs
     data = request.get_json()
     urls = data.get("urls")
+    metadata = data.get("metadata")
+    filename = metadata["name"].split("--")[0]
+    filename_without_extension = os.path.splitext(filename)[0]
 
     response = requests.get(urls[0])
 
@@ -310,13 +346,17 @@ def pdf_to_ppt():
     prs.save(converted_pptx.name)
     converted_pptx.close()
 
+    # Set the destination path for the file upload
+    folder_name = "pdf-to-ppt/modified"
+    destination_path = f"{folder_name}/{filename_without_extension}.pptx"
+
     # Upload the converted PPTX file to Firebase Storage
     firebase = pyrebase.initialize_app(firebase_config)
     storage = firebase.storage()
-    storage.child("converted.pptx").put(converted_pptx.name)
+    storage.child(destination_path).put(converted_pptx.name)
 
     # Generate the download URL for the converted PPTX
-    pptx_url = storage.child("converted.pptx").get_url(None)
+    pptx_url = storage.child(destination_path).get_url(None)
 
     # Clean up temporary files
     pdf_file.close()
@@ -349,7 +389,7 @@ def compress_pdf():
 @app.route("/api/protect-pdf", methods=["POST"])
 @cross_origin(supports_credentials=True)
 def protect_pdf():
-    return "Protectd"
+    return "Protected"
 
 
 @app.route("/api/unlock-pdf", methods=["POST"])

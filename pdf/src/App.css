@@ -641,6 +641,130 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
   font-size: 1.35rem;
 }
 
+.protect-panel__wrapper {
+  height: 100%;
+  width: 100%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 320px 1fr;
+      grid-template-columns: 320px 1fr;
+}
+
+.protect-panel__wrapper .protect-panel--detail {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 0.25em;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  border-right: 1px solid #e4e4e4;
+}
+
+.protect-panel__wrapper .protect-panel--detail svg {
+  width: 65px;
+  height: 65px;
+}
+
+.protect-panel__wrapper .protect-panel--detail p {
+  font-weight: 400;
+}
+
+.protect-panel__wrapper .protect-panel--input {
+  padding: 0 2em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 2em;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.protect-panel__wrapper .protect-panel--input p {
+  padding: 3.25em 0 0;
+  font-size: 1.125rem;
+  max-width: 40%;
+  text-align: left;
+}
+
+.protect-panel__wrapper .protect-panel--input form {
+  cursor: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  gap: 1em;
+  max-width: 360px;
+  min-width: 90px;
+}
+
+.protect-panel__wrapper .protect-panel--input form label {
+  width: 100%;
+}
+
+.protect-panel__wrapper .protect-panel--input form label input[type="password"] {
+  display: block;
+  width: 100%;
+  border: 2px solid #e4e4e4;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  color: #778088;
+  font-size: 1.05rem;
+  height: 50px;
+  padding: 0 1rem;
+}
+
+.protect-panel__wrapper .protect-panel--input form button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  gap: 0.65em;
+  width: 100%;
+  border-radius: 2px;
+  background-color: #d9d9d9;
+  border: none;
+  outline: none;
+  height: 50px;
+  color: #fff;
+  font-size: 0.975rem;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  cursor: not-allowed;
+}
+
+.protect-panel__wrapper .protect-panel--input form button svg {
+  width: 20px;
+  height: unset;
+}
+
+.protect-panel__wrapper .protect-panel--input form .btn--active {
+  background-color: #ff5975;
+  cursor: pointer;
+}
+
 .modifying--progress svg {
   width: unset;
   height: unset;
@@ -648,6 +772,28 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
 
 .modifying--progress p {
   font-size: 1.125rem;
+}
+
+@media only screen and (max-width: 767px) {
+  .protect-panel__wrapper {
+    -ms-grid-columns: unset;
+        grid-template-columns: unset;
+    -ms-grid-rows: (1fr)[2];
+        grid-template-rows: repeat(2, 1fr);
+  }
+  .protect-panel__wrapper .protect-panel--detail {
+    border-right: unset;
+    border-bottom: 1px solid #e4e4e4;
+  }
+  .protect-panel__wrapper .protect-panel--input {
+    padding: 2em;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+  .protect-panel__wrapper .protect-panel--input p {
+    padding: 0;
+  }
 }
 
 .edit-pdf-container {
@@ -958,7 +1104,7 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
 
 .document-container .link img {
   width: 100%;
-  max-width: 350px;
+  max-width: 380px;
   max-height: 746px;
   -webkit-box-shadow: 0 0 5px rgba(26, 26, 26, 0.2);
           box-shadow: 0 0 5px rgba(26, 26, 26, 0.2);
@@ -978,14 +1124,24 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
   gap: 1.25em;
 }
 
-.details-container h3 {
-  max-width: 85%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.details-container .filename {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 97.5%;
 }
 
-.details-container h3 span {
+.details-container .filename h3 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.details-container .filename span {
+  font-size: 1.125rem;
   font-weight: 400;
   color: #ccc;
 }

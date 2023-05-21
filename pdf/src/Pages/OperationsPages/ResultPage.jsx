@@ -3,19 +3,14 @@ import {
   faDownload,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useContext } from "react";
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FileContext } from "../../Helper/FileContext";
 import pdf from "../../Assets/pdf-placeholder.png";
 import jpg from "../../Assets/jpg-placeholder.png";
 import ppt from "../../Assets/ppt-placeholder.png";
 
 const ResultPage = () => {
   const location = useLocation();
-  const { metadata } = useContext(FileContext);
-
-  console.log(location);
-  console.log(metadata);
 
   const renderImg = (extension) => {
     if (extension === "pdf") return pdf;
@@ -23,33 +18,29 @@ const ResultPage = () => {
     else if (extension === "jpg") return jpg;
   };
 
+  const decodeUrl = decodeURIComponent(location.state);
+  const filename = decodeUrl.split("/").pop().split("?")[0];
+
   return (
     <div className="result-page-container__wrapper">
       <div className="result-page-container">
         <div className="document-container">
-          <Link className="link" to={location?.state}>
+          <Link to={location?.state} target="_blank" download className="link">
             <img
               src={renderImg(
-                metadata?.name
-                  ?.split("--")[0]
-                  .substr(metadata?.name?.split("--")[0].lastIndexOf(".") + 1)
+                filename?.substring(filename.lastIndexOf(".") + 1)
               )}
               alt="doc-img"
             />
           </Link>
         </div>
         <div className="details-container">
-          <h3>
-            {metadata?.name
-              ?.split("--")[0]
-              .substr(0, metadata?.name?.split("--")[0].lastIndexOf("."))}
-            <span>
-              {metadata?.name
-                ?.split("--")[0]
-                .substr(metadata?.name?.split("--")[0].lastIndexOf("."))}
-            </span>
-          </h3>
-          <Link className="link" to={location?.state}>
+          <div className="filename">
+            <h3>{filename?.substring(0, filename.lastIndexOf("."))}</h3>
+            <span>{filename?.substring(filename.lastIndexOf("."))}</span>
+          </div>
+
+          <Link download target="_blank" className="link" to={location?.state}>
             <button className="download-btn">
               <FontAwesomeIcon className="icon" icon={faDownload} />
               Download

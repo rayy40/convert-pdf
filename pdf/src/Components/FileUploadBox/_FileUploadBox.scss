@@ -118,6 +118,88 @@ form {
   }
 }
 
+.protect-panel__wrapper {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  .protect-panel--detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #e4e4e4;
+    svg {
+      width: 65px;
+      height: 65px;
+    }
+    p {
+      font-weight: 400;
+    }
+  }
+  .protect-panel--input {
+    padding: 0 2em;
+    display: flex;
+    gap: 2em;
+    justify-content: flex-end;
+    p {
+      padding: 3.25em 0 0;
+      font-size: 1.125rem;
+      max-width: 40%;
+      text-align: left;
+    }
+    form {
+      cursor: auto;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1em;
+      max-width: 360px;
+      min-width: 90px;
+      label {
+        width: 100%;
+        input[type="password"] {
+          display: block;
+          width: 100%;
+          border: 2px solid #e4e4e4;
+          box-sizing: border-box;
+          color: #778088;
+          font-size: 1.05rem;
+          height: 50px;
+          padding: 0 1rem;
+        }
+      }
+      button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.65em;
+        width: 100%;
+        border-radius: 2px;
+        background-color: #d9d9d9;
+        border: none;
+        outline: none;
+        height: 50px;
+        color: #fff;
+        font-size: 0.975rem;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+        cursor: not-allowed;
+        svg {
+          width: 20px;
+          height: unset;
+        }
+      }
+      .btn--active {
+        background-color: #ff5975;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
 .modifying--progress {
   svg {
     width: unset;
@@ -125,5 +207,23 @@ form {
   }
   p {
     font-size: 1.125rem;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .protect-panel__wrapper {
+    grid-template-columns: unset;
+    grid-template-rows: repeat(2, 1fr);
+    .protect-panel--detail {
+      border-right: unset;
+      border-bottom: 1px solid #e4e4e4;
+    }
+    .protect-panel--input {
+      padding: 2em;
+      justify-content: center;
+      p {
+        padding: 0;
+      }
+    }
   }
 }

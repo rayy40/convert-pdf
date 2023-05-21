@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const useUploadFiles = () => {
   const [progress, setProgress] = useState(0);
-  const { setUploadUrl, setMetadata } = useContext(FileContext);
+  const { setUploadUrl, setMetadata, setShowInput } = useContext(FileContext);
   const [isUploading, setIsUploading] = useState(false);
   const [isConverting, setIsConverting] = useState(false);
   const [downloadLink, setDownloadLink] = useState("");
@@ -25,7 +25,10 @@ const useUploadFiles = () => {
     setMetadata(null);
     setIsUploading(true);
     const uploadPromises = files.map((file) => {
-      const storageRef = ref(storage, `/files/${file.name}--${uuidv4()}`);
+      const storageRef = ref(
+        storage,
+        `/${route}/upload/${file.name}--${uuidv4()}`
+      );
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       return new Promise((resolve, reject) => {
@@ -48,8 +51,44 @@ const useUploadFiles = () => {
               })
               .catch(reject);
             // Retrieve and log the metadata
-            getMetadata(storageRef).then((metadata) => {
-              setMetadata(metadata);
+            getMetadata(storageRef).then((meta) => {
+              setMetadata(meta);
+
+              if (meta) {
+                if (
+                  route === "delete-pages" ||
+                  route === "split-pdf" ||
+                  route === "extract-pdf"
+                ) {
+                  navigate(`/${route}/edit`, { state: meta });
+                } else if (route !== "protect-pdf" && route !== "unlock-pdf") {
+                  return Promise.all(uploadPromises)
+                    .then((urls) => {
+                      setIsConverting(true);
+                      setIsUploading(false);
+                      console.log(meta);
+                      // Call API endpoint with the download URLs
+                      return fetch(`http://localhost:5000/api/${route}`, {
+                        method: "POST",
+                        body: JSON.stringify({ urls: urls, metadata: meta }),
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                      });
+                    })
+                    .then((response) => response.text())
+                    .then((data) => {
+                      setIsConverting(false);
+                      setDownloadLink(data);
+                      navigate("/result", { state: data });
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                    });
+                } else {
+                  setShowInput(true);
+                }
+              }
             });
           }
         );
@@ -59,33 +98,15 @@ const useUploadFiles = () => {
     Promise.all(uploadPromises).then(() => {
       setProgress(100);
     });
-
-    return Promise.all(uploadPromises)
-      .then((urls) => {
-        setIsConverting(true);
-        setIsUploading(false);
-        // Call API endpoint with the download URLs
-        return fetch(`http://localhost:5000/api/${route}`, {
-          method: "POST",
-          body: JSON.stringify({ urls }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      })
-      .then((response) => response.text())
-      .then((data) => {
-        setIsConverting(false);
-        console.log(data);
-        setDownloadLink(data);
-        navigate("/result", { state: data });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
   };
 
-  return { isConverting, isUploading, progress, uploadFiles, downloadLink };
+  return {
+    isConverting,
+    isUploading,
+    progress,
+    uploadFiles,
+    downloadLink,
+  };
 };
 
 export default useUploadFiles;

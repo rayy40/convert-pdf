@@ -18,9 +18,11 @@ const EditPdf = () => {
     setIsCheckboxSelected,
     isModifying,
     setIsModifying,
+    metadata,
   } = useContext(FileContext);
   const [numPages, setNumPages] = useState(null);
   const [isSplitting, setIsSplitting] = useState([]);
+  const [pagesToBeSplitted, setPagesToBeSplitted] = useState([]);
   const location = useLocation();
 
   const generateInitialCheckboxState = (numPages) => {
@@ -38,13 +40,49 @@ const EditPdf = () => {
     );
   }
 
-  const handleScissorButtonClick = (index) => {
-    //
+  const handleScissorButtonClick = (index, arr) => {
+    console.log(arr);
     setIsSplitting((prev) => ({
       ...prev,
-      [index + 1]: !prev[index + 1],
+      [index]: !prev[index],
     }));
+
+    let dummyArr = [];
+
+    if (arr.every((item) => !Array.isArray(item))) {
+      const first = arr.slice(0, index);
+      const second = arr.slice(index, arr.length);
+      dummyArr.push(first);
+      dummyArr.push(second);
+      setPagesToBeSplitted(dummyArr);
+    } else {
+      let flag = false;
+      for (let ind = 0; ind < arr.length; ind++) {
+        for (let y = 0; y < arr[ind].length; y++) {
+          flag = true;
+          if (arr[ind][y] === index) {
+            if (arr[ind].length > 2) {
+              const first = arr[ind].slice(0, index);
+              const second = arr[ind].slice(index, arr[ind].length);
+              dummyArr.push(first);
+              dummyArr.push(second);
+              setPagesToBeSplitted(dummyArr);
+            } else {
+              dummyArr.push([arr[ind][0]]);
+              dummyArr.push([arr[ind][1]]);
+              setPagesToBeSplitted(dummyArr);
+            }
+
+            flag = false;
+            break;
+          }
+        }
+        if (flag) dummyArr.push(arr[ind]);
+      }
+    }
   };
+
+  console.log(pagesToBeSplitted);
 
   return (
     <div className="edit-pdf-container">
@@ -66,6 +104,7 @@ const EditPdf = () => {
         <FontAwesomeIcon
           onClick={() =>
             handleApiCall(
+              metadata,
               isCheckboxSelected,
               uploadUrl,
               setIsModifying,
@@ -156,6 +195,9 @@ const EditPdf = () => {
             setNumPages(numPages);
             setIsCheckboxSelected(generateInitialCheckboxState(numPages));
             setIsSplitting(generateInitialCheckboxState(numPages));
+            setPagesToBeSplitted(
+              Array.from({ length: numPages }, (_, index) => index + 1)
+            );
           }}
           onLoadError={(err) => (
             <div className="error-container">
@@ -202,7 +244,11 @@ const EditPdf = () => {
                         : "scissor-container"
                     }`}
                   >
-                    <button onClick={() => handleScissorButtonClick(index)}>
+                    <button
+                      onClick={() =>
+                        handleScissorButtonClick(index + 1, pagesToBeSplitted)
+                      }
+                    >
                       <FontAwesomeIcon
                         className="icon"
                         icon={faScissors}
