@@ -135,6 +135,12 @@ body {
   background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.4) 75%, transparent 75%, transparent);
 }
 
+@media only screen and (max-width: 767px) {
+  :root {
+    font-size: 14px;
+  }
+}
+
 .homePage-container {
   width: 100%;
   padding-top: 64px;
@@ -189,17 +195,19 @@ body {
   list-style-type: none;
 }
 
-@media (min-width: 0px) and (max-width: 639px) {
-  .operations-box--list {
-    width: 100%;
-    padding: 8px;
+@media (max-width: 1024px) {
+  .homePage-container header {
+    padding: 2em 1.25em;
   }
-}
-
-@media (min-width: 640px) and (max-width: 1023px) {
-  .operations-box--list {
+  .homePage-container header h1 {
+    font-size: 2.5rem;
+  }
+  .homePage-container .homePage-container__wrapper {
+    padding: 1em;
+  }
+  .homePage-container .homePage-container__wrapper .operations-box--list {
     width: 50%;
-    padding: 12px;
+    padding: 0.5em;
   }
 }
 
@@ -286,10 +294,14 @@ body {
   font-size: 1.4rem;
 }
 
-@media (min-width: 0px) and (max-width: 1199px) {
+@media (max-width: 1200px) {
   .operationsPage-container__wrapper {
     max-width: none;
     padding: 2em 1em;
+  }
+  .operationsPage-container__header h2 {
+    padding-top: 0.25em;
+    text-align: center;
   }
 }
 
@@ -404,58 +416,57 @@ body {
   border: 1px solid #e4e4e4;
   background: #fafafa;
   border-radius: 4px;
-  position: relative;
+  height: 140px;
 }
 
 .operations-box:hover {
   background: #f4f4f4;
 }
 
-.operations-box a {
+.operations-box .link {
+  padding: 1.25em;
   width: 100%;
-  position: relative;
   border-radius: 4px;
   text-decoration: none;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 1.05rem;
-  outline: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
   color: #1a1a1a;
+  font-size: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 1em;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
-.operations-box a h4 {
-  padding: 1em 3.25em 1em 3.875em;
-  height: 120px;
+.operations-box .link .operations-box--detail {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 0.65em;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
-.operations-box__img {
-  position: absolute;
-  top: 17px;
-  left: 17px;
+.operations-box .link .operations-box--detail .operations-box__img {
   width: 32px;
   height: 32px;
 }
 
-.operations-box__arrow {
-  position: absolute;
+.operations-box .link .operations-box--detail .operations-box__arrow {
+  margin-left: auto;
   width: 24px;
   height: 24px;
-  top: 17px;
-  right: 17px;
-  color: #1a1a1a;
-  pointer-events: none;
 }
 
-.operations-box p {
-  color: #1a1a1a;
-  position: absolute;
-  pointer-events: none;
-  text-align: left;
-  left: 65px;
-  right: 57px;
-  margin: 0px;
-  top: 42px;
-  font-size: 0.875rem;
+.operations-box .link p {
+  max-width: 80%;
+  font-size: 0.925rem;
 }
 
 @-webkit-keyframes animate-progress-bar {
@@ -473,6 +484,12 @@ body {
   }
   100% {
     background-position: 60px 0px;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .operations-box .link p {
+    max-width: 100%;
   }
 }
 
@@ -774,6 +791,23 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
   font-size: 1.125rem;
 }
 
+@media only screen and (min-width: 767px) {
+  .protect-panel__wrapper .modify-input--panel {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    gap: 0em;
+  }
+  .protect-panel__wrapper .modify-input--panel p {
+    padding: 2.5em 0 0;
+    max-width: 100%;
+  }
+  .protect-panel__wrapper .modify-input--panel form {
+    max-width: 100%;
+  }
+}
+
 @media only screen and (max-width: 767px) {
   .protect-panel__wrapper {
     -ms-grid-columns: unset;
@@ -1038,6 +1072,9 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
 }
 
 @media only screen and (max-width: 1024px) {
+  .edit-pdf-container__banner {
+    top: 4.5em;
+  }
   .react-pdf__Document {
     -webkit-box-pack: center;
         -ms-flex-pack: center;
@@ -1204,10 +1241,29 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
   margin-right: 0.65em;
 }
 
-@media only screen and (min-width: 640px) {
-  .document-container .link {
+@media only screen and (max-width: 767px) {
+  .result-page-container__wrapper .result-page-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .details-container {
+    border-top: 1px solid #e4e4e4;
+    -webkit-box-shadow: 0 0 5px rgba(26, 26, 26, 0.35);
+            box-shadow: 0 0 5px rgba(26, 26, 26, 0.35);
+  }
+  .details-container .filename {
     width: 100%;
-    height: 80%;
+  }
+  .details-container .filename h3 {
+    font-size: 1.25rem;
+  }
+  .details-container .filename span {
+    font-size: 1.25rem;
   }
 }
 /*# sourceMappingURL=App.css.map */

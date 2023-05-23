@@ -92,11 +92,24 @@
   }
 }
 
-@media only screen and (min-width: 640px) {
-  .document-container {
-    .link {
+@media only screen and (max-width: 767px) {
+  .result-page-container__wrapper {
+    .result-page-container {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .details-container {
+    border-top: 1px solid #e4e4e4;
+    box-shadow: 0 0 5px rgba(26, 26, 26, 0.35);
+    .filename {
       width: 100%;
-      height: 80%;
+      h3 {
+        font-size: 1.25rem;
+      }
+      span {
+        font-size: 1.25rem;
+      }
     }
   }
 }

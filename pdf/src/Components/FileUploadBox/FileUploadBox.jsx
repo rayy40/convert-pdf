@@ -9,18 +9,23 @@ import useUploadFiles from "../../Helper/useUploadFiles";
 import Converting from "../../Layouts/Converting";
 import { FileContext } from "../../Helper/FileContext";
 import { handleApiCall } from "../../Helper/ReusableFunctions";
+import { useNavigate } from "react-router-dom";
 
 const FileUploadBox = ({ route, image, bgColor, file }) => {
   let fileInputRef = useRef(null);
+  const navigate = useNavigate();
   const {
     metadata,
     uploadUrl,
-    setIsModifying,
+    isConverting,
+    setIsConverting,
     setUploadUrl,
     showInput,
     setShowInput,
+    isUploading,
+    setIsUploading,
   } = useContext(FileContext);
-  const { isConverting, isUploading, progress, uploadFiles } = useUploadFiles();
+  const { progress, uploadFiles } = useUploadFiles();
   const [password, setPassword] = useState("");
   const [confirmPassword, setComfirmPassword] = useState("");
 
@@ -30,6 +35,10 @@ const FileUploadBox = ({ route, image, bgColor, file }) => {
 
     if (files.length === 0) return;
     uploadFiles(route, Array.from(files));
+  };
+
+  const navigateToPage = (data) => {
+    navigate("/result", { state: data });
   };
 
   return (
@@ -58,6 +67,7 @@ const FileUploadBox = ({ route, image, bgColor, file }) => {
                   <label className="file-input">
                     <input
                       ref={fileInputRef}
+                      onChange={handleFileUpload}
                       multiple
                       className="picker-input"
                       type="file"
@@ -198,50 +208,68 @@ const FileUploadBox = ({ route, image, bgColor, file }) => {
               )}
               <p>{metadata?.name?.split("--")[0]}</p>
             </div>
-            <div className="protect-panel--input">
+            <div
+              className={`protect-panel--input ${
+                route === "unlock-pdf" ? "modify-input--panel" : ""
+              }`}
+            >
               <p>
-                We protect your file with strong 128-bit AES encyrption. This
-                will make it impossible to open or remove the protection without
-                the correct password.
+                {route === "protect-pdf"
+                  ? "We protect your file with strong 128-bit AES encyrption. This will make it impossible to open or remove the protection without the correct password."
+                  : "If you have the password, it will only take seconds to decrypt your password protected pdf."}
               </p>
               <form action="/">
                 <label htmlFor="password">
                   <input
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
-                    placeholder="Choose your password"
+                    placeholder={
+                      route === "protect-pdf"
+                        ? "Choose your password"
+                        : "Password"
+                    }
                     type="password"
                   />
                 </label>
-                <label htmlFor="password">
-                  <input
-                    onChange={(e) => setComfirmPassword(e.target.value)}
-                    value={confirmPassword}
-                    placeholder="Repeat your password"
-                    type="password"
-                  />
-                </label>
+                {route === "protect-pdf" && (
+                  <label htmlFor="password">
+                    <input
+                      onChange={(e) => setComfirmPassword(e.target.value)}
+                      value={confirmPassword}
+                      placeholder="Repeat your password"
+                      type="password"
+                    />
+                  </label>
+                )}
                 <button
                   onClick={(e) => {
                     e.preventDefault();
                     handleApiCall(
                       metadata,
+                      false,
                       uploadUrl,
-                      setIsModifying,
+                      undefined,
                       setUploadUrl,
                       route,
+                      navigateToPage,
                       password,
-                      setShowInput
+                      setShowInput,
+                      setIsConverting,
+                      setIsUploading
                     );
                   }}
                   className={
-                    password.length > 0 && password === confirmPassword
+                    route !== "protect-pdf"
+                      ? password.length > 0
+                        ? "btn--active"
+                        : ""
+                      : password.length > 0 && password === confirmPassword
                       ? "btn--active"
                       : ""
                   }
                   type="submit"
                 >
-                  ENCRYPT PDF
+                  {route === "protect-pdf" ? "ENCRYPT" : "DECRYPT"} PDF
                   <FontAwesomeIcon className="icon" icon={faArrowRight} />
                 </button>
               </form>

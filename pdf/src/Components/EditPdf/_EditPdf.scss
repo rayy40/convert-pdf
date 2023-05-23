@@ -178,6 +178,11 @@
 }
 
 @media only screen and (max-width: 1024px) {
+  .edit-pdf-container {
+    &__banner {
+      top: 4.5em;
+    }
+  }
   .react-pdf__Document {
     justify-content: center;
     .react-pdf__Page {

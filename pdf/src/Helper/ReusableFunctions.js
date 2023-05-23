@@ -8,18 +8,21 @@ export const handleApiCall = (
   navigateToPage,
   password,
   setShowInput,
-  setIsConverting
+  setIsConverting,
+  setIsUploading
 ) => {
   let selectedPages;
   if (!(route === "protect-pdf" || route === "unlock-pdf")) {
     selectedPages = Object.entries(isCheckboxSelected)
       .filter(([key, value]) => value === true)
       .map(([key]) => Number(key));
+
+    setIsModifying(true);
   }
 
-  setIsModifying(true);
-  if (route === "protect-pdf") {
+  if (route === "protect-pdf" || route === "unlock-pdf") {
     setIsConverting(true);
+    setIsUploading(false);
     setShowInput(false);
   }
   let storedData;
@@ -45,8 +48,12 @@ export const handleApiCall = (
       console.error(error);
     })
     .finally(() => {
-      setIsModifying(false);
-      setIsConverting(false);
+      if (!(route === "protect-pdf" || route === "unlock-pdf")) {
+        setIsModifying(false);
+      }
+      if (route === "protect-pdf" || route === "unlock-pdf") {
+        setIsConverting(false);
+      }
       if (route !== "delete-pages") {
         navigateToPage(storedData);
       }

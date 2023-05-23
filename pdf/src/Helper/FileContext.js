@@ -7,6 +7,10 @@ export const FileContext = createContext({
   setMetadata: () => {},
   showInput: false,
   setShowInput: () => {},
+  isUploading: false,
+  setIsUploading: () => {},
+  isConverting: false,
+  setIsConverting: () => {},
   isModifying: false,
   setIsModifying: () => {},
   isCheckboxSelected: false,
@@ -16,7 +20,9 @@ export const FileContext = createContext({
 export const FileProvider = (props) => {
   const [uploadUrl, setUploadUrl] = useState("");
   const [metadata, setMetadata] = useState(null);
-  const [isModifying, setIsModifying] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isModifying, setIsModifying] = useState(false);
+  const [isConverting, setIsConverting] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const [isCheckboxSelected, setIsCheckboxSelected] = useState(null);
   return (
@@ -28,6 +34,10 @@ export const FileProvider = (props) => {
         setShowInput,
         metadata,
         setMetadata,
+        isUploading,
+        setIsUploading,
+        isConverting,
+        setIsConverting,
         isModifying,
         setIsModifying,
         isCheckboxSelected,

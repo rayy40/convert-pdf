@@ -34,7 +34,6 @@ const NavBar = () => {
   };
 
   const navigateToPage = (data) => {
-    console.log(data);
     navigate("/result", { state: data });
   };
 
@@ -123,7 +122,11 @@ const NavBar = () => {
                   setIsModifying,
                   setUploadUrl,
                   location.pathname.split("/")[1],
-                  navigateToPage
+                  navigateToPage,
+                  undefined,
+                  undefined,
+                  undefined,
+                  undefined
                 )
               }
             >

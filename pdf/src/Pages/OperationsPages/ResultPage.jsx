@@ -8,13 +8,18 @@ import { Link, useLocation } from "react-router-dom";
 import pdf from "../../Assets/pdf-placeholder.png";
 import jpg from "../../Assets/jpg-placeholder.png";
 import ppt from "../../Assets/ppt-placeholder.png";
+import protectPdf from "../../Assets/protected-pdf-placeholder.png";
 
 const ResultPage = () => {
   const location = useLocation();
 
   const renderImg = (extension) => {
-    if (extension === "pdf") return pdf;
-    else if (extension === "pptx" || extension === "ppt") return ppt;
+    if (extension === "pdf") {
+      if (decodeUrl.split("/")[7] === "protect-pdf") {
+        return protectPdf;
+      }
+      return pdf;
+    } else if (extension === "pptx" || extension === "ppt") return ppt;
     else if (extension === "jpg") return jpg;
   };
 

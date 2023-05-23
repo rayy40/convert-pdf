@@ -96,6 +96,12 @@ body {
   }
 }
 
+@media only screen and (max-width: 767px) {
+  :root {
+    font-size: 14px;
+  }
+}
+
 @import "./Pages/HomePage/HomePage";
 @import "./Pages/OperationsPages/OperationsPage";
 @import "./Components/NavBar/NavBar";

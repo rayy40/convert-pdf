@@ -12,9 +12,13 @@ import { useNavigate } from "react-router-dom";
 
 const useUploadFiles = () => {
   const [progress, setProgress] = useState(0);
-  const { setUploadUrl, setMetadata, setShowInput } = useContext(FileContext);
-  const [isUploading, setIsUploading] = useState(false);
-  const [isConverting, setIsConverting] = useState(false);
+  const {
+    setUploadUrl,
+    setMetadata,
+    setShowInput,
+    setIsConverting,
+    setIsUploading,
+  } = useContext(FileContext);
   const [downloadLink, setDownloadLink] = useState("");
   const navigate = useNavigate();
 
@@ -101,8 +105,6 @@ const useUploadFiles = () => {
   };
 
   return {
-    isConverting,
-    isUploading,
     progress,
     uploadFiles,
     downloadLink,

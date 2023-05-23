@@ -42,10 +42,16 @@
   }
 }
 
-@media (min-width: 0px) and (max-width: 1199px) {
+@media (max-width: 1200px) {
   .operationsPage-container__wrapper {
     max-width: none;
     padding: 2em 1em;
+  }
+  .operationsPage-container__header {
+    h2 {
+      padding-top: 0.25em;
+      text-align: center;
+    }
   }
 }
 

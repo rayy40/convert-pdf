@@ -1,5 +1,6 @@
 from flask import send_file, request, Flask
 from flask_cors import CORS, cross_origin
+from PyPDF2 import PdfReader, PdfWriter
 from dotenv import load_dotenv
 from pptx import Presentation
 from pylokit import Office
@@ -389,13 +390,118 @@ def compress_pdf():
 @app.route("/api/protect-pdf", methods=["POST"])
 @cross_origin(supports_credentials=True)
 def protect_pdf():
-    return "Protected"
+    data = request.get_json()
+    urls = data.get("urls")
+    password = data.get("password")
+    metadata = data.get("metadata")
+
+    filename = metadata["name"].split("--")[0]
+    filename_without_extension = os.path.splitext(filename)[0]
+
+    response = requests.get(urls)
+
+    # Create a temporary file to save the PDF content
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        temp_file.write(response.content)
+        temp_file_path = temp_file.name
+
+    # Open the PDF
+    pdf = PdfReader(temp_file_path)
+
+    # Create a new PDF with encryption
+    writer = PdfWriter()
+
+    # Iterate through the pages of the original PDF and add them to the new PDF
+    for page in pdf.pages:
+        writer.add_page(page)
+
+    # Encrypt the new PDF with a password
+    writer.encrypt(user_password=password, owner_password=None, use_128bit=True)
+
+    # Create a temporary file to save the encrypted PDF
+    with tempfile.NamedTemporaryFile(delete=False) as encrypted_file:
+        encrypted_file_path = encrypted_file.name
+
+        # Save the encrypted PDF to the temporary file
+        writer.write(encrypted_file)
+
+    # Read the encrypted PDF content from the file
+    with open(encrypted_file_path, "rb") as encrypted_file:
+        encrypted_pdf_content = encrypted_file.read()
+
+    # Set the destination path for the file upload
+    folder_name = "protect-pdf/modified"
+    destination_path = f"{folder_name}/{filename_without_extension}-protected.pdf"
+
+    # Upload the new PDF file to Firebase storage
+    firebase = pyrebase.initialize_app(firebase_config)
+    storage = firebase.storage()
+    storage.child(destination_path).put(encrypted_pdf_content)
+
+    # Get the download URL
+    download_url = storage.child(destination_path).get_url(None)
+
+    os.remove(temp_file_path)
+    os.remove(encrypted_file_path)
+
+    return download_url
 
 
 @app.route("/api/unlock-pdf", methods=["POST"])
 @cross_origin(supports_credentials=True)
 def unlock_pdf():
-    return "Unlocked"
+    data = request.get_json()
+    urls = data.get("urls")
+    password = data.get("password")
+    metadata = data.get("metadata")
+    print(password)
+
+    filename = metadata["name"].split("--")[0]
+    filename_without_extension = os.path.splitext(filename)[0]
+
+    response = requests.get(urls)
+
+    with tempfile.NamedTemporaryFile(suffix=".pdf") as temp_dir:
+        temp_pdf_path = os.path.join(temp_dir, "temp.pdf")
+        temp_unlocked_pdf_path = os.path.join(temp_dir, "temp_unlocked.pdf")
+
+        with open(temp_pdf_path, "wb") as temp_pdf:
+            temp_pdf.write(response.content)
+
+        # Open the PDF file using PdfFileReader
+        pdf_reader = PdfReader(temp_pdf)
+
+        # Check if the PDF file is encrypted
+        if pdf_reader.is_encrypted:
+            # Decrypt the PDF file with the provided password
+            if not pdf_reader.decrypt(password):
+                print("Incorrect password. Unable to decrypt the PDF file.")
+                return "Failed to unlock the PDF."
+
+        # Create a new PDF file writer
+        pdf_writer = PdfWriter()
+
+        # Add all the decrypted pages to the new PDF writer
+        for page in pdf_reader.pages:
+            pdf_writer.add_page(page)
+
+        # Save the unlocked PDF to the temporary file
+        with open(temp_unlocked_pdf_path, "wb") as output_file:
+            pdf_writer.write(output_file)
+
+        # Set the destination path for the file upload
+        folder_name = "unlock-pdf/modified"
+        destination_path = f"{folder_name}/{filename_without_extension}-unlocked.pdf"
+
+        # Upload the new PDF file to Firebase storage
+        firebase = pyrebase.initialize_app(firebase_config)
+        storage = firebase.storage()
+        storage.child(destination_path).put(temp_unlocked_pdf_path)
+
+        # Get the download URL
+        download_url = storage.child(destination_path).get_url(None)
+
+    return download_url
 
 
 @app.route("/api/merge-pdf", methods=["POST"])
@@ -403,6 +509,10 @@ def unlock_pdf():
 def merge_pdf():
     data = request.get_json()
     urls = data.get("urls")
+    metadata = data.get("metadata")
+
+    filename = metadata["name"].split("--")[0]
+    filename_without_extension = os.path.splitext(filename)[0]
 
     merged_pdf = fitz.open()
 
@@ -412,20 +522,23 @@ def merge_pdf():
         with fitz.open(stream=response.content, filetype="pdf") as pdf_file:
             merged_pdf.insert_pdf(pdf_file)
 
-    output_file_path = "output.pdf"
-    merged_pdf.save(output_file_path)
+    merged_pdf.save("output.pdf")
     merged_pdf.close()
+
+    # Set the destination path for the file upload
+    folder_name = "merged-pdf/modified"
+    destination_path = f"{folder_name}/{filename_without_extension}-merged.pdf"
 
     # Upload the single image file to Firebase Storage
     firebase = pyrebase.initialize_app(firebase_config)
     storage = firebase.storage()
-    storage.child("merged.pdf").put(output_file_path)
+    storage.child(destination_path).put("output.pdf")
 
     # Generate the download URL for the modified PDF
-    pdf_url = storage.child("merged.pdf").get_url(None)
+    pdf_url = storage.child(destination_path).get_url(None)
 
     # Clean up temporary files
-    os.remove(output_file_path)
+    os.remove("output.pdf")
 
     return pdf_url
 
