@@ -174,8 +174,10 @@ body {
 }
 
 .homePage-container header p {
+  max-width: 90%;
   font-weight: 500;
   font-size: 1.25rem;
+  color: #333;
 }
 
 .homePage-container .homePage-container__wrapper {
@@ -334,9 +336,17 @@ body {
   border-bottom: 1px solid #e0e0e0;
 }
 
-.navbar-container .logo {
+.navbar-container .logo,
+.navbar-container .current-page--logo {
   width: 32px;
   height: 32px;
+  cursor: pointer;
+}
+
+.navbar-container .big--icon {
+  padding: 0 0.35em;
+  font-size: 1.5rem;
+  color: #c3c3c3;
 }
 
 .navbar-container__middle {
@@ -1239,6 +1249,17 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
 
 .details-container .start-over-link .icon {
   margin-right: 0.65em;
+}
+
+@media only screen and (min-width: 1024px) {
+  .result-page-container__wrapper .result-page-container {
+    -ms-grid-columns: 1fr 400px;
+        grid-template-columns: 1fr 400px;
+  }
+  .document-container .link {
+    width: 100%;
+    height: 80%;
+  }
 }
 
 @media only screen and (max-width: 767px) {

@@ -3,7 +3,6 @@ from flask_cors import CORS, cross_origin
 from PyPDF2 import PdfReader, PdfWriter
 from dotenv import load_dotenv
 from pptx import Presentation
-from pylokit import Office
 from io import BytesIO
 from PIL import Image
 import urllib.request
@@ -11,6 +10,7 @@ import requests
 import tempfile
 import zipfile
 import pyrebase
+import shutil
 import math
 import fitz
 import os
@@ -279,6 +279,68 @@ def extract_pdf():
     # Remove the local files
     os.remove("split.pdf")
     os.remove(output_filename)
+
+    return download_url
+
+
+@app.route("/api/extract-images", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def extract_images():
+    data = request.get_json()
+    urls = data.get("urls")
+    metadata = data.get("metadata")
+    filename = metadata["name"].split("--")[0]
+    filename_without_extension = os.path.splitext(filename)[0]
+
+    response = requests.get(urls[0])
+
+    with open("extract-images.pdf", "wb") as file:
+        file.write(response.content)
+
+    pdf_document = fitz.open("extract-images.pdf")
+
+    images_folder = f"{filename_without_extension}_images"
+    os.makedirs(images_folder, exist_ok=True)
+
+    image_paths = []
+
+    for current_page in range(pdf_document.page_count):
+        page = pdf_document.load_page(current_page)
+        image_list = page.get_images()
+        for image_index, image in enumerate(image_list):
+            xref = image[0]
+            base_image = pdf_document.extract_image(xref)
+            image_bytes = base_image["image"]
+            image_extension = base_image["ext"]
+            image_path = (
+                f"{images_folder}/image{current_page}_{image_index}.{image_extension}"
+            )
+            with open(image_path, "wb") as image_file:
+                image_file.write(image_bytes)
+            image_paths.append(image_path)
+
+    # Create a zip file of the extracted images
+    zip_file_name = f"{filename_without_extension}_images.zip"
+    with zipfile.ZipFile(zip_file_name, "w") as zip_file:
+        for image_path in image_paths:
+            zip_file.write(image_path)
+
+    # Set the destination path for the file upload
+    folder_name = "extract-images/modified"
+    destination_path = f"{folder_name}/{zip_file_name}"
+
+    # Upload the new PDF file to Firebase storage
+    firebase = pyrebase.initialize_app(firebase_config)
+    storage = firebase.storage()
+    storage.child(destination_path).put(zip_file_name)
+
+    # Get the download URL
+    download_url = storage.child(destination_path).get_url(None)
+
+    pdf_document.close()
+    os.remove("extract-images.pdf")
+    os.remove(zip_file_name)
+    shutil.rmtree(images_folder)
 
     return download_url
 

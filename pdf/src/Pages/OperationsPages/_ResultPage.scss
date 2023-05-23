@@ -92,6 +92,20 @@
   }
 }
 
+@media only screen and (min-width: 1024px) {
+  .result-page-container__wrapper {
+    .result-page-container {
+      grid-template-columns: 1fr 400px;
+    }
+  }
+  .document-container {
+    .link {
+      width: 100%;
+      height: 80%;
+    }
+  }
+}
+
 @media only screen and (max-width: 767px) {
   .result-page-container__wrapper {
     .result-page-container {

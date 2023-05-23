@@ -1,9 +1,14 @@
 import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faDownload } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRight,
+  faCaretRight,
+  faDownload,
+} from "@fortawesome/free-solid-svg-icons";
 import { FileContext } from "../../Helper/FileContext";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { handleApiCall } from "../../Helper/ReusableFunctions";
+import { operationsBoxInfo } from "../../Helper/Utilities";
 
 const NavBar = () => {
   const location = useLocation();
@@ -35,6 +40,14 @@ const NavBar = () => {
 
   const navigateToPage = (data) => {
     navigate("/result", { state: data });
+  };
+
+  const findImageByRoute = (route) => {
+    const operation = operationsBoxInfo.find((item) => item.link === route);
+    if (operation) {
+      return operation.image;
+    }
+    return null;
   };
 
   return (
@@ -82,6 +95,16 @@ const NavBar = () => {
             </svg>
           </div>
         </Link>
+        {location.pathname.split("/")[1].length === 0 && <p>logo</p>}
+        {location.pathname.split("/")[1].length > 0 && (
+          <FontAwesomeIcon className="icon big--icon" icon={faCaretRight} />
+        )}
+        <Link
+          to={`/${location.pathname.split("/")[1]}`}
+          className="current-page--logo"
+        >
+          {findImageByRoute(location.pathname.split("/")[1])}
+        </Link>
         <div className="navbar-container__middle">
           {pathsToCheck.some((path) => location.pathname.includes(path)) && (
             <>
@@ -105,35 +128,36 @@ const NavBar = () => {
               </button>
             </a>
           )}
-          {!location.pathname.includes("/delete-pages/edit") && (
-            <button
-              className={`convert-btn ${
-                isCheckboxSelected &&
-                Object.values(isCheckboxSelected).every(
-                  (value) => value === false
-                ) &&
-                "convert-btn--deactive"
-              }`}
-              onClick={() =>
-                handleApiCall(
-                  metadata,
-                  isCheckboxSelected,
-                  uploadUrl,
-                  setIsModifying,
-                  setUploadUrl,
-                  location.pathname.split("/")[1],
-                  navigateToPage,
-                  undefined,
-                  undefined,
-                  undefined,
-                  undefined
-                )
-              }
-            >
-              Extract
-              <FontAwesomeIcon className="icon" icon={faArrowRight} />
-            </button>
-          )}
+          {location.pathname.includes("/delete-pages.edit") &&
+            location.pathname.includes("/split-pdf/edit") && (
+              <button
+                className={`convert-btn ${
+                  isCheckboxSelected &&
+                  Object.values(isCheckboxSelected).every(
+                    (value) => value === false
+                  ) &&
+                  "convert-btn--deactive"
+                }`}
+                onClick={() =>
+                  handleApiCall(
+                    metadata,
+                    isCheckboxSelected,
+                    uploadUrl,
+                    setIsModifying,
+                    setUploadUrl,
+                    location.pathname.split("/")[1],
+                    navigateToPage,
+                    undefined,
+                    undefined,
+                    undefined,
+                    undefined
+                  )
+                }
+              >
+                Extract
+                <FontAwesomeIcon className="icon" icon={faArrowRight} />
+              </button>
+            )}
         </div>
       </div>
     </div>

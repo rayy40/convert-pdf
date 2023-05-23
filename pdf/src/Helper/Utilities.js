@@ -98,33 +98,6 @@ export const operationsBoxInfo = [
     ),
   },
   {
-    header: "Number Pages",
-    description: "Add & Insert Page Numbers to PDF files with ease",
-    link: "add-page-numbers",
-    image: (
-      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z"
-          fill="#0FC0C5"
-        ></path>
-        <path
-          fillRule="evenodd"
-          clipRule="evenodd"
-          d="M10.948 17V16.063H12.0346V13.1732H11.0976V12.4567C11.6409 12.3543 11.9874 12.2126 12.3417 12H13.1921V16.063H14.1291V17H10.948Z"
-          fill="white"
-        ></path>
-        <path
-          fillRule="evenodd"
-          clipRule="evenodd"
-          d="M19.0541 21V20.3509L19.6174 19.8154C20.5623 18.9061 21.187 18.2163 21.187 17.6306C21.187 17.1515 20.9165 16.8887 20.4915 16.8887C20.136 16.8887 19.8655 17.1283 19.6182 17.391L19 16.7805C19.4869 16.2628 19.9428 16 20.6461 16C21.6121 16 22.2689 16.6182 22.2689 17.5611C22.2689 18.3879 21.4961 19.2689 20.7002 20.1036C20.9474 20.0726 21.2875 20.0417 21.5193 20.0417H22.5085V21H19.0541Z"
-          fill="white"
-        ></path>
-        <rect x="7.5" y="7.5" width="10" height="13" stroke="white"></rect>
-        <path d="M18 11.5H24.5V24.5H14.5V20" stroke="white"></path>
-      </svg>
-    ),
-  },
-  {
     header: "Delete PDF Pages",
     description: "Remove one or multiple pages from your PDF",
     link: "delete-pages",
@@ -166,6 +139,33 @@ export const operationsBoxInfo = [
           stroke="white"
         ></path>
         <path d="M16 5L19 8L16 11V5Z" fill="white"></path>
+      </svg>
+    ),
+  },
+  {
+    header: "Extract images from PDF",
+    description: "Extract images from a PDF with ease",
+    link: "extract-images",
+    image: (
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z"
+          fill="#0FC0C5"
+        ></path>
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M10.948 17V16.063H12.0346V13.1732H11.0976V12.4567C11.6409 12.3543 11.9874 12.2126 12.3417 12H13.1921V16.063H14.1291V17H10.948Z"
+          fill="white"
+        ></path>
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M19.0541 21V20.3509L19.6174 19.8154C20.5623 18.9061 21.187 18.2163 21.187 17.6306C21.187 17.1515 20.9165 16.8887 20.4915 16.8887C20.136 16.8887 19.8655 17.1283 19.6182 17.391L19 16.7805C19.4869 16.2628 19.9428 16 20.6461 16C21.6121 16 22.2689 16.6182 22.2689 17.5611C22.2689 18.3879 21.4961 19.2689 20.7002 20.1036C20.9474 20.0726 21.2875 20.0417 21.5193 20.0417H22.5085V21H19.0541Z"
+          fill="white"
+        ></path>
+        <rect x="7.5" y="7.5" width="10" height="13" stroke="white"></rect>
+        <path d="M18 11.5H24.5V24.5H14.5V20" stroke="white"></path>
       </svg>
     ),
   },
