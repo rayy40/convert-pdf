@@ -1,4 +1,4 @@
-from flask import send_file, request, Flask
+from flask import request, Flask
 from flask_cors import CORS, cross_origin
 from PyPDF2 import PdfReader, PdfWriter
 from dotenv import load_dotenv
@@ -229,6 +229,50 @@ def delete_pages():
 
     # Clean up temporary files
     os.remove("delete.pdf")
+    os.remove(output_file_path)
+
+    return pdf_url
+
+
+@app.route("/api/rotate-pdf", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def rotate_pdf():
+    data = request.get_json()
+    urls = data.get("urls")
+    pages = data.get("pages")
+    rotation = data.get("rotation")
+    metadata = data.get("metadata")
+    filename = metadata["name"].split("--")[0]
+    filename_without_extension = os.path.splitext(filename)[0]
+
+    response = requests.get(urls)
+    with open("rotate.pdf", "wb") as file:
+        file.write(response.content)
+
+    pdf = fitz.open("rotate.pdf")
+
+    for page_number in sorted(pages, reverse=True):
+        page = pdf[page_number - 1]
+        page.set_rotation(rotation)
+
+    output_file_path = "output.pdf"
+    pdf.save(output_file_path)
+    pdf.close()
+
+    # Set the destination path for the file upload
+    folder_name = "rotate-pdf/modified"
+    destination_path = f"{folder_name}/{filename_without_extension}-rotated.pdf"
+
+    # Upload the single image file to Firebase Storage
+    firebase = pyrebase.initialize_app(firebase_config)
+    storage = firebase.storage()
+    storage.child(destination_path).put(output_file_path)
+
+    # Generate the download URL for the modified PDF
+    pdf_url = storage.child(destination_path).get_url(None)
+
+    # Clean up temporary files
+    os.remove("rotate.pdf")
     os.remove(output_file_path)
 
     return pdf_url

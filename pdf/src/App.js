@@ -17,6 +17,7 @@ import ProtectPdfPage from "./Pages/OperationsPages/ProtectPdfPage";
 import UnlockPdfPage from "./Pages/OperationsPages/UnlockPdfPage";
 import ResultPage from "./Pages/OperationsPages/ResultPage";
 import ExtractedImagesPdfPage from "./Pages/OperationsPages/ExtractedImagesPdfPage";
+import RotatePdfPage from "./Pages/OperationsPages/RotatePdfPage";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -40,11 +41,13 @@ function App() {
               element={<ExtractedImagesPdfPage />}
             />
             <Route path="/protect-pdf" element={<ProtectPdfPage />} />
+            <Route path="/rotate-pdf" element={<RotatePdfPage />} />
             <Route path="/unlock-pdf" element={<UnlockPdfPage />} />
             <Route path="/compress-pdf" element={<CompressPdfPage />} />
             <Route path="/delete-pages/edit" element={<EditPdf />} />
             <Route path="/split-pdf/edit" element={<EditPdf />} />
             <Route path="/extract-pdf/edit" element={<EditPdf />} />
+            <Route path="/rotate-pdf/edit" element={<EditPdf />} />
             <Route path="/result" element={<ResultPage />} />
           </Routes>
         </div>

@@ -4,7 +4,12 @@ import { FileContext } from "../../Helper/FileContext";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faScissors, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRotateLeft,
+  faArrowRotateRight,
+  faScissors,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import Loading from "../../Layouts/Loading";
 import Converting from "../../Layouts/Converting";
 import { useLocation } from "react-router-dom";
@@ -22,6 +27,7 @@ const EditPdf = () => {
   } = useContext(FileContext);
   const [numPages, setNumPages] = useState(null);
   const [isSplitting, setIsSplitting] = useState([]);
+  const [rotationAngle, setRotationAngle] = useState(0);
   const [pagesToBeSplitted, setPagesToBeSplitted] = useState([]);
   const location = useLocation();
 
@@ -82,8 +88,6 @@ const EditPdf = () => {
     }
   };
 
-  console.log(pagesToBeSplitted);
-
   return (
     <div className="edit-pdf-container">
       <div className="edit-pdf-container__banner">
@@ -121,6 +125,54 @@ const EditPdf = () => {
           }`}
           icon={faTrashAlt}
         />
+        {location.pathname.includes("rotate-pdf") && (
+          <div className="rotate-icons">
+            <FontAwesomeIcon
+              onClick={() => {
+                const newRotationAngle = (rotationAngle - 90) % 360;
+                setRotationAngle(newRotationAngle);
+                handleApiCall(
+                  metadata,
+                  isCheckboxSelected,
+                  uploadUrl,
+                  setIsModifying,
+                  setUploadUrl,
+                  location.pathname.split("/")[1],
+                  undefined,
+                  undefined,
+                  undefined,
+                  undefined,
+                  undefined,
+                  newRotationAngle
+                );
+              }}
+              className="rotate--icon"
+              icon={faArrowRotateLeft}
+            />
+            <FontAwesomeIcon
+              onClick={() => {
+                const newRotationAngle = (rotationAngle + 90) % 360;
+                setRotationAngle(newRotationAngle);
+                handleApiCall(
+                  metadata,
+                  isCheckboxSelected,
+                  uploadUrl,
+                  setIsModifying,
+                  setUploadUrl,
+                  location.pathname.split("/")[1],
+                  undefined,
+                  undefined,
+                  undefined,
+                  undefined,
+                  undefined,
+                  newRotationAngle
+                );
+              }}
+              className="rotate--icon"
+              icon={faArrowRotateRight}
+            />
+          </div>
+        )}
         {!location.pathname.includes("/split-pdf") && (
           <div className="deselect-container">
             <label className="form-checkbox banner-checkbox" htmlFor="Deselect">

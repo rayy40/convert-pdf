@@ -62,7 +62,8 @@ const useUploadFiles = () => {
                 if (
                   route === "delete-pages" ||
                   route === "split-pdf" ||
-                  route === "extract-pdf"
+                  route === "extract-pdf" ||
+                  route === "rotate-pdf"
                 ) {
                   navigate(`/${route}/edit`, { state: meta });
                 } else if (route !== "protect-pdf" && route !== "unlock-pdf") {

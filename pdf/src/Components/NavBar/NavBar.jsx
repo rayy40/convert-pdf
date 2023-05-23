@@ -26,6 +26,7 @@ const NavBar = () => {
     "delete-pages/edit",
     "split-pdf/edit",
     "extract-pdf/edit",
+    "rotate-pdf/edit",
   ];
 
   const convertSize = (size) => {
@@ -114,7 +115,8 @@ const NavBar = () => {
           )}
         </div>
         <div className="navbar-container__right">
-          {location.pathname.includes("/delete-pages/edit") && (
+          {(location.pathname.includes("/delete-pages/edit") ||
+            location.pathname.includes("/rotate-pdf/edit")) && (
             <a
               className="link"
               target="_blank"
@@ -128,36 +130,36 @@ const NavBar = () => {
               </button>
             </a>
           )}
-          {location.pathname.includes("/delete-pages.edit") &&
-            location.pathname.includes("/split-pdf/edit") && (
-              <button
-                className={`convert-btn ${
-                  isCheckboxSelected &&
-                  Object.values(isCheckboxSelected).every(
-                    (value) => value === false
-                  ) &&
-                  "convert-btn--deactive"
-                }`}
-                onClick={() =>
-                  handleApiCall(
-                    metadata,
-                    isCheckboxSelected,
-                    uploadUrl,
-                    setIsModifying,
-                    setUploadUrl,
-                    location.pathname.split("/")[1],
-                    navigateToPage,
-                    undefined,
-                    undefined,
-                    undefined,
-                    undefined
-                  )
-                }
-              >
-                Extract
-                <FontAwesomeIcon className="icon" icon={faArrowRight} />
-              </button>
-            )}
+          {(location.pathname.includes("/extract-pages.edit") ||
+            location.pathname.includes("/split-pdf/edit")) && (
+            <button
+              className={`convert-btn ${
+                isCheckboxSelected &&
+                Object.values(isCheckboxSelected).every(
+                  (value) => value === false
+                ) &&
+                "convert-btn--deactive"
+              }`}
+              onClick={() =>
+                handleApiCall(
+                  metadata,
+                  isCheckboxSelected,
+                  uploadUrl,
+                  setIsModifying,
+                  setUploadUrl,
+                  location.pathname.split("/")[1],
+                  navigateToPage,
+                  undefined,
+                  undefined,
+                  undefined,
+                  undefined
+                )
+              }
+            >
+              Extract
+              <FontAwesomeIcon className="icon" icon={faArrowRight} />
+            </button>
+          )}
         </div>
       </div>
     </div>

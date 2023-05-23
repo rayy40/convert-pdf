@@ -9,7 +9,8 @@ export const handleApiCall = (
   password,
   setShowInput,
   setIsConverting,
-  setIsUploading
+  setIsUploading,
+  rotation
 ) => {
   let selectedPages;
   if (!(route === "protect-pdf" || route === "unlock-pdf")) {
@@ -19,6 +20,8 @@ export const handleApiCall = (
 
     setIsModifying(true);
   }
+
+  console.log(rotation);
 
   if (route === "protect-pdf" || route === "unlock-pdf") {
     setIsConverting(true);
@@ -34,6 +37,7 @@ export const handleApiCall = (
       pages: selectedPages,
       metadata: metadata,
       password: password || "",
+      rotation: rotation || 0,
     }),
     headers: {
       "Content-Type": "application/json",
@@ -54,7 +58,7 @@ export const handleApiCall = (
       if (route === "protect-pdf" || route === "unlock-pdf") {
         setIsConverting(false);
       }
-      if (route !== "delete-pages") {
+      if (route !== "delete-pages" && route !== "rotate-pdf") {
         navigateToPage(storedData);
       }
     });
