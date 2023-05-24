@@ -4,6 +4,7 @@ from PyPDF2 import PdfReader, PdfWriter
 from dotenv import load_dotenv
 from pdf2docx import Converter
 from pptx import Presentation
+import aspose.words as aw
 from io import BytesIO
 from PIL import Image
 import urllib.request
@@ -79,27 +80,23 @@ def jpg_to_pdf():
         )
 
     # Save PDF to file and return download URL
-    output_buffer = BytesIO()
-    pdf.save(output_buffer)
+    with tempfile.NamedTemporaryFile() as temp_file:
+        pdf.save(temp_file.name)
 
-    # Reset the buffer's position to the beginning
-    output_buffer.seek(0)
+        pdf.close()
+        temp_file.close()
 
-    # Set the destination path for the file upload
-    folder_name = "jpg-to-pdf/modified"
-    destination_path = f"{folder_name}/{filename_without_extension}.pdf"
+        # Set the destination path for the file upload
+        folder_name = "jpg-to-pdf/modified"
+        destination_path = f"{folder_name}/{filename_without_extension}.pdf"
 
-    # Upload the single image file to Firebase Storage
-    firebase = pyrebase.initialize_app(firebase_config)
-    storage = firebase.storage()
-    storage.child(destination_path).put(output_buffer)
+        # Upload the single image file to Firebase Storage
+        firebase = pyrebase.initialize_app(firebase_config)
+        storage = firebase.storage()
+        storage.child(destination_path).put(temp_file.name)
 
-    # Get the download URL
-    download_url = storage.child(destination_path).get_url(None)
-
-    # Close the buffer
-    pdf.close()
-    output_buffer.close()
+        # Get the download URL
+        download_url = storage.child(destination_path).get_url(None)
 
     return download_url
 
@@ -228,6 +225,45 @@ def pdf_to_word():
 
     # Clean up temporary files
     os.remove("word.pdf")
+    os.remove(output_file_path)
+
+    return docx_url
+
+
+@app.route("/api/word-to-pdf", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def word_to_pdf():
+    # Get the JSON data containing URLs
+    data = request.get_json()
+    urls = data.get("urls")
+    metadata = data.get("metadata")
+    filename = metadata["name"].split("--")[0]
+    filename_without_extension = os.path.splitext(filename)[0]
+
+    # Download the PDF file
+    response = requests.get(urls[0])
+    with open("input.docx", "wb") as f:
+        f.write(response.content)
+
+    doc = aw.Document("input.docx")
+
+    output_file_path = "output.pdf"
+    doc.save(output_file_path, aw.SaveFormat.PDF)
+
+    # Set the destination path for the file upload
+    folder_name = "word-to-pdf/modified"
+    destination_path = f"{folder_name}/{filename_without_extension}.pdf"
+
+    # Upload the single image file to Firebase Storage
+    firebase = pyrebase.initialize_app(firebase_config)
+    storage = firebase.storage()
+    storage.child(destination_path).put(output_file_path)
+
+    # Generate the download URL for the modified PDF
+    docx_url = storage.child(destination_path).get_url(None)
+
+    # Clean up temporary files
+    os.remove("input.docx")
     os.remove(output_file_path)
 
     return docx_url
