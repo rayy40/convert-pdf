@@ -2,6 +2,7 @@ from flask import request, Flask
 from flask_cors import CORS, cross_origin
 from PyPDF2 import PdfReader, PdfWriter
 from dotenv import load_dotenv
+from pdf2docx import Converter
 from pptx import Presentation
 from io import BytesIO
 from PIL import Image
@@ -192,6 +193,46 @@ def pdf_to_jpg():
         return image_url
 
 
+@app.route("/api/pdf-to-word", methods=["POST"])
+@cross_origin(supports_credentials=True)
+def pdf_to_word():
+    # Get the JSON data containing URLs
+    data = request.get_json()
+    urls = data.get("urls")
+    metadata = data.get("metadata")
+    filename = metadata["name"].split("--")[0]
+    filename_without_extension = os.path.splitext(filename)[0]
+
+    # Download the PDF file
+    response = requests.get(urls[0])
+    with open("word.pdf", "wb") as f:
+        f.write(response.content)
+
+    cv = Converter("word.pdf")
+
+    output_file_path = "output.pdf"
+    cv.convert(output_file_path, start=0, end=None)
+    cv.close()
+
+    # Set the destination path for the file upload
+    folder_name = "pdf-to-word/modified"
+    destination_path = f"{folder_name}/{filename_without_extension}.docx"
+
+    # Upload the single image file to Firebase Storage
+    firebase = pyrebase.initialize_app(firebase_config)
+    storage = firebase.storage()
+    storage.child(destination_path).put(output_file_path)
+
+    # Generate the download URL for the modified PDF
+    docx_url = storage.child(destination_path).get_url(None)
+
+    # Clean up temporary files
+    os.remove("word.pdf")
+    os.remove(output_file_path)
+
+    return docx_url
+
+
 @app.route("/api/delete-pages", methods=["POST"])
 @cross_origin(supports_credentials=True)
 def delete_pages():
@@ -344,7 +385,7 @@ def extract_images():
 
     pdf_document = fitz.open("extract-images.pdf")
 
-    images_folder = f"{filename_without_extension}_images"
+    images_folder = f"{filename_without_extension}_extracted-images"
     os.makedirs(images_folder, exist_ok=True)
 
     image_paths = []
@@ -365,7 +406,7 @@ def extract_images():
             image_paths.append(image_path)
 
     # Create a zip file of the extracted images
-    zip_file_name = f"{filename_without_extension}_images.zip"
+    zip_file_name = f"{filename_without_extension}_extracted-images.zip"
     with zipfile.ZipFile(zip_file_name, "w") as zip_file:
         for image_path in image_paths:
             zip_file.write(image_path)

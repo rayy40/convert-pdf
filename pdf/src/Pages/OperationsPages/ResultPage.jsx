@@ -8,6 +8,8 @@ import { Link, useLocation } from "react-router-dom";
 import pdf from "../../Assets/pdf-placeholder.png";
 import jpg from "../../Assets/jpg-placeholder.png";
 import ppt from "../../Assets/ppt-placeholder.png";
+import zip from "../../Assets/zip-placeholder.png";
+import docx from "../../Assets/word-placeholder.png";
 import protectPdf from "../../Assets/protected-pdf-placeholder.png";
 
 const ResultPage = () => {
@@ -21,6 +23,8 @@ const ResultPage = () => {
       return pdf;
     } else if (extension === "pptx" || extension === "ppt") return ppt;
     else if (extension === "jpg") return jpg;
+    else if (extension === "zip") return zip;
+    else if (extension === "docx") return docx;
   };
 
   const decodeUrl = decodeURIComponent(location.state);
