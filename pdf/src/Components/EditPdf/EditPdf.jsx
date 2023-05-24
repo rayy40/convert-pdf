@@ -27,13 +27,20 @@ const EditPdf = () => {
   } = useContext(FileContext);
   const [numPages, setNumPages] = useState(null);
   const [isSplitting, setIsSplitting] = useState([]);
-  const [rotationAngle, setRotationAngle] = useState(0);
+  const [rotatingAngle, setRotatingAngle] = useState({});
   const [pagesToBeSplitted, setPagesToBeSplitted] = useState([]);
   const location = useLocation();
 
   const generateInitialCheckboxState = (numPages) => {
     return Array.from(new Array(numPages)).reduce((acc, _, index) => {
       acc[index + 1] = false;
+      return acc;
+    }, {});
+  };
+
+  const generateInitialRotatingAngleState = (numPages) => {
+    return Array.from(new Array(numPages)).reduce((acc, _, index) => {
+      acc[index + 1] = 0;
       return acc;
     }, {});
   };
@@ -128,9 +135,7 @@ const EditPdf = () => {
         {location.pathname.includes("rotate-pdf") && (
           <div className="rotate-icons">
             <FontAwesomeIcon
-              onClick={() => {
-                const newRotationAngle = (rotationAngle - 90) % 360;
-                setRotationAngle(newRotationAngle);
+              onClick={() =>
                 handleApiCall(
                   metadata,
                   isCheckboxSelected,
@@ -143,16 +148,16 @@ const EditPdf = () => {
                   undefined,
                   undefined,
                   undefined,
-                  newRotationAngle
-                );
-              }}
+                  rotatingAngle,
+                  setRotatingAngle,
+                  "subtract"
+                )
+              }
               className="rotate--icon"
               icon={faArrowRotateLeft}
             />
             <FontAwesomeIcon
-              onClick={() => {
-                const newRotationAngle = (rotationAngle + 90) % 360;
-                setRotationAngle(newRotationAngle);
+              onClick={() =>
                 handleApiCall(
                   metadata,
                   isCheckboxSelected,
@@ -165,9 +170,11 @@ const EditPdf = () => {
                   undefined,
                   undefined,
                   undefined,
-                  newRotationAngle
-                );
-              }}
+                  rotatingAngle,
+                  setRotatingAngle,
+                  "add"
+                )
+              }
               className="rotate--icon"
               icon={faArrowRotateRight}
             />
@@ -247,6 +254,7 @@ const EditPdf = () => {
             setNumPages(numPages);
             setIsCheckboxSelected(generateInitialCheckboxState(numPages));
             setIsSplitting(generateInitialCheckboxState(numPages));
+            setRotatingAngle(generateInitialRotatingAngleState(numPages));
             setPagesToBeSplitted(
               Array.from({ length: numPages }, (_, index) => index + 1)
             );

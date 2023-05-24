@@ -253,7 +253,8 @@ def rotate_pdf():
 
     for page_number in sorted(pages, reverse=True):
         page = pdf[page_number - 1]
-        page.set_rotation(rotation)
+        print(page_number)
+        page.set_rotation(rotation[str(page_number)])
 
     output_file_path = "output.pdf"
     pdf.save(output_file_path)

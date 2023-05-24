@@ -10,9 +10,11 @@ export const handleApiCall = (
   setShowInput,
   setIsConverting,
   setIsUploading,
-  rotation
+  rotation,
+  setRotation,
+  operation
 ) => {
-  let selectedPages;
+  let selectedPages, rotatingAngle;
   if (!(route === "protect-pdf" || route === "unlock-pdf")) {
     selectedPages = Object.entries(isCheckboxSelected)
       .filter(([key, value]) => value === true)
@@ -21,7 +23,22 @@ export const handleApiCall = (
     setIsModifying(true);
   }
 
-  console.log(rotation);
+  if (route === "rotate-pdf") {
+    rotatingAngle = Object.fromEntries(
+      Object.entries(rotation).map(([key, value]) => {
+        if (selectedPages.includes(Number(key))) {
+          if (operation === "subtract") {
+            return [key, (value - 90 + 360) % 360];
+          } else if (operation === "add") {
+            return [key, (value + 90) % 360];
+          }
+        }
+        return [key, value];
+      })
+    );
+
+    setRotation(rotatingAngle);
+  }
 
   if (route === "protect-pdf" || route === "unlock-pdf") {
     setIsConverting(true);
@@ -37,7 +54,7 @@ export const handleApiCall = (
       pages: selectedPages,
       metadata: metadata,
       password: password || "",
-      rotation: rotation || 0,
+      rotation: rotatingAngle || rotation,
     }),
     headers: {
       "Content-Type": "application/json",
