@@ -163,11 +163,8 @@ def pdf_to_jpg():
         zip_url = storage.child(destination_path).get_url(None)
 
         # Clean up temporary files
-        for i in range(num_pages):
-            image_path = os.path.join("images", f"{filename_without_extension}_{i}.jpg")
-            os.remove(image_path)
-
-            shutil.rmtree("images")
+        os.remove("input.pdf")
+        shutil.rmtree("images")
 
         return zip_url
     elif num_pages == 1:
@@ -189,8 +186,7 @@ def pdf_to_jpg():
         image_url = storage.child(destination_path).get_url(None)
 
         # Clean up temporary files
-        os.remove(image_path)
-
+        os.remove("input.pdf")
         shutil.rmtree("images")
 
         return image_url
