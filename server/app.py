@@ -558,17 +558,68 @@ def pdf_to_ppt():
 def compress_pdf():
     data = request.get_json()
     urls = data.get("urls")
+    metadata = data.get("metadata")
+    filename = metadata["name"].split("--")[0]
+    filename_without_extension = os.path.splitext(filename)[0]
 
     response = requests.get(urls[0])
 
-    with open("compress.pdf", "wb") as file:
+    temp_pdf_handle, temp_pdf_path = tempfile.mkstemp(suffix=".pdf")
+    with open(temp_pdf_handle, "wb") as file:
         file.write(response.content)
 
-    pdf = fitz.open("compress.pdf")
+    renderer = aw.pdf2word.fixedformats.PdfFixedRenderer()
+    pdf_read_options = aw.pdf2word.fixedformats.PdfFixedOptions()
+    pdf_read_options.image_format = aw.pdf2word.fixedformats.FixedImageFormat.JPEG
+    pdf_read_options.jpeg_quality = 50
 
-    # Compression logic
+    with open(temp_pdf_path, "rb") as pdf_stream:
+        pages_stream = renderer.save_pdf_as_images(pdf_stream, pdf_read_options)
 
-    return "Uploaded"
+    builder = aw.DocumentBuilder()
+    for i in range(0, len(pages_stream)):
+        # Set maximum page size to avoid the current page image scaling.
+        max_page_dimension = 1584
+        page_setup = builder.page_setup
+        page_setup.page_width = max_page_dimension
+        page_setup.page_height = max_page_dimension
+
+        page_image = builder.insert_image(pages_stream[i])
+
+        page_setup.page_width = page_image.width
+        page_setup.page_height = page_image.height
+        page_setup.top_margin = 0
+        page_setup.left_margin = 0
+        page_setup.bottom_margin = 0
+        page_setup.right_margin = 0
+
+        if i != len(pages_stream) - 1:
+            builder.insert_break(aw.BreakType.SECTION_BREAK_NEW_PAGE)
+
+    save_options = aw.saving.PdfSaveOptions()
+    save_options.cache_background_graphics = True
+
+    temp_output_handle, output_file_path = tempfile.mkstemp(suffix=".pdf")
+    with open(temp_output_handle, "wb") as output_file:
+        builder.document.save(output_file, save_options)
+
+    # Set the destination path for the file upload
+    folder_name = "compress-pdf/modified"
+    destination_path = f"{folder_name}/{filename_without_extension}-compressed.pdf"
+
+    # Upload the single image file to Firebase Storage
+    firebase = pyrebase.initialize_app(firebase_config)
+    storage = firebase.storage()
+    storage.child(destination_path).put(output_file_path)
+
+    # Generate the download URL for the modified PDF
+    docx_url = storage.child(destination_path).get_url(None)
+
+    # Clean up temporary files
+    os.remove(temp_pdf_path)
+    os.remove(output_file_path)
+
+    return docx_url
 
 
 @app.route("/api/protect-pdf", methods=["POST"])
