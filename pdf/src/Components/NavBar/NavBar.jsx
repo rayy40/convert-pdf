@@ -96,7 +96,7 @@ const NavBar = () => {
             </svg>
           </div>
         </Link>
-        {location.pathname.split("/")[1].length === 0 && <p>logo</p>}
+        {/* {location.pathname.split("/")[1].length === 0 && <p>logo</p>} */}
         {location.pathname.split("/")[1].length > 0 && (
           <FontAwesomeIcon className="icon big--icon" icon={faCaretRight} />
         )}

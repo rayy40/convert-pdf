@@ -74,6 +74,8 @@ const FileUploadBox = ({ route, image, bgColor, file }) => {
                       accept={
                         route === "jpg-to-pdf"
                           ? "image/png, image/gif, image/bmp, image/tiff, image/jpg"
+                          : route === "word-to-pdf"
+                          ? ".doc,.docx"
                           : "application/pdf"
                       }
                     />
