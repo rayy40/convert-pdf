@@ -130,7 +130,7 @@ const NavBar = () => {
               </button>
             </a>
           )}
-          {(location.pathname.includes("/extract-pages.edit") ||
+          {(location.pathname.includes("/extract-pdf/edit") ||
             location.pathname.includes("/split-pdf/edit")) && (
             <button
               className={`convert-btn ${

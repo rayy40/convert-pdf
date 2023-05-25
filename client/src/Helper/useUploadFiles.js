@@ -71,7 +71,6 @@ const useUploadFiles = () => {
                     .then((urls) => {
                       setIsConverting(true);
                       setIsUploading(false);
-                      console.log(meta);
                       // Call API endpoint with the download URLs
                       return fetch(
                         `https://convert-pdf.onrender.com/api/${route}`,
