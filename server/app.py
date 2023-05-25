@@ -98,6 +98,8 @@ def jpg_to_pdf():
         # Get the download URL
         download_url = storage.child(destination_path).get_url(None)
 
+        os.remove(pdf)
+
     return download_url
 
 
@@ -165,6 +167,8 @@ def pdf_to_jpg():
             image_path = os.path.join("images", f"{filename_without_extension}_{i}.jpg")
             os.remove(image_path)
 
+            shutil.rmtree("images")
+
         return zip_url
     elif num_pages == 1:
         # Generate the download URL for the single image
@@ -186,6 +190,8 @@ def pdf_to_jpg():
 
         # Clean up temporary files
         os.remove(image_path)
+
+        shutil.rmtree("images")
 
         return image_url
 
