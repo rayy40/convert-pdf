@@ -741,9 +741,9 @@ def unlock_pdf():
     return download_url
 
 
-@app.route("/api/merge-pdf", methods=["POST"])
+@app.route("/api/merged-pdf", methods=["POST"])
 @cross_origin(supports_credentials=True)
-def merge_pdf():
+def merged_pdf():
     data = request.get_json()
     urls = data.get("urls")
     metadata = data.get("metadata")
