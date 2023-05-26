@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Union
+from typing import Union, List, Dict
 from PyPDF2 import PdfReader, PdfWriter
 from dotenv import load_dotenv
 from pdf2docx import Converter
@@ -42,11 +42,12 @@ app.add_middleware(
 )
 
 class PDFManipulationRequest(BaseModel):
-    urls: Union[str, list[str]]
-    pages: list[int] = []
-    rotation: dict = {}
+    urls: Union[str, List[str]]
+    pages: List[int] = []
+    rotation: Dict = {}
     password: str = ""
-    metadata: dict
+    metadata: Dict
+
 
 @app.post("/api/jpg-to-pdf")
 async def jpg_to_pdf(request: Request, data: PDFManipulationRequest):
