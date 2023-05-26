@@ -34,7 +34,12 @@ const ResultPage = () => {
     <div className="result-page-container__wrapper">
       <div className="result-page-container">
         <div className="document-container">
-          <Link to={location?.state} target="_blank" download className="link">
+          <Link
+            target="_blank"
+            to={location?.state.replace(/"/g, "")}
+            download
+            className="link"
+          >
             <img
               src={renderImg(
                 filename?.substring(filename.lastIndexOf(".") + 1)
@@ -49,7 +54,11 @@ const ResultPage = () => {
             <span>{filename?.substring(filename.lastIndexOf("."))}</span>
           </div>
 
-          <Link download target="_blank" className="link" to={location?.state}>
+          <Link
+            download
+            className="link"
+            to={location?.state.replace(/"/g, "")}
+          >
             <button className="download-btn">
               <FontAwesomeIcon className="icon" icon={faDownload} />
               Download
