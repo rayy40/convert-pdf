@@ -123,7 +123,7 @@ const EditPdf = () => {
   return (
     <div className="edit-pdf-container">
       <div className="edit-pdf-container__banner">
-        {/* <div className="no-of-files-selected">
+        <div className="no-of-files-selected">
           {isCheckboxSelected &&
             Object.values(isCheckboxSelected).some(
               (value) => value === true
@@ -136,7 +136,7 @@ const EditPdf = () => {
                 } page`}
               </p>
             )}
-        </div> */}
+        </div>
         <div className="range-container">
           <form onSubmit={handleRangeSubmit} className="unmodify" action="/">
             <input
