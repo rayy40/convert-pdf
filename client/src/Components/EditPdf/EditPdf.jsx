@@ -24,8 +24,10 @@ const EditPdf = () => {
     isModifying,
     setIsModifying,
     metadata,
+    setIsError,
   } = useContext(FileContext);
   const [numPages, setNumPages] = useState(null);
+  const [pageRange, setPageRange] = useState([]);
   const [isSplitting, setIsSplitting] = useState([]);
   const [rotatingAngle, setRotatingAngle] = useState({});
   const [pagesToBeSplitted, setPagesToBeSplitted] = useState([]);
@@ -43,6 +45,29 @@ const EditPdf = () => {
       acc[index + 1] = 0;
       return acc;
     }, {});
+  };
+
+  const handleRangeSubmit = (e) => {
+    e.preventDefault();
+    let pages = [];
+    if (pageRange.includes("-")) {
+      const start = parseInt(pageRange.split("-")[0]);
+      const end = parseInt(pageRange.split("-")[1]);
+
+      if (!isNaN(start) && !isNaN(end)) {
+        pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+      }
+    } else {
+      if (!isNaN(parseInt(pageRange))) {
+        pages = [parseInt(pageRange)];
+      }
+    }
+    pages.map((index) =>
+      setIsCheckboxSelected((prev) => ({
+        ...prev,
+        [index]: !prev[index],
+      }))
+    );
   };
 
   if (isModifying) {
@@ -98,7 +123,7 @@ const EditPdf = () => {
   return (
     <div className="edit-pdf-container">
       <div className="edit-pdf-container__banner">
-        <div className="no-of-files-selected">
+        {/* <div className="no-of-files-selected">
           {isCheckboxSelected &&
             Object.values(isCheckboxSelected).some(
               (value) => value === true
@@ -111,10 +136,23 @@ const EditPdf = () => {
                 } page`}
               </p>
             )}
+        </div> */}
+        <div className="range-container">
+          <form onSubmit={handleRangeSubmit} className="unmodify" action="/">
+            <input
+              onChange={(e) => setPageRange(e.target.value)}
+              type="text"
+              placeholder="Example: 1-3, 7"
+              pattern="^\d+-\d+$|^\d+$"
+              required
+            />
+            <button>Ok</button>
+          </form>
         </div>
         <FontAwesomeIcon
           onClick={() =>
             handleApiCall(
+              setIsError,
               metadata,
               isCheckboxSelected,
               uploadUrl,
@@ -137,6 +175,7 @@ const EditPdf = () => {
             <FontAwesomeIcon
               onClick={() =>
                 handleApiCall(
+                  setIsError,
                   metadata,
                   isCheckboxSelected,
                   uploadUrl,
@@ -159,6 +198,7 @@ const EditPdf = () => {
             <FontAwesomeIcon
               onClick={() =>
                 handleApiCall(
+                  setIsError,
                   metadata,
                   isCheckboxSelected,
                   uploadUrl,
