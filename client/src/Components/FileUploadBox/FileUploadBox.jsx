@@ -10,6 +10,7 @@ import Converting from "../../Layouts/Converting";
 import { FileContext } from "../../Helper/FileContext";
 import { handleApiCall } from "../../Helper/ReusableFunctions";
 import { useNavigate } from "react-router-dom";
+import Error from "../Error/Error";
 
 const FileUploadBox = ({ route, image, bgColor, file }) => {
   let fileInputRef = useRef(null);
@@ -24,6 +25,8 @@ const FileUploadBox = ({ route, image, bgColor, file }) => {
     setShowInput,
     isUploading,
     setIsUploading,
+    setIsError,
+    isError,
   } = useContext(FileContext);
   const { progress, uploadFiles } = useUploadFiles();
   const [password, setPassword] = useState("");
@@ -46,7 +49,7 @@ const FileUploadBox = ({ route, image, bgColor, file }) => {
       style={{ height: showInput && window.innerWidth < 767 && "400px" }}
       className="fileUpload-container"
     >
-      {!showInput && !(isUploading || isConverting) && (
+      {!isError && !showInput && !(isUploading || isConverting) && (
         <div
           style={{
             display: isUploading ? "none" : "block",
@@ -94,7 +97,7 @@ const FileUploadBox = ({ route, image, bgColor, file }) => {
           </form>
         </div>
       )}
-      {!showInput && isUploading && !isConverting && (
+      {!isError && !showInput && isUploading && !isConverting && (
         <div className="fileUpload-container__progress">
           <div
             style={{ width: `${progress}%`, background: bgColor }}
@@ -110,178 +113,189 @@ const FileUploadBox = ({ route, image, bgColor, file }) => {
           <p>Uploading...</p>
         </div>
       )}
-      {showInput && (route === "protect-pdf" || route === "unlock-pdf") && (
-        <div className="fileUpload-container__progress">
-          <div className="protect-panel__wrapper">
-            <div className="protect-panel--detail">
-              {password.length > 0 ? (
-                <svg viewBox="0 0 50 72" xmlns="http://www.w3.org/2000/svg">
-                  <g id="Page-1" fill="none" fillRule="evenodd">
-                    <g id="password-weak" stroke="#000" strokeWidth="2">
-                      <g id="strokes" transform="translate(1.000000, 1.000000)">
-                        <rect
-                          id="lock"
-                          fill="#FFF"
-                          y="27"
-                          width="48"
-                          height="43"
-                          rx="6"
-                        ></rect>
-                        <path
-                          d="M37.998 27V13.999C37.998 6.268 31.73 0 23.998 0 16.269 0 10 6.268 10 13.999V27"
-                          id="outer"
-                        ></path>
-                        <path
-                          d="M31.046 27.197V14.339a7.047 7.047 0 1 0-14.094 0v12.62"
-                          id="inner"
-                        ></path>
-                        <path
-                          d="M34 51c.552 0 1-.895 1-2l-1.594-1.317C33.16 47.917 33 48.34 33 49c0 1.105.448 2 1 2z"
-                          id="right-eye"
-                        ></path>
-                        <path
-                          d="M23.667 51l1 2L23 55.667l1.667 2.666L23 61l1.667 2.667L23 66.333 24.667 69l-1 1.333"
-                          id="mouth"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          transform="translate(23.833333, 60.666667) rotate(-270.000000) translate(-23.833333, -60.666667)"
-                        ></path>
-                        <path
-                          d="M14 51c.552 0 1-.895 1-2l-1.594-1.317C13.15 47.89 13 48.34 13 49c0 1.105.448 2 1 2z"
-                          id="left-eye"
-                          transform="translate(14.000000, 49.341475) scale(-1, 1) translate(-14.000000, -49.341475)"
-                        ></path>
+      {!isError &&
+        showInput &&
+        (route === "protect-pdf" || route === "unlock-pdf") && (
+          <div className="fileUpload-container__progress">
+            <div className="protect-panel__wrapper">
+              <div className="protect-panel--detail">
+                {password.length > 0 ? (
+                  <svg viewBox="0 0 50 72" xmlns="http://www.w3.org/2000/svg">
+                    <g id="Page-1" fill="none" fillRule="evenodd">
+                      <g id="password-weak" stroke="#000" strokeWidth="2">
+                        <g
+                          id="strokes"
+                          transform="translate(1.000000, 1.000000)"
+                        >
+                          <rect
+                            id="lock"
+                            fill="#FFF"
+                            y="27"
+                            width="48"
+                            height="43"
+                            rx="6"
+                          ></rect>
+                          <path
+                            d="M37.998 27V13.999C37.998 6.268 31.73 0 23.998 0 16.269 0 10 6.268 10 13.999V27"
+                            id="outer"
+                          ></path>
+                          <path
+                            d="M31.046 27.197V14.339a7.047 7.047 0 1 0-14.094 0v12.62"
+                            id="inner"
+                          ></path>
+                          <path
+                            d="M34 51c.552 0 1-.895 1-2l-1.594-1.317C33.16 47.917 33 48.34 33 49c0 1.105.448 2 1 2z"
+                            id="right-eye"
+                          ></path>
+                          <path
+                            d="M23.667 51l1 2L23 55.667l1.667 2.666L23 61l1.667 2.667L23 66.333 24.667 69l-1 1.333"
+                            id="mouth"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            transform="translate(23.833333, 60.666667) rotate(-270.000000) translate(-23.833333, -60.666667)"
+                          ></path>
+                          <path
+                            d="M14 51c.552 0 1-.895 1-2l-1.594-1.317C13.15 47.89 13 48.34 13 49c0 1.105.448 2 1 2z"
+                            id="left-eye"
+                            transform="translate(14.000000, 49.341475) scale(-1, 1) translate(-14.000000, -49.341475)"
+                          ></path>
+                        </g>
                       </g>
                     </g>
-                  </g>
-                </svg>
-              ) : (
-                <svg viewBox="0 0 50 80" xmlns="http://www.w3.org/2000/svg">
-                  <g id="Page-1" fill="none" fillRule="evenodd">
-                    <g id="password-open">
-                      <g
-                        id="strokes"
-                        transform="translate(1.000000, 1.000000)"
-                        stroke="#000"
-                        strokeWidth="2"
-                      >
-                        <rect
-                          id="lock"
-                          fill="#FFF"
-                          y="35"
-                          width="48"
-                          height="43"
-                          rx="6"
-                        ></rect>
-                        <path
-                          d="M37.998 35V13.999C37.998 6.268 31.73 0 23.998 0 16.269 0 10 6.268 10 13.999V21h7"
-                          id="top-2"
-                        ></path>
-                        <path
-                          d="M31.046 34.197V14.339a7.047 7.047 0 1 0-14.094 0V22"
-                          id="top-1"
-                        ></path>
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 50 80" xmlns="http://www.w3.org/2000/svg">
+                    <g id="Page-1" fill="none" fillRule="evenodd">
+                      <g id="password-open">
+                        <g
+                          id="strokes"
+                          transform="translate(1.000000, 1.000000)"
+                          stroke="#000"
+                          strokeWidth="2"
+                        >
+                          <rect
+                            id="lock"
+                            fill="#FFF"
+                            y="35"
+                            width="48"
+                            height="43"
+                            rx="6"
+                          ></rect>
+                          <path
+                            d="M37.998 35V13.999C37.998 6.268 31.73 0 23.998 0 16.269 0 10 6.268 10 13.999V21h7"
+                            id="top-2"
+                          ></path>
+                          <path
+                            d="M31.046 34.197V14.339a7.047 7.047 0 1 0-14.094 0V22"
+                            id="top-1"
+                          ></path>
+                          <ellipse
+                            id="left-eye"
+                            cx="14"
+                            cy="57"
+                            rx="1"
+                            ry="2"
+                          ></ellipse>
+                          <ellipse
+                            id="right-eye"
+                            cx="34"
+                            cy="57"
+                            rx="1"
+                            ry="2"
+                          ></ellipse>
+                        </g>
                         <ellipse
-                          id="left-eye"
-                          cx="14"
-                          cy="57"
-                          rx="1"
-                          ry="2"
-                        ></ellipse>
-                        <ellipse
-                          id="right-eye"
-                          cx="34"
-                          cy="57"
-                          rx="1"
-                          ry="2"
+                          id="fills"
+                          fill="#000"
+                          cx="25"
+                          cy="68"
+                          rx="4"
+                          ry="4"
                         ></ellipse>
                       </g>
-                      <ellipse
-                        id="fills"
-                        fill="#000"
-                        cx="25"
-                        cy="68"
-                        rx="4"
-                        ry="4"
-                      ></ellipse>
                     </g>
-                  </g>
-                </svg>
-              )}
-              <p>{metadata?.name?.split("--")[0]}</p>
-            </div>
-            <div
-              className={`protect-panel--input ${
-                route === "unlock-pdf" ? "modify-input--panel" : ""
-              }`}
-            >
-              <p>
-                {route === "protect-pdf"
-                  ? "We protect your file with strong 128-bit AES encyrption. This will make it impossible to open or remove the protection without the correct password."
-                  : "If you have the password, it will only take seconds to decrypt your password protected pdf."}
-              </p>
-              <form action="/">
-                <label htmlFor="password">
-                  <input
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
-                    placeholder={
-                      route === "protect-pdf"
-                        ? "Choose your password"
-                        : "Password"
-                    }
-                    type="password"
-                  />
-                </label>
-                {route === "protect-pdf" && (
+                  </svg>
+                )}
+                <p>{metadata?.name?.split("--")[0]}</p>
+              </div>
+              <div
+                className={`protect-panel--input ${
+                  route === "unlock-pdf" ? "modify-input--panel" : ""
+                }`}
+              >
+                <p>
+                  {route === "protect-pdf"
+                    ? "We protect your file with strong 128-bit AES encyrption. This will make it impossible to open or remove the protection without the correct password."
+                    : "If you have the password, it will only take seconds to decrypt your password protected pdf."}
+                </p>
+                <form action="/">
                   <label htmlFor="password">
                     <input
-                      onChange={(e) => setComfirmPassword(e.target.value)}
-                      value={confirmPassword}
-                      placeholder="Repeat your password"
+                      onChange={(e) => setPassword(e.target.value)}
+                      value={password}
+                      placeholder={
+                        route === "protect-pdf"
+                          ? "Choose your password"
+                          : "Password"
+                      }
                       type="password"
                     />
                   </label>
-                )}
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleApiCall(
-                      metadata,
-                      false,
-                      uploadUrl,
-                      undefined,
-                      setUploadUrl,
-                      route,
-                      navigateToPage,
-                      password,
-                      setShowInput,
-                      setIsConverting,
-                      setIsUploading
-                    );
-                  }}
-                  className={
-                    route !== "protect-pdf"
-                      ? password.length > 0
+                  {route === "protect-pdf" && (
+                    <label htmlFor="password">
+                      <input
+                        onChange={(e) => setComfirmPassword(e.target.value)}
+                        value={confirmPassword}
+                        placeholder="Repeat your password"
+                        type="password"
+                      />
+                    </label>
+                  )}
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleApiCall(
+                        setIsError,
+                        metadata,
+                        false,
+                        uploadUrl,
+                        undefined,
+                        setUploadUrl,
+                        route,
+                        navigateToPage,
+                        password,
+                        setShowInput,
+                        setIsConverting,
+                        setIsUploading
+                      );
+                    }}
+                    className={
+                      route !== "protect-pdf"
+                        ? password.length > 0
+                          ? "btn--active"
+                          : ""
+                        : password.length > 0 && password === confirmPassword
                         ? "btn--active"
                         : ""
-                      : password.length > 0 && password === confirmPassword
-                      ? "btn--active"
-                      : ""
-                  }
-                  type="submit"
-                >
-                  {route === "protect-pdf" ? "ENCRYPT" : "DECRYPT"} PDF
-                  <FontAwesomeIcon className="icon" icon={faArrowRight} />
-                </button>
-              </form>
+                    }
+                    type="submit"
+                  >
+                    {route === "protect-pdf" ? "ENCRYPT" : "DECRYPT"} PDF
+                    <FontAwesomeIcon className="icon" icon={faArrowRight} />
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-      {!showInput && !isUploading && isConverting && (
+        )}
+      {!isError && !showInput && !isUploading && isConverting && (
         <div className="fileUpload-container__progress modifying--progress">
           <Converting toggle={true} bgColor={bgColor} />
+        </div>
+      )}
+      {isError && (
+        <div className="fileUpload-container__progress">
+          <Error route={route} />
         </div>
       )}
     </div>
