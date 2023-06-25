@@ -47,7 +47,7 @@ export const handleApiCall = (
   }
   let storedData;
 
-  fetch(`http://localhost:5000/api/${route}`, {
+  fetch(`https://convert-pdf.onrender.com/api/${route}`, {
     method: "POST",
     body: JSON.stringify({
       urls: uploadUrl,

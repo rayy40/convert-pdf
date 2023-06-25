@@ -96,7 +96,7 @@ const NavBar = () => {
             </svg>
           </div>
         </Link>
-        {location.pathname.split("/")[1].length === 0 && <p>logo</p>}
+        {/* {location.pathname.split("/")[1].length === 0 && <p>logo</p>} */}
         {location.pathname.split("/")[1].length > 0 && (
           <FontAwesomeIcon className="icon big--icon" icon={faCaretRight} />
         )}
@@ -121,7 +121,7 @@ const NavBar = () => {
               className="link"
               target="_blank"
               rel="noreferrer"
-              href={uploadUrl}
+              href={uploadUrl.replace(/"/g, "")}
               download
             >
               <button className="convert-btn">
@@ -130,7 +130,7 @@ const NavBar = () => {
               </button>
             </a>
           )}
-          {(location.pathname.includes("/extract-pages.edit") ||
+          {(location.pathname.includes("/extract-pdf/edit") ||
             location.pathname.includes("/split-pdf/edit")) && (
             <button
               className={`convert-btn ${

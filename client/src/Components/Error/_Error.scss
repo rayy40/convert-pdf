@@ -1,0 +1,40 @@
+.error-container {
+  display: flex;
+  gap: 1em;
+  &--detail {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    h3 {
+      font-weight: 600;
+    }
+    .link {
+      padding-top: 0.35em;
+      font-weight: 300;
+      appearance: none;
+      text-decoration: none;
+      font-size: 1.25rem;
+      position: relative;
+      width: fit-content;
+      outline: none;
+      &::after {
+        content: "";
+        width: 87.5%;
+        height: 1px;
+        position: absolute;
+        bottom: -0.075em;
+        left: 0;
+        background: rgba(0, 0, 0, 0.5);
+        transform: scaleX(1);
+        transform-origin: right;
+        transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+      }
+      &:hover {
+        &::after {
+          transform: scaleX(0);
+          transform-origin: right;
+        }
+      }
+    }
+  }
+}

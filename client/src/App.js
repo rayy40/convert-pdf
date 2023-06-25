@@ -19,6 +19,7 @@ import ResultPage from "./Pages/OperationsPages/ResultPage";
 import ExtractedImagesPdfPage from "./Pages/OperationsPages/ExtractedImagesPdfPage";
 import RotatePdfPage from "./Pages/OperationsPages/RotatePdfPage";
 import PdfToWordPage from "./Pages/OperationsPages/PdfToWordPage";
+import WordToPdfPage from "./Pages/OperationsPages/WordToPdfPage";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -34,6 +35,7 @@ function App() {
             <Route path="/jpg-to-pdf" element={<JpgToPdfPage />} />
             <Route path="/pdf-to-ppt" element={<PdfToPptPage />} />
             <Route path="/pdf-to-word" element={<PdfToWordPage />} />
+            <Route path="/word-to-pdf" element={<WordToPdfPage />} />
             <Route path="/delete-pages" element={<DeletePdfPage />} />
             <Route path="/split-pdf" element={<SplitPdfPage />} />
             <Route path="/extract-pdf" element={<ExtractPdfPage />} />
