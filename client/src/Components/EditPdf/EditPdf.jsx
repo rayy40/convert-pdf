@@ -13,19 +13,19 @@ import {
 import Loading from "../../Layouts/Loading";
 import Converting from "../../Layouts/Converting";
 import { useLocation } from "react-router-dom";
-import { handleApiCall } from "../../Helper/ReusableFunctions";
+import Error from "../Error/Error";
+import useModifiyFiles from "../../Helper/useModifyFiles";
 
 const EditPdf = () => {
   const {
-    uploadUrl,
-    setUploadUrl,
+    isModifying,
     isCheckboxSelected,
     setIsCheckboxSelected,
-    isModifying,
-    setIsModifying,
+    isError,
     metadata,
-    setIsError,
+    uploadUrl,
   } = useContext(FileContext);
+  const { modifyFiles } = useModifiyFiles();
   const [numPages, setNumPages] = useState(null);
   const [pageRange, setPageRange] = useState([]);
   const [isSplitting, setIsSplitting] = useState([]);
@@ -73,13 +73,20 @@ const EditPdf = () => {
   if (isModifying) {
     return (
       <div className="converting-container__wrapper">
-        <Converting bgColor={"rgb(15, 192, 197)"} />
+        <Converting bgColor={"rgb(15, 192, 197)"} operation={"modified"} />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="converting-container__wrapper">
+        <Error route={location.pathname.split("/")[1]} />
       </div>
     );
   }
 
   const handleScissorButtonClick = (index, arr) => {
-    console.log(arr);
     setIsSplitting((prev) => ({
       ...prev,
       [index]: !prev[index],
@@ -120,6 +127,26 @@ const EditPdf = () => {
     }
   };
 
+  const handleEditFiles = (
+    route,
+    isCheckboxSelected,
+    metadata,
+    operation,
+    rotation,
+    setRotation,
+    password
+  ) => {
+    modifyFiles(
+      route,
+      isCheckboxSelected,
+      metadata,
+      operation,
+      rotation,
+      setRotation,
+      password
+    );
+  };
+
   return (
     <div className="edit-pdf-container">
       <div className="edit-pdf-container__banner">
@@ -137,28 +164,26 @@ const EditPdf = () => {
               </p>
             )}
         </div>
-        <div className="range-container">
-          <form onSubmit={handleRangeSubmit} className="unmodify" action="/">
-            <input
-              onChange={(e) => setPageRange(e.target.value)}
-              type="text"
-              placeholder="Example: 1-3, 7"
-              pattern="^\d+-\d+$|^\d+$"
-              required
-            />
-            <button>Ok</button>
-          </form>
-        </div>
+        {!location.pathname.includes("split-pdf") && (
+          <div className="range-container">
+            <form onSubmit={handleRangeSubmit} className="unmodify" action="/">
+              <input
+                onChange={(e) => setPageRange(e.target.value)}
+                type="text"
+                placeholder="Example: 1-3, 7"
+                pattern="^\d+-\d+$|^\d+$"
+                required
+              />
+              <button>Ok</button>
+            </form>
+          </div>
+        )}
         <FontAwesomeIcon
           onClick={() =>
-            handleApiCall(
-              setIsError,
-              metadata,
+            handleEditFiles(
+              location.pathname.split("/")[1],
               isCheckboxSelected,
-              uploadUrl,
-              setIsModifying,
-              setUploadUrl,
-              location.pathname.split("/")[1]
+              metadata
             )
           }
           className={`${
@@ -174,22 +199,14 @@ const EditPdf = () => {
           <div className="rotate-icons">
             <FontAwesomeIcon
               onClick={() =>
-                handleApiCall(
-                  setIsError,
-                  metadata,
-                  isCheckboxSelected,
-                  uploadUrl,
-                  setIsModifying,
-                  setUploadUrl,
+                handleEditFiles(
                   location.pathname.split("/")[1],
-                  undefined,
-                  undefined,
-                  undefined,
-                  undefined,
-                  undefined,
+                  isCheckboxSelected,
+                  metadata,
+                  "subtract",
                   rotatingAngle,
                   setRotatingAngle,
-                  "subtract"
+                  null
                 )
               }
               className="rotate--icon"
@@ -197,22 +214,14 @@ const EditPdf = () => {
             />
             <FontAwesomeIcon
               onClick={() =>
-                handleApiCall(
-                  setIsError,
-                  metadata,
-                  isCheckboxSelected,
-                  uploadUrl,
-                  setIsModifying,
-                  setUploadUrl,
+                handleEditFiles(
                   location.pathname.split("/")[1],
-                  undefined,
-                  undefined,
-                  undefined,
-                  undefined,
-                  undefined,
+                  isCheckboxSelected,
+                  metadata,
+                  "add",
                   rotatingAngle,
                   setRotatingAngle,
-                  "add"
+                  null
                 )
               }
               className="rotate--icon"
