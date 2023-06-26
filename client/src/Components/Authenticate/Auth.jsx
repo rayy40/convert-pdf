@@ -45,7 +45,7 @@ const Auth = () => {
     setIsUpdatingUser(true);
     try {
       const currUser = await signInWithEmailAndPassword(auth, email, password);
-      setUser(currUser);
+      setUser(currUser?.user ?? currUser);
     } catch (err) {
       setIsUpdatingUser(false);
       console.log(err.message);
@@ -65,7 +65,7 @@ const Auth = () => {
         email,
         password
       );
-      setUser(newUser);
+      setUser(newUser?.user ?? newUser);
     } catch (err) {
       setIsUpdatingUser(false);
       console.log(err);
@@ -79,7 +79,7 @@ const Auth = () => {
   const handleSignInWithGoogle = async () => {
     try {
       const googleUser = await signInWithPopup(auth, provider);
-      setUser(googleUser);
+      setUser(googleUser?.user ?? googleUser);
     } catch (err) {
       console.log(err.message);
     } finally {
