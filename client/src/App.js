@@ -1,6 +1,7 @@
 import "./App.css";
 import "@fontsource/source-sans-pro";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { pdfjs } from "react-pdf";
 import HomePage from "./Pages/HomePage/HomePage.jsx";
 import JpgToPdfPage from "./Pages/OperationsPages/JpgToPdfPage";
 import PdfToJpgPage from "./Pages/OperationsPages/PdfToJpgPage";
@@ -9,7 +10,6 @@ import DeletePdfPage from "./Pages/OperationsPages/DeletePdfPage";
 import EditPdf from "./Components/EditPdf/EditPdf";
 import { FileProvider } from "./Helper/FileContext";
 import NavBar from "./Components/NavBar/NavBar";
-import { pdfjs } from "react-pdf";
 import PdfToPptPage from "./Pages/OperationsPages/PdfToPptPage";
 import SplitPdfPage from "./Pages/OperationsPages/SplitPdfPage";
 import ExtractPdfPage from "./Pages/OperationsPages/ExtractPdfPage";
