@@ -84,7 +84,7 @@ const Auth = () => {
     try {
       let googleUser = null;
       if (window.innerWidth < 767) {
-        googleUser = await signInWithRedirect(auth.provider);
+        googleUser = await signInWithRedirect(auth, provider);
       } else {
         googleUser = await signInWithPopup(auth, provider);
       }
