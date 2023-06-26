@@ -10,7 +10,7 @@
 }
 
 body {
-  font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
 }
 
 .loading-container {
@@ -106,6 +106,10 @@ body {
 @import "./Pages/OperationsPages/OperationsPage";
 @import "./Components/NavBar/NavBar";
 @import "./Layouts/Layouts";
+@import "./Components/Authenticate/Auth";
+@import "./Components/Error/Error";
+@import "./Components/Modal/Modal";
 @import "./Components/FileUploadBox/FileUploadBox";
 @import "./Components/EditPdf/EditPdf";
 @import "./Pages/OperationsPages/ResultPage";
+@import "./Pages/DocumentsPage/Documents";
