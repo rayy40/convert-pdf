@@ -700,6 +700,10 @@ body {
 .auth-container__signup .input-container:hover .icon {
   color: #333;
 }
+.auth-container__login .input--error,
+.auth-container__signup .input--error {
+  border: 1px solid red;
+}
 .auth-container__login button,
 .auth-container__signup button {
   border: 1px solid transparent;
@@ -710,6 +714,12 @@ body {
   font-size: 0.925rem;
   background: rgb(0, 85, 255);
   color: rgb(255, 255, 255);
+}
+.auth-container__login .error,
+.auth-container__signup .error {
+  text-align: center;
+  font-size: 0.925rem;
+  color: red;
 }
 .auth-container__login .submit-btn:hover,
 .auth-container__login .login-btn:hover,
