@@ -2,7 +2,7 @@ import React from "react";
 import {
   faArrowRotateRight,
   faDownload,
-  faPen,
+  // faPen,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useLocation } from "react-router-dom";
