@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/static/css/main.62f69abc.css",
+    "main.js": "/static/js/main.e4cf6e24.js",
+    "static/media/source-sans-pro-latin-400-normal.woff": "/static/media/source-sans-pro-latin-400-normal.1dab9dfbf4ebe14ee1e6.woff",
+    "static/media/source-sans-pro-latin-ext-400-normal.woff": "/static/media/source-sans-pro-latin-ext-400-normal.386fffe75ce8dea66463.woff",
+    "static/media/source-sans-pro-latin-400-normal.woff2": "/static/media/source-sans-pro-latin-400-normal.c0d191aa7fb798623030.woff2",
+    "static/media/source-sans-pro-latin-ext-400-normal.woff2": "/static/media/source-sans-pro-latin-ext-400-normal.fbd4fe33a443c83e04f1.woff2",
+    "static/media/source-sans-pro-cyrillic-400-normal.woff": "/static/media/source-sans-pro-cyrillic-400-normal.9b5f70afcc3d6c1dad75.woff",
+    "static/media/source-sans-pro-greek-400-normal.woff": "/static/media/source-sans-pro-greek-400-normal.7fa05b8a6ba159bb0cfd.woff",
+    "static/media/source-sans-pro-greek-ext-400-normal.woff": "/static/media/source-sans-pro-greek-ext-400-normal.4ad21ab0ad27076fb5ab.woff",
+    "static/media/source-sans-pro-cyrillic-400-normal.woff2": "/static/media/source-sans-pro-cyrillic-400-normal.d1cfd8b7bb2cbe3fabb0.woff2",
+    "static/media/source-sans-pro-greek-400-normal.woff2": "/static/media/source-sans-pro-greek-400-normal.9c7d72dcc7a044db07b1.woff2",
+    "static/media/source-sans-pro-cyrillic-ext-400-normal.woff": "/static/media/source-sans-pro-cyrillic-ext-400-normal.5cee348b848b24db3fe0.woff",
+    "static/media/source-sans-pro-greek-ext-400-normal.woff2": "/static/media/source-sans-pro-greek-ext-400-normal.1b1cb10170f2616853f0.woff2",
+    "static/media/source-sans-pro-vietnamese-400-normal.woff": "/static/media/source-sans-pro-vietnamese-400-normal.b09d27ba0cf97308a4e9.woff",
+    "static/media/source-sans-pro-cyrillic-ext-400-normal.woff2": "/static/media/source-sans-pro-cyrillic-ext-400-normal.de95c5209ef26bf69ccf.woff2",
+    "static/media/source-sans-pro-vietnamese-400-normal.woff2": "/static/media/source-sans-pro-vietnamese-400-normal.e84a4369ad213f658ebb.woff2",
+    "index.html": "/index.html",
+    "main.62f69abc.css.map": "/static/css/main.62f69abc.css.map",
+    "main.e4cf6e24.js.map": "/static/js/main.e4cf6e24.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.62f69abc.css",
+    "static/js/main.e4cf6e24.js"
+  ]
+}
