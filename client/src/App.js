@@ -1,4 +1,5 @@
 import "./App.css";
+import "@fontsource/source-sans-pro";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./Pages/HomePage/HomePage.jsx";
 import JpgToPdfPage from "./Pages/OperationsPages/JpgToPdfPage";
@@ -16,10 +17,12 @@ import MergePdfPage from "./Pages/OperationsPages/MergePdfPage";
 import ProtectPdfPage from "./Pages/OperationsPages/ProtectPdfPage";
 import UnlockPdfPage from "./Pages/OperationsPages/UnlockPdfPage";
 import ResultPage from "./Pages/OperationsPages/ResultPage";
-import ExtractedImagesPdfPage from "./Pages/OperationsPages/ExtractedImagesPdfPage";
+import ExtractPdfImages from "./Pages/OperationsPages/ExtractPdfImages";
 import RotatePdfPage from "./Pages/OperationsPages/RotatePdfPage";
 import PdfToWordPage from "./Pages/OperationsPages/PdfToWordPage";
 import WordToPdfPage from "./Pages/OperationsPages/WordToPdfPage";
+import Documents from "./Pages/DocumentsPage/Documents";
+import ExtractPdfText from "./Pages/OperationsPages/ExtractPdfText";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -39,11 +42,9 @@ function App() {
             <Route path="/delete-pages" element={<DeletePdfPage />} />
             <Route path="/split-pdf" element={<SplitPdfPage />} />
             <Route path="/extract-pdf" element={<ExtractPdfPage />} />
+            <Route path="/extract-text" element={<ExtractPdfText />} />
             <Route path="/merge-pdf" element={<MergePdfPage />} />
-            <Route
-              path="/extract-images"
-              element={<ExtractedImagesPdfPage />}
-            />
+            <Route path="/extract-images" element={<ExtractPdfImages />} />
             <Route path="/protect-pdf" element={<ProtectPdfPage />} />
             <Route path="/rotate-pdf" element={<RotatePdfPage />} />
             <Route path="/unlock-pdf" element={<UnlockPdfPage />} />
@@ -53,6 +54,7 @@ function App() {
             <Route path="/extract-pdf/edit" element={<EditPdf />} />
             <Route path="/rotate-pdf/edit" element={<EditPdf />} />
             <Route path="/result" element={<ResultPage />} />
+            <Route path="/documents" element={<Documents />} />
           </Routes>
         </div>
       </FileProvider>
