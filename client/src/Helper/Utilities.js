@@ -180,6 +180,29 @@ export const operationsBoxInfo = [
     ),
   },
   {
+    header: "Extract text from PDF",
+    description: "Extract text from a PDF with ease",
+    link: "extract-text",
+    image: (
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z"
+          fill="#0FC0C5"
+        ></path>
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M15 13.7778L22.7778 6L25 8.22222L17.2222 16H15V13.7778Z"
+          fill="white"
+        ></path>
+        <path d="M20 7.5H7.5V24.5H21.5V14" stroke="white"></path>
+        <path d="M9 16.5H14" stroke="white"></path>
+        <path d="M9 22.5H14" stroke="white"></path>
+        <path d="M11.5 16.5V22.5" stroke="white"></path>
+      </svg>
+    ),
+  },
+  {
     header: "Merge PDF",
     description: "Combine multiple PDFs into one unified document",
     link: "merge-pdf",
@@ -215,25 +238,25 @@ export const operationsBoxInfo = [
       </svg>
     ),
   },
-  {
-    header: "Split PDF",
-    description: "Save each page or multiple pages as PDFs from a PDF",
-    link: "split-pdf",
-    image: (
-      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z"
-          fill="#7961F2"
-        ></path>
-        <path
-          fillRule="evenodd"
-          clipRule="evenodd"
-          fill="white"
-          d="M9.38925 24.7847C11.2743 25.4574 13.3599 24.5013 14.0474 22.6493L16 17.3898L17.9526 22.6493C18.6401 24.5013 20.7257 25.4574 22.6108 24.7847C24.4958 24.112 25.4666 22.0653 24.7791 20.2133C24.0915 18.3612 22.006 17.4052 20.1209 18.0779C19.2467 18.3898 18.5691 18.9972 18.1624 19.7437L16.6442 15.6544L19.8571 7L19.1194 7.37144C18.575 7.64549 18.1561 8.1114 17.9466 8.67569L16 13.9191L14.0534 8.67569C13.8439 8.1114 13.425 7.64549 12.8806 7.37144L12.1429 7L15.3558 15.6544L13.8376 19.7437C13.4309 18.9972 12.7533 18.3898 11.8791 18.0779C9.99404 17.4052 7.9085 18.3612 7.22094 20.2133C6.53338 22.0653 7.50417 24.112 9.38925 24.7847ZM9.80423 23.6669C11.061 24.1153 12.4513 23.478 12.9097 22.2433C13.3681 21.0086 12.7209 19.6441 11.4641 19.1957C10.2074 18.7472 8.81706 19.3846 8.35869 20.6193C7.90032 21.854 8.54751 23.2184 9.80423 23.6669ZM22.1958 23.6669C23.4525 23.2184 24.0997 21.854 23.6413 20.6193C23.1829 19.3846 21.7926 18.7472 20.5359 19.1957C19.2791 19.6441 18.6319 21.0086 19.0903 22.2433C19.5487 23.478 20.939 24.1153 22.1958 23.6669Z"
-        ></path>
-      </svg>
-    ),
-  },
+  // {
+  //   header: "Split PDF",
+  //   description: "Save each page or multiple pages as PDFs from a PDF",
+  //   link: "split-pdf",
+  //   image: (
+  //     <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  //       <path
+  //         d="M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z"
+  //         fill="#7961F2"
+  //       ></path>
+  //       <path
+  //         fillRule="evenodd"
+  //         clipRule="evenodd"
+  //         fill="white"
+  //         d="M9.38925 24.7847C11.2743 25.4574 13.3599 24.5013 14.0474 22.6493L16 17.3898L17.9526 22.6493C18.6401 24.5013 20.7257 25.4574 22.6108 24.7847C24.4958 24.112 25.4666 22.0653 24.7791 20.2133C24.0915 18.3612 22.006 17.4052 20.1209 18.0779C19.2467 18.3898 18.5691 18.9972 18.1624 19.7437L16.6442 15.6544L19.8571 7L19.1194 7.37144C18.575 7.64549 18.1561 8.1114 17.9466 8.67569L16 13.9191L14.0534 8.67569C13.8439 8.1114 13.425 7.64549 12.8806 7.37144L12.1429 7L15.3558 15.6544L13.8376 19.7437C13.4309 18.9972 12.7533 18.3898 11.8791 18.0779C9.99404 17.4052 7.9085 18.3612 7.22094 20.2133C6.53338 22.0653 7.50417 24.112 9.38925 24.7847ZM9.80423 23.6669C11.061 24.1153 12.4513 23.478 12.9097 22.2433C13.3681 21.0086 12.7209 19.6441 11.4641 19.1957C10.2074 18.7472 8.81706 19.3846 8.35869 20.6193C7.90032 21.854 8.54751 23.2184 9.80423 23.6669ZM22.1958 23.6669C23.4525 23.2184 24.0997 21.854 23.6413 20.6193C23.1829 19.3846 21.7926 18.7472 20.5359 19.1957C19.2791 19.6441 18.6319 21.0086 19.0903 22.2433C19.5487 23.478 20.939 24.1153 22.1958 23.6669Z"
+  //       ></path>
+  //     </svg>
+  //   ),
+  // },
   {
     header: "Protect PDF",
     description:
@@ -252,24 +275,34 @@ export const operationsBoxInfo = [
       </svg>
     ),
   },
-  {
-    header: "Unlock PDF",
-    description: "Remove passwords from PDF files.",
-    link: "unlock-pdf",
-    image: (
-      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z"
-          fill="#FF5975"
-        ></path>
-        <rect x="7.5" y="14.5" width="13" height="10" stroke="white"></rect>
-        <path
-          d="M24.5 12C24.5 9.51472 22.4853 7.5 20 7.5C17.5147 7.5 15.5 9.51472 15.5 12"
-          stroke="white"
-        ></path>
-        <path d="M15.5 12V14.5" stroke="white"></path>
-        <path d="M24.5 12V14" stroke="white"></path>
-      </svg>
-    ),
-  },
+  // {
+  //   header: "Unlock PDF",
+  //   description: "Remove passwords from PDF files.",
+  //   link: "unlock-pdf",
+  //   image: (
+  //     <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  //       <path
+  //         d="M0 4C0 1.79086 1.79086 0 4 0H28C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32H4C1.79086 32 0 30.2091 0 28V4Z"
+  //         fill="#FF5975"
+  //       ></path>
+  //       <rect x="7.5" y="14.5" width="13" height="10" stroke="white"></rect>
+  //       <path
+  //         d="M24.5 12C24.5 9.51472 22.4853 7.5 20 7.5C17.5147 7.5 15.5 9.51472 15.5 12"
+  //         stroke="white"
+  //       ></path>
+  //       <path d="M15.5 12V14.5" stroke="white"></path>
+  //       <path d="M24.5 12V14" stroke="white"></path>
+  //     </svg>
+  //   ),
+  // },
 ];
+
+export const convertSize = (size) => {
+  if (size >= 1000000) {
+    // Convert to megabytes
+    return `${(size / 1000000).toFixed(2)} mB`;
+  } else {
+    // Convert to kilobytes
+    return `${Math.round(size / 1000)} kB`;
+  }
+};
