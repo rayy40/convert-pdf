@@ -5,8 +5,8 @@ from typing import Union, List, Dict
 from PyPDF2 import PdfReader, PdfWriter
 from dotenv import load_dotenv
 from pdf2docx import Converter
+from docx2pdf import convert
 from pptx import Presentation
-import aspose.words as aw
 from io import BytesIO
 from PIL import Image
 import urllib.request
@@ -41,23 +41,56 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class PDFManipulationRequest(BaseModel):
     urls: Union[str, List[str]]
+    user: Dict = {}
+    rename_file: str = ""
     pages: List[int] = []
     rotation: Dict = {}
     password: str = ""
     metadata: Dict
 
 
+@app.post("/api/rename")
+async def rename_file(request: Request, data: PDFManipulationRequest):
+    urls = data.urls
+    metadata = data.metadata
+    filename = metadata["name"]
+    new_filename = data.rename_file
+    userId = data.user["uid"]
+    userToken = data.user["stsTokenManager"]["accessToken"]
+
+    response = requests.get(urls)
+    file_content = response.content
+
+    file_path = f"{userId}/upload/{filename}"
+
+    # Delete the file from Firebase Storage
+    firebase = pyrebase.initialize_app(firebase_config)
+    storage = firebase.storage()
+    storage.delete(file_path, userToken)
+
+    new_file_path = f"{userId}/upload/{new_filename}"
+
+    # Put the new file into the firebase storage
+    storage.child(new_file_path).put(file_content)
+
+    return "Success"
+
+
 @app.post("/api/jpg-to-pdf")
 async def jpg_to_pdf(request: Request, data: PDFManipulationRequest):
     urls = data.urls
     metadata = data.metadata
-    filename = metadata["name"].split("--")[0]
+    filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
     # Create a new PDF document
     pdf = fitz.open()
+
+    if isinstance(urls, str):
+        urls = [urls]
 
     for url in urls:
         # Download image from URL
@@ -90,34 +123,20 @@ async def jpg_to_pdf(request: Request, data: PDFManipulationRequest):
         pixmap = fitz.Pixmap(BytesIO(img_data))
 
         # Insert the image into the PDF page
-        page.insert_image(fitz.Rect(x_pos, y_pos, x_pos + img_width, y_pos + img_height), pixmap=pixmap)
+        page.insert_image(
+            fitz.Rect(x_pos, y_pos, x_pos + img_width, y_pos + img_height),
+            pixmap=pixmap,
+        )
 
     # Save PDF to file and return download URL
-<<<<<<< HEAD
-    with tempfile.NamedTemporaryFile() as temp_file:
-        pdf.save(temp_file.name)
-
-        pdf.close()
-        temp_file.close()
-=======
     pdf_data = BytesIO()
     pdf.save(pdf_data)
     pdf.close()
->>>>>>> 150e244459f00eec7a46745640aa3c0194b0226e
 
-        # Set the destination path for the file upload
-        folder_name = "jpg-to-pdf/modified"
-        destination_path = f"{folder_name}/{filename_without_extension}.pdf"
+    # Set the destination path for the file upload
+    folder_name = "jpg-to-pdf/modified"
+    destination_path = f"{folder_name}/{filename_without_extension}.pdf"
 
-<<<<<<< HEAD
-        # Upload the single image file to Firebase Storage
-        firebase = pyrebase.initialize_app(firebase_config)
-        storage = firebase.storage()
-        storage.child(destination_path).put(temp_file.name)
-
-        # Get the download URL
-        download_url = storage.child(destination_path).get_url(None)
-=======
     # Upload the single image file to Firebase Storage
     firebase = pyrebase.initialize_app(firebase_config)
     storage = firebase.storage()
@@ -125,25 +144,24 @@ async def jpg_to_pdf(request: Request, data: PDFManipulationRequest):
 
     # Get the download URL
     download_url = storage.child(destination_path).get_url(None)
-    
+
     pdf_data.close()
->>>>>>> 150e244459f00eec7a46745640aa3c0194b0226e
 
     return download_url
 
 
 @app.post("/api/pdf-to-jpg")
 async def pdf_to_jpg(request: Request, data: PDFManipulationRequest):
-    urls = data.urls
+    urls = data.urls[0]
     metadata = data.metadata
-    filename = metadata["name"].split("--")[0]
+    filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
     # Create a BytesIO object to store the images
     images_data = BytesIO()
 
     # Download the PDF file
-    response = requests.get(urls[0])
+    response = requests.get(urls)
     pdf_data = BytesIO(response.content)
 
     # Open the PDF
@@ -166,7 +184,7 @@ async def pdf_to_jpg(request: Request, data: PDFManipulationRequest):
         # Set the destination path for the file upload
         folder_name = "pdf-to-jpg/modified"
         destination_path = f"{folder_name}/{filename_without_extension}.zip"
-        
+
         zip_stream = BytesIO()
         with zipfile.ZipFile(zip_stream, "w", zipfile.ZIP_STORED) as zipf:
             # Add each image to the zip file
@@ -213,18 +231,18 @@ async def pdf_to_jpg(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/pdf-to-word")
 async def pdf_to_word(request: Request, data: PDFManipulationRequest):
-    urls = data.urls
+    urls = data.urls[0]
     metadata = data.metadata
-    filename = metadata["name"].split("--")[0]
+    filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
     # Download the PDF file
-    response = requests.get(urls[0])
+    response = requests.get(urls)
     pdf_stream = BytesIO(response.content)
 
     cv = Converter(pdf_stream.read())
-
     output_doc_stream = BytesIO()
+
     cv.convert(output_doc_stream, start=0, end=None)
     cv.close()
 
@@ -247,41 +265,22 @@ async def pdf_to_word(request: Request, data: PDFManipulationRequest):
     return docx_url
 
 
-<<<<<<< HEAD
-@app.route("/api/word-to-pdf", methods=["POST"])
-@cross_origin(supports_credentials=True)
-def word_to_pdf():
-    # Get the JSON data containing URLs
-    data = request.get_json()
-    urls = data.get("urls")
-    metadata = data.get("metadata")
-=======
 @app.post("/api/word-to-pdf")
 async def word_to_pdf(request: Request, data: PDFManipulationRequest):
     urls = data.urls
     metadata = data.metadata
->>>>>>> 150e244459f00eec7a46745640aa3c0194b0226e
-    filename = metadata["name"].split("--")[0]
+    filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
     # Download the PDF file
-    response = requests.get(urls[0])
-<<<<<<< HEAD
-    with open("input.docx", "wb") as f:
+    response = requests.get(urls)
+
+    with open("document.docx", "wb") as f:
         f.write(response.content)
 
-    doc = aw.Document("input.docx")
+    convert("document.docx", "output.pdf")
 
-    output_file_path = "output.pdf"
-    doc.save(output_file_path, aw.SaveFormat.PDF)
-=======
-    doc_stream = BytesIO(response.content)
-
-    doc = aw.Document(stream=doc_stream)
-
-    output_pdf_stream = BytesIO()
-    doc.save(output_pdf_stream, aw.SaveFormat.PDF)
->>>>>>> 150e244459f00eec7a46745640aa3c0194b0226e
+    # output_pdf_stream = BytesIO()
 
     # Set the destination path for the file upload
     folder_name = "word-to-pdf/modified"
@@ -290,43 +289,23 @@ async def word_to_pdf(request: Request, data: PDFManipulationRequest):
     # Upload the single image file to Firebase Storage
     firebase = pyrebase.initialize_app(firebase_config)
     storage = firebase.storage()
-<<<<<<< HEAD
-    storage.child(destination_path).put(output_file_path)
-=======
-    storage.child(destination_path).put(output_pdf_stream.getvalue())
->>>>>>> 150e244459f00eec7a46745640aa3c0194b0226e
+    storage.child(destination_path).put("output.pdf")
 
     # Generate the download URL for the modified PDF
     docx_url = storage.child(destination_path).get_url(None)
 
-<<<<<<< HEAD
     # Clean up temporary files
-    os.remove("input.docx")
-    os.remove(output_file_path)
-=======
-    doc_stream.close()
-    output_pdf_stream.close()
->>>>>>> 150e244459f00eec7a46745640aa3c0194b0226e
+    # output_pdf_stream.close()
 
     return docx_url
 
 
-<<<<<<< HEAD
-@app.route("/api/delete-pages", methods=["POST"])
-@cross_origin(supports_credentials=True)
-def delete_pages():
-    data = request.get_json()
-    urls = data.get("urls")
-    pages = data.get("pages")
-    metadata = data.get("metadata")
-=======
 @app.post("/api/delete-pages")
 async def delete_pages(request: Request, data: PDFManipulationRequest):
-    urls = data.urls
+    urls = data.urls[0]
     pages = data.pages
     metadata = data.metadata
->>>>>>> 150e244459f00eec7a46745640aa3c0194b0226e
-    filename = metadata["name"].split("--")[0]
+    filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
     response = requests.get(urls)
@@ -352,7 +331,7 @@ async def delete_pages(request: Request, data: PDFManipulationRequest):
 
     # Generate the download URL for the modified PDF
     pdf_url = storage.child(destination_path).get_url(None)
-    
+
     output_pdf_stream.close()
     pdf_stream.close()
 
@@ -361,11 +340,11 @@ async def delete_pages(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/rotate-pdf")
 def rotate_pdf(request: Request, data: PDFManipulationRequest):
-    urls = data.urls
+    urls = data.urls[0]
     pages = data.pages
     rotation = data.rotation
     metadata = data.metadata
-    filename = metadata["name"].split("--")[0]
+    filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
     response = requests.get(urls)
@@ -392,7 +371,7 @@ def rotate_pdf(request: Request, data: PDFManipulationRequest):
 
     # Generate the download URL for the modified PDF
     pdf_url = storage.child(destination_path).get_url(None)
-    
+
     pdf_stream.close()
     output_pdf_stream.close()
 
@@ -401,17 +380,17 @@ def rotate_pdf(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/extract-pdf")
 def extract_pdf(request: Request, data: PDFManipulationRequest):
-    urls = data.urls
+    urls = data.urls[0]
     pages = data.pages
     metadata = data.metadata
-    filename = metadata["name"].split("--")[0]
+    filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
     response = requests.get(urls, stream=True)
 
-   # Create in-memory file-like object to store the PDF content
+    # Create in-memory file-like object to store the PDF content
     pdf_stream = BytesIO()
-    
+
     for chunk in response.iter_content(chunk_size=4096):
         pdf_stream.write(chunk)
 
@@ -419,7 +398,7 @@ def extract_pdf(request: Request, data: PDFManipulationRequest):
     doc = fitz.open(stream=pdf_stream, filetype="pdf")
     pdf = fitz.open()
 
-    for page_num in sorted(pages, reverse=True): 
+    for page_num in sorted(pages, reverse=True):
         pdf.insert_pdf(doc, from_page=int(page_num) - 1, to_page=int(page_num) - 1)
 
     # Save the extracted pages to a new PDF file
@@ -447,15 +426,57 @@ def extract_pdf(request: Request, data: PDFManipulationRequest):
     return download_url
 
 
-@app.post("/api/extract-images")
-def extract_images(request: Request, data: PDFManipulationRequest):
-    urls = data.urls
+@app.post("/api/extract-text")
+def extract_text(request: Request, data: PDFManipulationRequest):
+    urls = data.urls[0]
     metadata = data.metadata
-    filename = metadata["name"].split("--")[0]
+    filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
-    response = requests.get(urls[0])
-    
+    response = requests.get(urls)
+
+    pdf_stream = BytesIO(response.content)
+
+    # Create a PDF reader object
+    pdf = PdfReader(pdf_stream)
+
+    # Create a new PDF with encryption
+    extracted_text = []
+
+    # Iterate through the pages of the original PDF and add them to the new PDF
+    for page in pdf.pages:
+        text = page.extract_text()
+        extracted_text.append(text)
+
+    # Join the extracted text from all pages into a single string
+    text_from_pdf = "\n".join(extracted_text)
+
+    # Set the destination path for the file upload
+    folder_name = "extract-text/modified"
+    destination_path = f"{folder_name}/{filename_without_extension}.txt"
+
+    # Upload the single image file to Firebase Storage
+    firebase = pyrebase.initialize_app(firebase_config)
+    storage = firebase.storage()
+    storage.child(destination_path).put(text_from_pdf.encode())
+
+    # Generate the download URL for the modified PDF
+    txt_url = storage.child(destination_path).get_url(None)
+
+    pdf_stream.close()
+
+    return txt_url
+
+
+@app.post("/api/extract-images")
+def extract_images(request: Request, data: PDFManipulationRequest):
+    urls = data.urls[0]
+    metadata = data.metadata
+    filename = metadata["name"]
+    filename_without_extension = os.path.splitext(filename)[0]
+
+    response = requests.get(urls)
+
     pdf_stream = BytesIO(response.content)
     pdf_document = fitz.open(stream=pdf_stream.read(), filetype="pdf")
 
@@ -479,7 +500,7 @@ def extract_images(request: Request, data: PDFManipulationRequest):
     with zipfile.ZipFile(zip_stream, "w", zipfile.ZIP_STORED) as zip_file:
         for image_name, image_bytes in image_data:
             zip_file.writestr(image_name, image_bytes)
-            
+
     # Set the position to the beginning of the BytesIO object
     zip_stream.seek(0)
 
@@ -506,12 +527,12 @@ def extract_images(request: Request, data: PDFManipulationRequest):
 @app.post("/api/pdf-to-ppt")
 def pdf_to_ppt(request: Request, data: PDFManipulationRequest):
     # Get the JSON data containing URLs
-    urls = data.urls
+    urls = data.urls[0]
     metadata = data.metadata
-    filename = metadata["name"].split("--")[0]
+    filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
-    response = requests.get(urls[0])
+    response = requests.get(urls)
 
     # Load the PDF content into a Presentation object
     prs = Presentation()
@@ -522,7 +543,6 @@ def pdf_to_ppt(request: Request, data: PDFManipulationRequest):
     slide_width = prs.slide_width
     slide_height = prs.slide_height
     slide_layout = prs.slide_layouts[1]  # Use the layout for a content slide
-
 
     pdf_doc = fitz.open(stream=pdf_stream.read(), filetype="pdf")
     for page_index in range(len(pdf_doc)):
@@ -562,7 +582,7 @@ def pdf_to_ppt(request: Request, data: PDFManipulationRequest):
     # Save the Presentation as a PPTX file
     converted_pptx_stream = BytesIO()
     prs.save(converted_pptx_stream)
-    
+
     # Set the position to the beginning of the BytesIO object
     converted_pptx_stream.seek(0)
 
@@ -577,7 +597,7 @@ def pdf_to_ppt(request: Request, data: PDFManipulationRequest):
 
     # Generate the download URL for the converted PPTX
     pptx_url = storage.child(destination_path).get_url(None)
-    
+
     pdf_stream.close()
     pdf_doc.close()
     converted_pptx_stream.close()
@@ -587,50 +607,35 @@ def pdf_to_ppt(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/compress-pdf")
 def compress_pdf(request: Request, data: PDFManipulationRequest):
-    urls = data.urls
+    urls = data.urls[0]
     metadata = data.metadata
-    filename = metadata["name"].split("--")[0]
+    filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
-    response = requests.get(urls[0])
-    
+    response = requests.get(urls)
+
     # Create a BytesIO object to store the PDF content
     pdf_stream = BytesIO(response.content)
 
-    renderer = aw.pdf2word.fixedformats.PdfFixedRenderer()
-    pdf_read_options = aw.pdf2word.fixedformats.PdfFixedOptions()
-    pdf_read_options.image_format = aw.pdf2word.fixedformats.FixedImageFormat.JPEG
-    pdf_read_options.jpeg_quality = 50
+    # Open the PDF
+    pdf = PdfReader(pdf_stream)
 
-    pages_stream = renderer.save_pdf_as_images(pdf_stream, pdf_read_options)
+    # Create a new PDF with encryption
+    writer = PdfWriter()
 
-    builder = aw.DocumentBuilder()
-    for i in range(0, len(pages_stream)):
-        # Set maximum page size to avoid the current page image scaling.
-        max_page_dimension = 1584
-        page_setup = builder.page_setup
-        page_setup.page_width = max_page_dimension
-        page_setup.page_height = max_page_dimension
+    # Iterate through the pages of the original PDF and add them to the new PDF
+    for page in pdf.pages:
+        page.compress_content_streams()
+        writer.add_page(page)
 
-        page_image = builder.insert_image(pages_stream[i])
-
-        page_setup.page_width = page_image.width
-        page_setup.page_height = page_image.height
-        page_setup.top_margin = 0
-        page_setup.left_margin = 0
-        page_setup.bottom_margin = 0
-        page_setup.right_margin = 0
-
-        if i != len(pages_stream) - 1:
-            builder.insert_break(aw.BreakType.SECTION_BREAK_NEW_PAGE)
-
-    save_options = aw.saving.PdfSaveOptions()
-    save_options.cache_background_graphics = True
-
-    # Create a BytesIO object to store the compressed PDF content
+    # Create a BytesIO object to store the encrypted PDF content
     compressed_pdf_stream = BytesIO()
-        
-    builder.document.save(compressed_pdf_stream, save_options)
+
+    # Save the encrypted PDF to the temporary file
+    writer.write(compressed_pdf_stream)
+
+    # Set the position to the beginning of the BytesIO object
+    compressed_pdf_stream.seek(0)
 
     # Set the destination path for the file upload
     folder_name = "compress-pdf/modified"
@@ -643,7 +648,7 @@ def compress_pdf(request: Request, data: PDFManipulationRequest):
 
     # Generate the download URL for the modified PDF
     docx_url = storage.child(destination_path).get_url(None)
-    
+
     pdf_stream.close()
     compressed_pdf_stream.close()
 
@@ -652,15 +657,15 @@ def compress_pdf(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/protect-pdf")
 def protect_pdf(request: Request, data: PDFManipulationRequest):
-    urls = data.urls
+    urls = data.urls[0]
     password = data.password
     metadata = data.metadata
 
-    filename = metadata["name"].split("--")[0]
+    filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
     response = requests.get(urls)
-    
+
     # Create a BytesIO object to store the PDF content
     pdf_stream = BytesIO(response.content)
 
@@ -676,7 +681,7 @@ def protect_pdf(request: Request, data: PDFManipulationRequest):
 
     # Encrypt the new PDF with a password
     writer.encrypt(user_password=password, owner_password=None, use_128bit=True)
-    
+
     # Create a BytesIO object to store the encrypted PDF content
     encrypted_pdf_stream = BytesIO()
 
@@ -697,7 +702,7 @@ def protect_pdf(request: Request, data: PDFManipulationRequest):
 
     # Get the download URL
     download_url = storage.child(destination_path).get_url(None)
-    
+
     pdf_stream.close()
     encrypted_pdf_stream.close()
 
@@ -715,7 +720,7 @@ def merge_pdf(request: Request, data: PDFManipulationRequest):
     urls = data.urls
     metadata = data.metadata
 
-    filename = metadata["name"].split("--")[0]
+    filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
     merged_pdf = fitz.open()
@@ -726,7 +731,7 @@ def merge_pdf(request: Request, data: PDFManipulationRequest):
         pdf_stream = BytesIO(response.content)
         with fitz.open(stream=pdf_stream, filetype="pdf") as pdf_file:
             merged_pdf.insert_pdf(pdf_file)
-            
+
     output_stream = BytesIO()
     merged_pdf.save(output_stream)
     merged_pdf.close()
@@ -742,9 +747,8 @@ def merge_pdf(request: Request, data: PDFManipulationRequest):
 
     # Generate the download URL for the modified PDF
     pdf_url = storage.child(destination_path).get_url(None)
-    
+
     output_stream.close()
     pdf_stream.close()
 
     return pdf_url
-
