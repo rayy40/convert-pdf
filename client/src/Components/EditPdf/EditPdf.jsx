@@ -294,10 +294,14 @@ const EditPdf = () => {
           </div>
         )}
       </div>
-      {uploadUrl.length > 0 ? (
+      {uploadUrl?.length > 0 ? (
         <Document
           loading={<Loading />}
-          file={uploadUrl.replace(/"/g, "")}
+          file={
+            Array.isArray(uploadUrl)
+              ? uploadUrl?.[0]?.replace(/"/g, "")
+              : uploadUrl?.replace(/"/g, "")
+          }
           error={<Loading />}
           onLoadSuccess={({ numPages }) => {
             setNumPages(numPages);

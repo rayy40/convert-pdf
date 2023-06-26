@@ -193,7 +193,7 @@ const NavBar = () => {
               className="link"
               target="_blank"
               rel="noreferrer"
-              href={uploadUrl.replace(/"/g, "")}
+              href={uploadUrl?.[0]?.replace(/"/g, "")}
               download
             >
               <button className="convert-btn">
