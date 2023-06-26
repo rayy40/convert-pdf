@@ -5,6 +5,7 @@ import {
   signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signInWithRedirect,
 } from "firebase/auth";
 import { auth } from "../../Config/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,6 +26,7 @@ const Auth = () => {
   let passwordRef = useRef(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isError, setIsError] = useState(false);
   const [isUpdatingUser, setIsUpdatingUser] = useState(false);
 
   useEffect(() => {
@@ -46,13 +48,14 @@ const Auth = () => {
     try {
       const currUser = await signInWithEmailAndPassword(auth, email, password);
       setUser(currUser?.user ?? currUser);
-    } catch (err) {
-      setIsUpdatingUser(false);
-      console.log(err.message);
-    } finally {
-      setIsUpdatingUser(false);
       setIsModalOpen(false);
       document.querySelector("body").style.overflow = "auto";
+    } catch (err) {
+      setIsUpdatingUser(false);
+      setIsError(true);
+      console.log(err?.message);
+    } finally {
+      setIsUpdatingUser(false);
     }
   };
 
@@ -66,25 +69,31 @@ const Auth = () => {
         password
       );
       setUser(newUser?.user ?? newUser);
-    } catch (err) {
-      setIsUpdatingUser(false);
-      console.log(err);
-    } finally {
-      setIsUpdatingUser(false);
       setIsModalOpen(false);
       document.querySelector("body").style.overflow = "auto";
+    } catch (err) {
+      setIsUpdatingUser(false);
+      setIsError(true);
+      console.log(err?.message);
+    } finally {
+      setIsUpdatingUser(false);
     }
   };
 
   const handleSignInWithGoogle = async () => {
     try {
-      const googleUser = await signInWithPopup(auth, provider);
+      let googleUser = null;
+      if (window.innerWidth < 767) {
+        googleUser = await signInWithRedirect(auth.provider);
+      } else {
+        googleUser = await signInWithPopup(auth, provider);
+      }
       setUser(googleUser?.user ?? googleUser);
-    } catch (err) {
-      console.log(err.message);
-    } finally {
       setIsModalOpen(false);
       document.querySelector("body").style.overflow = "auto";
+    } catch (err) {
+      setIsError(true);
+      console.log(err.message);
     }
   };
 
@@ -140,7 +149,11 @@ const Auth = () => {
             </button>
             <span>or</span>
             <form action="login" onSubmit={handleLogin}>
-              <div className="input-container">
+              <div
+                className={
+                  isError ? "input-container input--error" : "input-container"
+                }
+              >
                 <FontAwesomeIcon
                   className="icon input--icon"
                   icon={faEnvelope}
@@ -153,7 +166,11 @@ const Auth = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <div className="input-container">
+              <div
+                className={
+                  isError ? "input-container input--error" : "input-container"
+                }
+              >
                 <FontAwesomeIcon className="icon input--icon" icon={faLock} />
                 <input
                   type="password"
@@ -163,6 +180,9 @@ const Auth = () => {
                 />
                 <FontAwesomeIcon className="icon input--icon" icon={faEye} />
               </div>
+              {isError && (
+                <span className="error">Wrong email or password</span>
+              )}
               <button
                 className={`login-btn ${isUpdatingUser ? "loading--btn" : ""}`}
               >
@@ -212,7 +232,11 @@ const Auth = () => {
             </button>
             <span>or</span>
             <form action="signup" onSubmit={handleSignup}>
-              <div className="input-container">
+              <div
+                className={
+                  isError ? "input-container input--error" : "input-container"
+                }
+              >
                 <FontAwesomeIcon
                   className="icon input--icon"
                   icon={faEnvelope}
@@ -225,7 +249,11 @@ const Auth = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <div className="input-container">
+              <div
+                className={
+                  isError ? "input-container input--error" : "input-container"
+                }
+              >
                 <FontAwesomeIcon className="icon input--icon" icon={faLock} />
                 <input
                   ref={passwordRef}
@@ -236,6 +264,7 @@ const Auth = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
+              {isError && <span className="error">Email already exixts</span>}
               <button
                 className={`signup-btn ${isUpdatingUser ? "loading--btn" : ""}`}
               >
