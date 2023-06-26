@@ -1,26 +1,38 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faAngleRight,
   faArrowRight,
+  faCaretDown,
   faCaretRight,
+  faClose,
   faDownload,
+  faFile,
+  faSignOut,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FileContext } from "../../Helper/FileContext";
-import { useLocation, Link, useNavigate } from "react-router-dom";
-import { handleApiCall } from "../../Helper/ReusableFunctions";
-import { operationsBoxInfo } from "../../Helper/Utilities";
+import { useLocation, Link } from "react-router-dom";
+import { convertSize, operationsBoxInfo } from "../../Helper/Utilities";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../../Config/firebase";
+import Auth from "../Authenticate/Auth";
+import useModifiyFiles from "../../Helper/useModifyFiles";
 
 const NavBar = () => {
+  let dropDownRef = useRef(null);
   const location = useLocation();
+  const { modifyFiles } = useModifiyFiles();
   const {
-    metadata,
+    user,
+    setUser,
     uploadUrl,
+    metadata,
     isCheckboxSelected,
-    setUploadUrl,
-    setIsModifying,
+    setIsModalOpen,
+    isModalOpen,
   } = useContext(FileContext);
-
-  const navigate = useNavigate();
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
 
   const pathsToCheck = [
     "delete-pages/edit",
@@ -29,18 +41,32 @@ const NavBar = () => {
     "rotate-pdf/edit",
   ];
 
-  const convertSize = (size) => {
-    if (size >= 1000000) {
-      // Convert to megabytes
-      return `${(size / 1000000).toFixed(2)} mB`;
-    } else {
-      // Convert to kilobytes
-      return `${Math.round(size / 1000)} kB`;
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropDownRef.current && !dropDownRef.current.contains(event.target)) {
+        setIsDropDownOpen(false);
+      }
     }
-  };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropDownRef, setIsDropDownOpen]);
 
-  const navigateToPage = (data) => {
-    navigate("/result", { state: data });
+  useEffect(() => {
+    onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+  }, [setUser]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.log(err.message);
+    } finally {
+      setUser(null);
+    }
   };
 
   const findImageByRoute = (route) => {
@@ -51,8 +77,35 @@ const NavBar = () => {
     return null;
   };
 
+  const getInitials = (name) => {
+    const words = name.split(" ");
+    const initials = words.map((word) => word.charAt(0).toUpperCase());
+    return initials.slice(0, 2).join("");
+  };
+
+  const handleEditFiles = (
+    route,
+    isCheckboxSelected,
+    metadata,
+    operation,
+    rotation,
+    setRotation,
+    password
+  ) => {
+    modifyFiles(
+      route,
+      isCheckboxSelected,
+      metadata,
+      operation,
+      rotation,
+      setRotation,
+      password
+    );
+  };
+
   return (
     <div className="navbar-container__wrapper">
+      {isDropDownOpen && <div className="modal-box__wrapper"></div>}
       <div className="navbar-container">
         <Link className="link" to={"/"}>
           <div className="logo">
@@ -97,19 +150,38 @@ const NavBar = () => {
           </div>
         </Link>
         {/* {location.pathname.split("/")[1].length === 0 && <p>logo</p>} */}
-        {location.pathname.split("/")[1].length > 0 && (
-          <FontAwesomeIcon className="icon big--icon" icon={faCaretRight} />
+        {!location.pathname.includes("edit") && (
+          <Link
+            to={"/documents"}
+            className={`documents-link ${
+              location.pathname.includes("documents")
+                ? "documents-link--active"
+                : ""
+            }`}
+          >
+            <FontAwesomeIcon className="icon" icon={faFile} />
+            Documents
+          </Link>
         )}
-        <Link
-          to={`/${location.pathname.split("/")[1]}`}
-          className="current-page--logo"
-        >
-          {findImageByRoute(location.pathname.split("/")[1])}
-        </Link>
+        {!location.pathname.includes("result") &&
+          location.pathname.split("/")[1].length === 2 && (
+            <>
+              <FontAwesomeIcon className="icon big--icon" icon={faCaretRight} />
+              <Link
+                to={`/${location.pathname.split("/")[1]}`}
+                className="current-page--logo"
+              >
+                <div className="route-logo">
+                  {findImageByRoute(location.pathname.split("/")[1])}
+                </div>
+                <p>{location.pathname.split("/")[1].replaceAll("-", " ")}</p>
+              </Link>
+            </>
+          )}
         <div className="navbar-container__middle">
           {pathsToCheck.some((path) => location.pathname.includes(path)) && (
             <>
-              <p>{metadata?.name.split("--")[0]}</p>
+              <p>{metadata?.name}</p>
               <span>{convertSize(metadata?.size)}</span>
             </>
           )}
@@ -141,18 +213,14 @@ const NavBar = () => {
                 "convert-btn--deactive"
               }`}
               onClick={() =>
-                handleApiCall(
-                  metadata,
-                  isCheckboxSelected,
-                  uploadUrl,
-                  setIsModifying,
-                  setUploadUrl,
+                handleEditFiles(
                   location.pathname.split("/")[1],
-                  navigateToPage,
+                  isCheckboxSelected,
+                  metadata,
+                  null,
                   undefined,
                   undefined,
-                  undefined,
-                  undefined
+                  null
                 )
               }
             >
@@ -160,8 +228,72 @@ const NavBar = () => {
               <FontAwesomeIcon className="icon" icon={faArrowRight} />
             </button>
           )}
+          {user ? (
+            <div
+              ref={dropDownRef}
+              onClick={() => setIsDropDownOpen((prev) => !prev)}
+              className="user-container"
+            >
+              {getInitials(
+                user?.user?.displayName ?? user?.displayName ?? user?.email
+              )}
+              <FontAwesomeIcon
+                onClick={() => setIsDropDownOpen(false)}
+                className="dropdown-icon"
+                icon={faCaretDown}
+              />
+              <div
+                style={{ display: isDropDownOpen ? "block" : "none" }}
+                className="user-dropdown"
+              >
+                <FontAwesomeIcon className="close-icon" icon={faClose} />
+                <div className="user-detail">
+                  <div className="user-name">
+                    {getInitials(
+                      user?.user?.displayName ??
+                        user?.displayName ??
+                        user?.email
+                    )}
+                  </div>
+                  <div className="user-detail--extensive">
+                    <p>{user?.user?.displayName ?? user?.displayName}</p>
+                    <p>{user?.user?.email ?? user?.email}</p>
+                  </div>
+                </div>
+                <ul>
+                  <Link
+                    onClick={() => setIsDropDownOpen(false)}
+                    className="link"
+                    to={"/account"}
+                  >
+                    <li>
+                      <FontAwesomeIcon className="icon" icon={faUser} />
+                      Account
+                      <FontAwesomeIcon className="icon" icon={faAngleRight} />
+                    </li>
+                  </Link>
+                  <li onClick={handleLogout}>
+                    <FontAwesomeIcon className="icon" icon={faSignOut} />
+                    Log out
+                    <FontAwesomeIcon className="icon" icon={faAngleRight} />
+                  </li>
+                </ul>
+              </div>
+            </div>
+          ) : (
+            <button
+              className="login-btn"
+              onClick={() => {
+                setIsModalOpen((v) => !v);
+                document.querySelector("body").style.overflow = "hidden";
+              }}
+            >
+              Log In
+            </button>
+          )}
         </div>
       </div>
+      {isModalOpen && <Auth />}
     </div>
   );
 };
