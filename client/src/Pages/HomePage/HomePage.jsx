@@ -1,10 +1,12 @@
 import React from "react";
 import OperationsBox from "../../Layouts/OperationsBox";
 import { operationsBoxInfo } from "../../Helper/Utilities";
+import Head from "../../Components/Metadata/Head";
 
 const HomePage = () => {
   return (
     <div className="homePage-container">
+      <Head title={"Empyrean PDF"} description={"A place for your PDFs"} />
       <header>
         <h1>All Pdf Tools</h1>
         <p>

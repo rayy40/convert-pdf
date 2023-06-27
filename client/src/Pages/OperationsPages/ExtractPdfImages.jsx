@@ -1,9 +1,11 @@
 import React from "react";
 import FileUploadBox from "../../Components/FileUploadBox/FileUploadBox";
+import Head from "../../Components/Metadata/Head";
 
 const ExtractPdfImages = () => {
   return (
     <div className="operationsPage-container">
+      <Head title={"Extract images"} description={"Extract images from PDF"} />
       <div className="operationsPage-container__wrapper">
         <div className="operationsPage-container__header">
           <div className="operationsPage-container__header--content">

@@ -13,6 +13,7 @@ import zip from "../../Assets/zip-placeholder.png";
 import txt from "../../Assets/txt-placeholder.png";
 import docx from "../../Assets/word-placeholder.png";
 import protectPdf from "../../Assets/protected-pdf-placeholder.png";
+import Head from "../../Components/Metadata/Head";
 
 const ResultPage = () => {
   const location = useLocation();
@@ -35,6 +36,10 @@ const ResultPage = () => {
 
   return (
     <div className="result-page-container__wrapper">
+      <Head
+        title={"Result"}
+        description={"Get results of your converted or modified files"}
+      />
       <div className="result-page-container">
         <div className="document-container">
           <Link

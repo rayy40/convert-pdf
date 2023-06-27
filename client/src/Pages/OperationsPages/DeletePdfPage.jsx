@@ -1,9 +1,14 @@
 import React from "react";
 import FileUploadBox from "../../Components/FileUploadBox/FileUploadBox";
+import Head from "../../Components/Metadata/Head";
 
 const DeletePdfPage = () => {
   return (
     <div className="operationsPage-container">
+      <Head
+        title={"Delete pages from PDF"}
+        description={"Remove pages from PDF"}
+      />
       <div className="operationsPage-container__wrapper">
         <div className="operationsPage-container__header">
           <div className="operationsPage-container__header--content">

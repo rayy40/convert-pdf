@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { storage } from "../../Config/firebase";
 import { deleteObject, ref } from "firebase/storage";
 import useConvertFiles from "../../Helper/useConvertFiles";
+import Head from "../../Components/Metadata/Head";
 
 const Documents = () => {
   let fileInputRef = useRef(null);
@@ -137,6 +138,7 @@ const Documents = () => {
 
   return (
     <div className="documents-page-container">
+      <Head title={"Documents"} description={"All your uploaded documents"} />
       <div className="documents-page-container__header">
         <h3>My Documents</h3>
         {fileList.find((item) => item.isChecked === true) && (
