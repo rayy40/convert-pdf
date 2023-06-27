@@ -1,9 +1,11 @@
 import React from "react";
 import FileUploadBox from "../../Components/FileUploadBox/FileUploadBox";
+import Head from "../../Components/Metadata/Head";
 
 const WordToPdfPage = () => {
   return (
     <div className="operationsPage-container">
+      <Head title={"Word to PDF"} description={"Convert from Word to PDF"} />
       <div className="operationsPage-container__wrapper">
         <div className="operationsPage-container__header">
           <div className="operationsPage-container__header--content">
