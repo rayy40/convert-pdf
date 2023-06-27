@@ -523,9 +523,9 @@ body {
 .operations-box .link .operations-box--detail {
   display: flex;
   gap: 0.65em;
-  align-items: center;
+  align-items: flex-start;
 }
-.operations-box .link .operations-box--detail .operations-box__img {
+.operations-box .link .operations-box--detail .operations-box__img svg {
   width: 32px;
   height: 32px;
 }
@@ -838,7 +838,7 @@ body {
   background-color: rgb(255, 255, 255);
   border: 1px solid rgb(221, 221, 221);
   border-radius: 4px;
-  padding: 0 1rem;
+  padding: 0 1em;
   color: #333;
 }
 .modal-container__button {
@@ -854,7 +854,7 @@ body {
   text-decoration: none;
   border: 1px solid rgb(0, 85, 255);
   border-radius: 4px;
-  padding: 0 1rem;
+  padding: 0 1em;
   cursor: pointer;
   font-weight: 600;
   font-size: 0.925rem;
@@ -881,6 +881,20 @@ body {
   background: rgb(221, 221, 221);
 }
 
+@media only screen and (max-width: 767px) {
+  .modal-container .modal-container__wrapper {
+    width: calc(100% - 2em);
+  }
+  .modal-container .modal-container__wrapper .icon {
+    right: 1.5em;
+  }
+  .modal-container__input {
+    padding: 1.25em 1.25em 0;
+  }
+  .modal-container__button {
+    padding: 1.25em;
+  }
+}
 .fileUpload-container {
   width: 100%;
   position: relative;
@@ -1582,9 +1596,6 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
   text-align: center;
   transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
 }
-.file-list__content--items .actions:hover {
-  background-color: #e4e4e4;
-}
 .file-list__content--items .actions .dropdown-container {
   position: absolute;
   border-radius: 8px;
@@ -1634,9 +1645,6 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
   height: 15px;
   color: #333;
 }
-.file-list__content--items .actions .dropdown-container ul li:hover {
-  background-color: rgb(235, 235, 235);
-}
 .file-list__content--items .actions .extensive-dropdown-container {
   position: absolute;
   border-radius: 8px;
@@ -1649,12 +1657,6 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
 .file-list__content--items .actions--active {
   background-color: #e4e4e4;
 }
-.file-list:hover {
-  background: rgb(245, 245, 245);
-}
-.file-list:hover input[type=checkbox] {
-  visibility: visible;
-}
 .file-list input[type=checkbox]:checked {
   visibility: visible;
 }
@@ -1663,6 +1665,20 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
   background: rgb(245, 245, 245);
 }
 
+@media (hover: hover) {
+  .file-list__content--items .actions:hover {
+    background-color: #e4e4e4;
+  }
+  .file-list__content--items .actions .dropdown-container ul li:hover {
+    background-color: rgb(235, 235, 235);
+  }
+  .file-list:hover {
+    background: rgb(245, 245, 245);
+  }
+  .file-list:hover input[type=checkbox] {
+    visibility: visible;
+  }
+}
 @media only screen and (max-width: 1024px) {
   .file-list__content--items .file-name {
     width: 75%;

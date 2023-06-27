@@ -153,7 +153,7 @@ export const operationsBoxInfo = [
     ),
   },
   {
-    header: "Extract images from PDF",
+    header: "Extract images",
     description: "Extract images from a PDF with ease",
     link: "extract-images",
     image: (
@@ -220,7 +220,7 @@ export const operationsBoxInfo = [
     ),
   },
   {
-    header: "Extract pages from PDF",
+    header: "Extract pages",
     description: "Extract pages from a PDF with ease",
     link: "extract-pdf",
     image: (
@@ -259,8 +259,7 @@ export const operationsBoxInfo = [
   // },
   {
     header: "Protect PDF",
-    description:
-      "Encrypt your PDF file using a password to ensure that it remains secure.",
+    description: "Encrypt your PDF file using a password to secure it.",
     link: "protect-pdf",
     image: (
       <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">

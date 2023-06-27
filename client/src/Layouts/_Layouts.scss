@@ -20,10 +20,12 @@
     .operations-box--detail {
       display: flex;
       gap: 0.65em;
-      align-items: center;
+      align-items: flex-start;
       .operations-box__img {
-        width: 32px;
-        height: 32px;
+        svg {
+          width: 32px;
+          height: 32px;
+        }
       }
       .operations-box__arrow {
         margin-left: auto;
