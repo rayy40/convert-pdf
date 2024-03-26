@@ -51,6 +51,10 @@ class PDFManipulationRequest(BaseModel):
     password: str = ""
     metadata: Dict
 
+@app.get("/")
+async def test_route():
+    return {"message": "Hello, FastAPI is running!"}
+
 
 @app.post("/api/rename")
 async def rename_file(request: Request, data: PDFManipulationRequest):
