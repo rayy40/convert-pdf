@@ -149,3 +149,4 @@ WoeUSB-ng==0.2.12
 wxPython==4.2.1
 XlsxWriter==3.2.0
 yt-dlp==2024.3.10
+python_version=="3.9"
