@@ -69,6 +69,7 @@ ply==3.11
 preshed==3.0.9
 progressbar2==3.53.2
 protobuf==4.25.3
+psycopg2-binary~=2.9.6
 ptyprocess==0.7.0
 pyasn1==0.5.1
 pyasn1-modules==0.3.0
