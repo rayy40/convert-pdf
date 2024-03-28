@@ -727,6 +727,19 @@ body {
 .auth-container__signup .login-btn:hover {
   background: rgb(0, 72, 217);
 }
+.auth-container__login .loading-google-btn,
+.auth-container__signup .loading-google-btn {
+  background: #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none transparent;
+  cursor: not-allowed;
+}
+.auth-container__login .loading-google-btn .loading--icon,
+.auth-container__signup .loading-google-btn .loading--icon {
+  font-size: 1.15rem;
+}
 .auth-container__login .loading--btn,
 .auth-container__signup .loading--btn {
   background: #aaa;
@@ -1870,6 +1883,29 @@ form .fileUpload-container__content__row .fileUpload-container__content__btn but
 }
 .documents-page-container__files .file-list--checkbox input[type=checkbox]:checked::before {
   transform: scale(1);
+}
+
+.documents-page-container__no-files {
+  display: flex;
+  gap: 0.65em;
+  font-size: 1.125rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.documents-page-container__no-files a {
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: #7fa3ec;
+  transition: color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.documents-page-container__no-files a:hover {
+  color: #6691e8;
 }
 
 .login-prompt-container {

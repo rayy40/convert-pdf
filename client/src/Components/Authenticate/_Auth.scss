@@ -155,6 +155,17 @@
   .login-btn:hover {
     background: rgb(0, 72, 217);
   }
+  .loading-google-btn {
+    background: #aaa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none transparent;
+    cursor: not-allowed;
+    .loading--icon {
+      font-size: 1.15rem;
+    }
+  }
   .loading--btn {
     background: #aaa;
     cursor: not-allowed;
