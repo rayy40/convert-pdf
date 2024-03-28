@@ -256,7 +256,7 @@ const Documents = () => {
             ></div>
           </div>
         </div>
-      ) : (
+      ) : fileList.length > 0 ? (
         <div className="documents-page-container__files">
           <div className="file-list__header">
             <div className="file-list--checkbox">
@@ -290,6 +290,11 @@ const Documents = () => {
               ))}
             </ul>
           </div>
+        </div>
+      ) : (
+        <div className="documents-page-container__no-files">
+          <p>No files uploaded yet.</p>
+          <Link to={"/"}>Go, check out our various operations offered.</Link>
         </div>
       )}
     </div>
