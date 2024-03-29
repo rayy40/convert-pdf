@@ -10,7 +10,7 @@ const useConvertFiles = () => {
     setIsConverting(true);
     setIsUploading && setIsUploading(false);
 
-    return fetch(`https://convert-pdf.onrender.com/api/${route}`, {
+    return fetch(`${process.env.REACT_APP_BACKEND_URL}/api/${route}`, {
       method: "POST",
       body: JSON.stringify({ urls: url, metadata: meta }),
       headers: {
