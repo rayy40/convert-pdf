@@ -66,7 +66,7 @@ const DropDownItem = ({
     <li
       onMouseOver={handleMouseOver}
       style={{ borderTop: download ? "1px solid #e4e4e4" : "transparent" }}
-      onClick={handleOperation}
+      onClick={title === "More tools" ? console.log("Undone") : handleOperation}
     >
       <Link
         target={title === "Download" ? "_blank" : ""}
