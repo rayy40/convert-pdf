@@ -156,7 +156,10 @@ async def jpg_to_pdf(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/pdf-to-jpg")
 async def pdf_to_jpg(request: Request, data: PDFManipulationRequest):
-    urls = data.urls[0]
+    if isinstance(data.urls, list) and data.urls:
+        url = data.urls[0]
+    else:
+        url = data.urls
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
@@ -165,7 +168,7 @@ async def pdf_to_jpg(request: Request, data: PDFManipulationRequest):
     images_data = BytesIO()
 
     # Download the PDF file
-    response = requests.get(urls)
+    response = requests.get(url)
     pdf_data = BytesIO(response.content)
 
     # Open the PDF
@@ -235,13 +238,16 @@ async def pdf_to_jpg(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/pdf-to-word")
 async def pdf_to_word(request: Request, data: PDFManipulationRequest):
-    urls = data.urls[0]
+    if isinstance(data.urls, list) and data.urls:
+        url = data.urls[0]
+    else:
+        url = data.urls
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
     # Download the PDF file
-    response = requests.get(urls)
+    response = requests.get(url)
     pdf_stream = BytesIO(response.content)
 
     cv = Converter(pdf_stream.read())
@@ -271,13 +277,16 @@ async def pdf_to_word(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/word-to-pdf")
 async def word_to_pdf(request: Request, data: PDFManipulationRequest):
-    urls = data.urls
+    if isinstance(data.urls, list) and data.urls:
+        url = data.urls[0]
+    else:
+        url = data.urls
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
     # Download the PDF file
-    response = requests.get(urls)
+    response = requests.get(url)
 
     with open("document.docx", "wb") as f:
         f.write(response.content)
@@ -306,13 +315,16 @@ async def word_to_pdf(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/delete-pages")
 async def delete_pages(request: Request, data: PDFManipulationRequest):
-    urls = data.urls[0]
+    if isinstance(data.urls, list) and data.urls:
+        url = data.urls[0]
+    else:
+        url = data.urls
     pages = data.pages
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
-    response = requests.get(urls)
+    response = requests.get(url)
     pdf_stream = BytesIO(response.content)
 
     pdf = fitz.open(stream=pdf_stream.read(), filetype="pdf")
@@ -344,14 +356,17 @@ async def delete_pages(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/rotate-pdf")
 def rotate_pdf(request: Request, data: PDFManipulationRequest):
-    urls = data.urls[0]
+    if isinstance(data.urls, list) and data.urls:
+        url = data.urls[0]
+    else:
+        url = data.urls
     pages = data.pages
     rotation = data.rotation
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
-    response = requests.get(urls)
+    response = requests.get(url)
     pdf_stream = BytesIO(response.content)
 
     pdf = fitz.open(stream=pdf_stream.read(), filetype="pdf")
@@ -384,13 +399,16 @@ def rotate_pdf(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/extract-pdf")
 def extract_pdf(request: Request, data: PDFManipulationRequest):
-    urls = data.urls[0]
+    if isinstance(data.urls, list) and data.urls:
+        url = data.urls[0]
+    else:
+        url = data.urls
     pages = data.pages
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
-    response = requests.get(urls, stream=True)
+    response = requests.get(url, stream=True)
 
     # Create in-memory file-like object to store the PDF content
     pdf_stream = BytesIO()
@@ -432,12 +450,15 @@ def extract_pdf(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/extract-text")
 def extract_text(request: Request, data: PDFManipulationRequest):
-    urls = data.urls[0]
+    if isinstance(data.urls, list) and data.urls:
+        url = data.urls[0]
+    else:
+        url = data.urls
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
-    response = requests.get(urls)
+    response = requests.get(url)
 
     pdf_stream = BytesIO(response.content)
 
@@ -474,12 +495,15 @@ def extract_text(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/extract-images")
 def extract_images(request: Request, data: PDFManipulationRequest):
-    urls = data.urls[0]
+    if isinstance(data.urls, list) and data.urls:
+        url = data.urls[0]
+    else:
+        url = data.urls
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
-    response = requests.get(urls)
+    response = requests.get(url)
 
     pdf_stream = BytesIO(response.content)
     pdf_document = fitz.open(stream=pdf_stream.read(), filetype="pdf")
@@ -530,13 +554,15 @@ def extract_images(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/pdf-to-ppt")
 def pdf_to_ppt(request: Request, data: PDFManipulationRequest):
-    # Get the JSON data containing URLs
-    urls = data.urls[0]
+    if isinstance(data.urls, list) and data.urls:
+        url = data.urls[0]
+    else:
+        url = data.urls
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
-    response = requests.get(urls)
+    response = requests.get(url)
 
     # Load the PDF content into a Presentation object
     prs = Presentation()
@@ -611,12 +637,15 @@ def pdf_to_ppt(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/compress-pdf")
 def compress_pdf(request: Request, data: PDFManipulationRequest):
-    urls = data.urls[0]
+    if isinstance(data.urls, list) and data.urls:
+        url = data.urls[0]
+    else:
+        url = data.urls
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
-    response = requests.get(urls)
+    response = requests.get(url)
 
     # Create a BytesIO object to store the PDF content
     pdf_stream = BytesIO(response.content)
@@ -661,14 +690,17 @@ def compress_pdf(request: Request, data: PDFManipulationRequest):
 
 @app.post("/api/protect-pdf")
 def protect_pdf(request: Request, data: PDFManipulationRequest):
-    urls = data.urls[0]
+    if isinstance(data.urls, list) and data.urls:
+        url = data.urls[0]
+    else:
+        url = data.urls
     password = data.password
     metadata = data.metadata
 
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
-    response = requests.get(urls)
+    response = requests.get(url)
 
     # Create a BytesIO object to store the PDF content
     pdf_stream = BytesIO(response.content)
