@@ -143,6 +143,8 @@ async def jpg_to_pdf(request: Request, data: PDFManipulationRequest):
 
     # Upload the single image file to Firebase Storage
     firebase = pyrebase.initialize_app(firebase_config)
+    print(firebase_config)
+    print(firebase)
     storage = firebase.storage()
     storage.child(destination_path).put(pdf_data.getvalue())
 
