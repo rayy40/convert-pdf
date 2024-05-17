@@ -1,0 +1,103 @@
+.modal-container {
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  .modal-container__wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+    width: 480px;
+    .icon {
+      position: absolute;
+      right: 2em;
+      top: 1.25em;
+      cursor: pointer;
+      color: #aaa;
+      &:hover {
+        color: #333;
+      }
+    }
+  }
+  &__input {
+    padding: 2em 2em 0;
+    text-align: left;
+    width: 100%;
+    h3 {
+      padding-bottom: 0.75em;
+    }
+    input[type="text"] {
+      box-shadow: none;
+      outline: none;
+      line-height: 24px;
+      font-size: 0.925rem;
+      font-weight: 400;
+      height: 40px;
+      width: 100%;
+      background-color: rgb(255, 255, 255);
+      border: 1px solid rgb(221, 221, 221);
+      border-radius: 4px;
+      padding: 0 1em;
+      color: #333;
+    }
+  }
+  &__button {
+    padding: 2em;
+    display: flex;
+    gap: 1em;
+    justify-content: flex-end;
+    .modal-btn {
+      user-select: none;
+      text-decoration: none;
+      border: 1px solid rgb(0, 85, 255);
+      border-radius: 4px;
+      padding: 0 1em;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.925rem;
+      line-height: 24px;
+      height: 40px;
+      background: transparent;
+      color: rgb(0, 85, 255);
+      transition: background 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+      &:hover:first-child {
+        background: rgb(0, 72, 217);
+        border-color: rgb(0, 72, 217);
+        color: rgb(255, 255, 255);
+      }
+      &:last-child {
+        color: #fff;
+        background: rgb(0, 85, 255);
+        &:hover {
+          background: rgb(0, 72, 217);
+        }
+      }
+    }
+    .modal-btn--inactive {
+      cursor: not-allowed;
+      background: rgb(221, 221, 221);
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .modal-container {
+    .modal-container__wrapper {
+      width: calc(100% - 2em);
+      .icon {
+        right: 1.5em;
+      }
+    }
+    &__input {
+      padding: 1.25em 1.25em 0;
+    }
+    &__button {
+      padding: 1.25em;
+    }
+  }
+}

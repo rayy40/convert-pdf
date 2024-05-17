@@ -1,0 +1,174 @@
+.file-list {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  &__content--items {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e4e4e4;
+    .file-name {
+      display: flex;
+      align-items: center;
+      gap: 0.65em;
+      padding: 1.25em 0;
+      font-size: 1.025rem;
+      width: 70%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      .file-placeholder {
+        width: 40px;
+        height: 40px;
+        position: relative;
+        .file-extension {
+          font-size: 11px;
+          font-weight: 700;
+          color: rgb(255, 255, 255);
+          text-transform: uppercase;
+          height: 14px;
+          padding: 0px 2px;
+          border-radius: 2px;
+          display: flex;
+          align-items: center;
+          position: absolute;
+          bottom: 6px;
+        }
+      }
+      p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 80%;
+      }
+    }
+    .file-size,
+    .file-time {
+      padding: 1.25em 0;
+      width: 25%;
+      color: rgb(117, 117, 117);
+    }
+    .actions {
+      position: relative;
+      cursor: pointer;
+      background-color: transparent;
+      padding: 1em;
+      border-radius: 50%;
+      margin-right: 2em;
+      width: 60px;
+      text-align: center;
+      transition: background-color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+      .dropdown-container {
+        position: absolute;
+        border-radius: 8px;
+        top: 60%;
+        right: 0em;
+        z-index: 3;
+        width: 220px;
+        background: #fff;
+        color: #333;
+        filter: drop-shadow(rgba(0, 0, 0, 0.3) 0px 0px 12px);
+        border: 1px solid #e4e4e4;
+        padding: 0.65em;
+        ul {
+          list-style-type: none;
+          li {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0.75em 0.5em;
+            border-radius: 8px;
+            .dropdown-link {
+              border: none;
+              outline: none;
+              width: 100%;
+              display: flex;
+              align-items: center;
+              background: transparent;
+              text-decoration: none;
+              appearance: none;
+              color: inherit;
+              cursor: pointer;
+            }
+            svg {
+              width: 25px;
+              height: 25px;
+              margin-right: 1em;
+            }
+            svg.icon {
+              margin-left: auto;
+              margin-right: 0em;
+              width: 15px;
+              height: 15px;
+              color: #333;
+            }
+          }
+        }
+      }
+      .extensive-dropdown-container {
+        position: absolute;
+        border-radius: 8px;
+        width: 220px;
+        background-color: #fff;
+        right: calc(100% + 0.75em);
+        bottom: -35%;
+        padding: 0.65em;
+      }
+    }
+    .actions--active {
+      background-color: #e4e4e4;
+    }
+  }
+  input[type="checkbox"]:checked {
+    visibility: visible;
+  }
+}
+
+.file-list--active {
+  background: rgb(245, 245, 245);
+}
+
+@media (hover: hover) {
+  .file-list {
+    &__content--items {
+      .actions {
+        &:hover {
+          background-color: #e4e4e4;
+        }
+        .dropdown-container {
+          ul {
+            li:hover {
+              background-color: rgba(235, 235, 235);
+            }
+          }
+        }
+      }
+    }
+    &:hover {
+      background: rgb(245, 245, 245);
+      input[type="checkbox"] {
+        visibility: visible;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .file-list {
+    &__content--items {
+      .file-name {
+        width: 75%;
+      }
+      .file-size,
+      .file-time {
+        display: none;
+      }
+      .actions {
+        width: 45px;
+        margin-left: auto;
+        margin-right: 1.5em;
+      }
+    }
+  }
+}

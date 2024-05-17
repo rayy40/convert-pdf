@@ -13,6 +13,14 @@ body {
   font-family: "Source Sans Pro", sans-serif;
 }
 
+.loading-container_wrapper {
+  width: "100%";
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .loading-container {
   width: 100%;
   min-height: calc(100vh - 10em);
@@ -102,14 +110,14 @@ body {
   }
 }
 
-@import "./Pages/HomePage/HomePage";
-@import "./Pages/OperationsPages/OperationsPage";
-@import "./Components/NavBar/NavBar";
-@import "./Layouts/Layouts";
-@import "./Components/Authenticate/Auth";
-@import "./Components/Error/Error";
-@import "./Components/Modal/Modal";
-@import "./Components/FileUploadBox/FileUploadBox";
-@import "./Components/EditPdf/EditPdf";
-@import "./Pages/OperationsPages/ResultPage";
-@import "./Pages/DocumentsPage/Documents";
+@import "./pages/homePage/Home";
+@import "./pages/operationsPages/OperationsPage";
+@import "./components/NavBar/NavBar";
+@import "./layouts/Layouts";
+@import "./components/Authenticate/Auth";
+@import "./components/Error/Error";
+@import "./components/Modal/Modal";
+@import "./components/FileUploadBox/FileUploadBox";
+@import "./components/EditPdf/EditPdf";
+@import "./pages/operationsPages/ResultPage";
+@import "./pages/documentsPage/Documents";

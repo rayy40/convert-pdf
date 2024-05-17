@@ -2,27 +2,27 @@ import "./App.css";
 import "@fontsource/source-sans-pro";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { pdfjs } from "react-pdf";
-import HomePage from "./Pages/HomePage/HomePage.jsx";
-import JpgToPdfPage from "./Pages/OperationsPages/JpgToPdfPage";
-import PdfToJpgPage from "./Pages/OperationsPages/PdfToJpgPage";
-import CompressPdfPage from "./Pages/OperationsPages/CompressPdfPage";
-import DeletePdfPage from "./Pages/OperationsPages/DeletePdfPage";
-import EditPdf from "./Components/EditPdf/EditPdf";
-import { FileProvider } from "./Helper/FileContext";
-import NavBar from "./Components/NavBar/NavBar";
-import PdfToPptPage from "./Pages/OperationsPages/PdfToPptPage";
-import SplitPdfPage from "./Pages/OperationsPages/SplitPdfPage";
-import ExtractPdfPage from "./Pages/OperationsPages/ExtractPdfPage";
-import MergePdfPage from "./Pages/OperationsPages/MergePdfPage";
-import ProtectPdfPage from "./Pages/OperationsPages/ProtectPdfPage";
-import UnlockPdfPage from "./Pages/OperationsPages/UnlockPdfPage";
-import ResultPage from "./Pages/OperationsPages/ResultPage";
-import ExtractPdfImages from "./Pages/OperationsPages/ExtractPdfImages";
-import RotatePdfPage from "./Pages/OperationsPages/RotatePdfPage";
-import PdfToWordPage from "./Pages/OperationsPages/PdfToWordPage";
-import WordToPdfPage from "./Pages/OperationsPages/WordToPdfPage";
-import Documents from "./Pages/DocumentsPage/Documents";
-import ExtractPdfText from "./Pages/OperationsPages/ExtractPdfText";
+import HomePage from "./pages/homePage/Home";
+import JpgToPdfPage from "./pages/operationsPages/JpgToPdfPage";
+import PdfToJpgPage from "./pages/operationsPages/PdfToJpgPage";
+import CompressPdfPage from "./pages/operationsPages/CompressPdfPage";
+import DeletePdfPage from "./pages/operationsPages/DeletePdfPage";
+import EditPdf from "./components/EditPdf/EditPdf";
+import { FileProvider } from "./providers/fileContext";
+import NavBar from "./components/NavBar/NavBar";
+import PdfToPptPage from "./pages/operationsPages/PdfToPptPage";
+import SplitPdfPage from "./pages/operationsPages/SplitPdfPage";
+import ExtractPdfPage from "./pages/operationsPages/ExtractPdfPage";
+import MergePdfPage from "./pages/operationsPages/MergePdfPage";
+import ProtectPdfPage from "./pages/operationsPages/ProtectPdfPage";
+import UnlockPdfPage from "./pages/operationsPages/UnlockPdfPage";
+import ResultPage from "./pages/operationsPages/ResultPage";
+import ExtractPdfImages from "./pages/operationsPages/ExtractPdfImages";
+import RotatePdfPage from "./pages/operationsPages/RotatePdfPage";
+import PdfToWordPage from "./pages/operationsPages/PdfToWordPage";
+import WordToPdfPage from "./pages/operationsPages/WordToPdfPage";
+import Documents from "./pages/documentsPage/Documents";
+import ExtractPdfText from "./pages/operationsPages/ExtractPdfText";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -49,7 +49,7 @@ function App() {
             <Route path="/rotate-pdf" element={<RotatePdfPage />} />
             <Route path="/unlock-pdf" element={<UnlockPdfPage />} />
             <Route path="/compress-pdf" element={<CompressPdfPage />} />
-            <Route path="/delete-pages/edit" element={<EditPdf />} />
+            <Route path="/delete-Pages/edit" element={<EditPdf />} />
             <Route path="/split-pdf/edit" element={<EditPdf />} />
             <Route path="/extract-pdf/edit" element={<EditPdf />} />
             <Route path="/rotate-pdf/edit" element={<EditPdf />} />
