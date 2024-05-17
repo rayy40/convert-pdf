@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Union, List, Dict
+from typing import Union, List, Dict, Optional
 from PyPDF2 import PdfReader, PdfWriter
 from dotenv import load_dotenv
 from pdf2docx import Converter
@@ -44,7 +44,8 @@ app.add_middleware(
 
 class PDFManipulationRequest(BaseModel):
     urls: Union[str, List[str]]
-    user: Dict = {}
+    user: str = ""
+    accessToken: Optional[str] = None
     rename_file: str = ""
     pages: List[int] = []
     rotation: Dict = {}
@@ -62,8 +63,8 @@ async def rename_file(request: Request, data: PDFManipulationRequest):
     metadata = data.metadata
     filename = metadata["name"]
     new_filename = data.rename_file
-    userId = data.user["uid"]
-    userToken = data.user["stsTokenManager"]["accessToken"]
+    userId = data.user
+    userToken = data.accessToken
 
     response = requests.get(urls)
     file_content = response.content
@@ -87,6 +88,7 @@ async def rename_file(request: Request, data: PDFManipulationRequest):
 async def jpg_to_pdf(request: Request, data: PDFManipulationRequest):
     urls = data.urls
     metadata = data.metadata
+    userId = data.user
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
@@ -138,7 +140,7 @@ async def jpg_to_pdf(request: Request, data: PDFManipulationRequest):
     pdf.close()
 
     # Set the destination path for the file upload
-    folder_name = "jpg-to-pdf/modified"
+    folder_name = f"{userId}/modified"
     destination_path = f"{folder_name}/{filename_without_extension}.pdf"
 
     # Upload the single image file to Firebase Storage
@@ -160,6 +162,7 @@ async def pdf_to_jpg(request: Request, data: PDFManipulationRequest):
         url = data.urls[0]
     else:
         url = data.urls
+    userId = data.user
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
@@ -189,7 +192,7 @@ async def pdf_to_jpg(request: Request, data: PDFManipulationRequest):
     # Check the number of images
     if num_pages > 1:
         # Set the destination path for the file upload
-        folder_name = "pdf-to-jpg/modified"
+        folder_name = f"{userId}/modified"
         destination_path = f"{folder_name}/{filename_without_extension}.zip"
 
         zip_stream = BytesIO()
@@ -218,7 +221,7 @@ async def pdf_to_jpg(request: Request, data: PDFManipulationRequest):
         return zip_url
     elif num_pages == 1:
         # Set the destination path for the file upload
-        folder_name = "pdf-to-jpg/modified"
+        folder_name = f"{userId}/modified"
         destination_path = f"{folder_name}/{filename_without_extension}.jpg"
 
         # Upload the single image file to Firebase Storage
@@ -242,6 +245,7 @@ async def pdf_to_word(request: Request, data: PDFManipulationRequest):
         url = data.urls[0]
     else:
         url = data.urls
+    userId = data.user
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
@@ -257,7 +261,7 @@ async def pdf_to_word(request: Request, data: PDFManipulationRequest):
     cv.close()
 
     # Set the destination path for the file upload
-    folder_name = "pdf-to-word/modified"
+    folder_name = f"{userId}/modified"
     destination_path = f"{folder_name}/{filename_without_extension}.docx"
 
     # Upload the single image file to Firebase Storage
@@ -281,6 +285,7 @@ async def word_to_pdf(request: Request, data: PDFManipulationRequest):
         url = data.urls[0]
     else:
         url = data.urls
+    userId = data.user
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
@@ -296,7 +301,7 @@ async def word_to_pdf(request: Request, data: PDFManipulationRequest):
     # output_pdf_stream = BytesIO()
 
     # Set the destination path for the file upload
-    folder_name = "word-to-pdf/modified"
+    folder_name = f"{userId}/modified"
     destination_path = f"{folder_name}/{filename_without_extension}.pdf"
 
     # Upload the single image file to Firebase Storage
@@ -319,6 +324,7 @@ async def delete_pages(request: Request, data: PDFManipulationRequest):
         url = data.urls[0]
     else:
         url = data.urls
+    userId = data.user
     pages = data.pages
     metadata = data.metadata
     filename = metadata["name"]
@@ -337,7 +343,7 @@ async def delete_pages(request: Request, data: PDFManipulationRequest):
     pdf.close()
 
     # Set the destination path for the file upload
-    folder_name = "delete-pages/modified"
+    folder_name = f"{userId}/modified"
     destination_path = f"{folder_name}/{filename_without_extension}-modified.pdf"
 
     # Upload the single image file to Firebase Storage
@@ -360,6 +366,7 @@ def rotate_pdf(request: Request, data: PDFManipulationRequest):
         url = data.urls[0]
     else:
         url = data.urls
+    userId = data.user
     pages = data.pages
     rotation = data.rotation
     metadata = data.metadata
@@ -380,7 +387,7 @@ def rotate_pdf(request: Request, data: PDFManipulationRequest):
     pdf.close()
 
     # Set the destination path for the file upload
-    folder_name = "rotate-pdf/modified"
+    folder_name = f"{userId}/modified"
     destination_path = f"{folder_name}/{filename_without_extension}-rotated.pdf"
 
     # Upload the single image file to Firebase Storage
@@ -403,6 +410,7 @@ def extract_pdf(request: Request, data: PDFManipulationRequest):
         url = data.urls[0]
     else:
         url = data.urls
+    userId = data.user
     pages = data.pages
     metadata = data.metadata
     filename = metadata["name"]
@@ -430,7 +438,7 @@ def extract_pdf(request: Request, data: PDFManipulationRequest):
     doc.close()
 
     # Set the destination path for the file upload
-    folder_name = "extract-pdf/modified"
+    folder_name = f"{userId}/modified"
     destination_path = f"{folder_name}/{filename_without_extension}-extracted.pdf"
 
     # Upload the new PDF file to Firebase storage
@@ -454,6 +462,7 @@ def extract_text(request: Request, data: PDFManipulationRequest):
         url = data.urls[0]
     else:
         url = data.urls
+    userId = data.user
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
@@ -477,7 +486,7 @@ def extract_text(request: Request, data: PDFManipulationRequest):
     text_from_pdf = "\n".join(extracted_text)
 
     # Set the destination path for the file upload
-    folder_name = "extract-text/modified"
+    folder_name = f"{userId}/modified"
     destination_path = f"{folder_name}/{filename_without_extension}.txt"
 
     # Upload the single image file to Firebase Storage
@@ -499,6 +508,7 @@ def extract_images(request: Request, data: PDFManipulationRequest):
         url = data.urls[0]
     else:
         url = data.urls
+    userId = data.user
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
@@ -534,7 +544,7 @@ def extract_images(request: Request, data: PDFManipulationRequest):
 
     # Set the destination path for the file upload
     zip_file_name = f"{filename_without_extension}_extracted-images.zip"
-    folder_name = "extract-images/modified"
+    folder_name = f"{userId}/modified"
     destination_path = f"{folder_name}/{zip_file_name}"
 
     # Upload the new PDF file to Firebase storage
@@ -558,6 +568,7 @@ def pdf_to_ppt(request: Request, data: PDFManipulationRequest):
         url = data.urls[0]
     else:
         url = data.urls
+    userId = data.user
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
@@ -617,7 +628,7 @@ def pdf_to_ppt(request: Request, data: PDFManipulationRequest):
     converted_pptx_stream.seek(0)
 
     # Set the destination path for the file upload
-    folder_name = "pdf-to-ppt/modified"
+    folder_name = f"{userId}/modified"
     destination_path = f"{folder_name}/{filename_without_extension}.pptx"
 
     # Upload the converted PPTX file to Firebase Storage
@@ -641,6 +652,7 @@ def compress_pdf(request: Request, data: PDFManipulationRequest):
         url = data.urls[0]
     else:
         url = data.urls
+    userId = data.user
     metadata = data.metadata
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
@@ -671,7 +683,7 @@ def compress_pdf(request: Request, data: PDFManipulationRequest):
     compressed_pdf_stream.seek(0)
 
     # Set the destination path for the file upload
-    folder_name = "compress-pdf/modified"
+    folder_name = f"{userId}/modified"
     destination_path = f"{folder_name}/{filename_without_extension}-compressed.pdf"
 
     # Upload the single image file to Firebase Storage
@@ -694,6 +706,7 @@ def protect_pdf(request: Request, data: PDFManipulationRequest):
         url = data.urls[0]
     else:
         url = data.urls
+    userId = data.user
     password = data.password
     metadata = data.metadata
 
@@ -728,7 +741,7 @@ def protect_pdf(request: Request, data: PDFManipulationRequest):
     encrypted_pdf_stream.seek(0)
 
     # Set the destination path for the file upload
-    folder_name = "protect-pdf/modified"
+    folder_name = f"{userId}/modified"
     destination_path = f"{folder_name}/{filename_without_extension}-protected.pdf"
 
     # Upload the new PDF file to Firebase storage
@@ -755,7 +768,7 @@ def protect_pdf(request: Request, data: PDFManipulationRequest):
 def merge_pdf(request: Request, data: PDFManipulationRequest):
     urls = data.urls
     metadata = data.metadata
-
+    userId = data.user
     filename = metadata["name"]
     filename_without_extension = os.path.splitext(filename)[0]
 
@@ -773,7 +786,7 @@ def merge_pdf(request: Request, data: PDFManipulationRequest):
     merged_pdf.close()
 
     # Set the destination path for the file upload
-    folder_name = "merge-pdf/modified"
+    folder_name = f"{userId}/modified"
     destination_path = f"{folder_name}/{filename_without_extension}-merged.pdf"
 
     # Upload the single image file to Firebase Storage
